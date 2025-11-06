@@ -3,11 +3,23 @@ import type { Portfolio } from "../types/portfolio.js";
 import type { LongPositionLot, ShortPositionLot } from "../types/position.js";
 import type { CloseStrategy } from "../types/trade.js";
 
+/**
+ * Adds cash to the portfolio.
+ * @param p - The portfolio to modify
+ * @param currency - The currency code
+ * @param amount - The amount to add
+ */
 function debit_cash(p: Portfolio, currency: string, amount: number) {
   const balance = p.cash.get(currency) ?? 0;
   p.cash.set(currency, balance + amount);
 }
 
+/**
+ * Removes cash from the portfolio.
+ * @param p - The portfolio to modify
+ * @param currency - The currency code
+ * @param amount - The amount to remove
+ */
 function credit_cash(p: Portfolio, currency: string, amount: number) {
   const balance = p.cash.get(currency) ?? 0;
   p.cash.set(currency, balance - amount);
@@ -15,6 +27,11 @@ function credit_cash(p: Portfolio, currency: string, amount: number) {
 
 export { debit_cash as deposit, credit_cash as withdraw };
 
+/**
+ * Validates portfolio integrity by checking position lots and realised PnL.
+ * @param p - The portfolio to validate
+ * @returns True if portfolio is valid, false otherwise
+ */
 export function validatePortfolio(p: Portfolio): boolean {
   let realisedPnL = 0;
 
@@ -49,6 +66,16 @@ export function validatePortfolio(p: Portfolio): boolean {
   return true;
 }
 
+/**
+ * Opens a long position by purchasing an asset.
+ * @param p - The portfolio to modify
+ * @param asset - The asset to purchase
+ * @param price - The price per unit
+ * @param quant - The quantity to purchase
+ * @param comm - The commission paid (default: 0)
+ * @param time - The transaction time (default: current date)
+ * @returns The cash flow (negative value representing cost)
+ */
 export function openLong(
   p: Portfolio,
   asset: Asset,
@@ -104,6 +131,18 @@ export function openLong(
   return -cost;
 }
 
+/**
+ * Closes a long position by selling an asset.
+ * @param p - The portfolio to modify
+ * @param asset - The asset to sell
+ * @param price - The price per unit
+ * @param quant - The quantity to sell
+ * @param comm - The commission paid (default: 0)
+ * @param strat - The lot closing strategy (default: "LIFO")
+ * @param time - The transaction time (default: current date)
+ * @returns The realised profit or loss
+ * @throws Error if no long position exists for the asset
+ */
 export function closeLong(
   p: Portfolio,
   asset: Asset,
@@ -176,6 +215,16 @@ export function closeLong(
   return realisedPnL;
 }
 
+/**
+ * Opens a short position by borrowing and selling an asset.
+ * @param p - The portfolio to modify
+ * @param asset - The asset to short sell
+ * @param price - The price per unit
+ * @param quant - The quantity to short
+ * @param comm - The commission paid (default: 0)
+ * @param time - The transaction time (default: current date)
+ * @returns The cash proceeds from the short sale
+ */
 export function openShort(
   p: Portfolio,
   asset: Asset,
@@ -231,6 +280,18 @@ export function openShort(
   return proceeds;
 }
 
+/**
+ * Closes a short position by buying back the asset.
+ * @param p - The portfolio to modify
+ * @param asset - The asset to buy back
+ * @param price - The price per unit
+ * @param quant - The quantity to buy back
+ * @param comm - The commission paid (default: 0)
+ * @param strat - The lot closing strategy (default: "LIFO")
+ * @param time - The transaction time (default: current date)
+ * @returns The realised profit or loss
+ * @throws Error if no short position exists for the asset
+ */
 export function closeShort(
   p: Portfolio,
   asset: Asset,
@@ -303,6 +364,14 @@ export function closeShort(
   return realisedPnL;
 }
 
+/**
+ * Handles a stock split by adjusting position quantities and costs.
+ * @param p - The portfolio to modify
+ * @param asset - The asset undergoing the split
+ * @param ratio - The split ratio (e.g., 2 for a 2-for-1 split)
+ * @param time - The transaction time (default: current date)
+ * @throws Error if the split ratio is not positive
+ */
 export function handleSplit(
   p: Portfolio,
   asset: Asset,
@@ -348,6 +417,16 @@ export function handleSplit(
   p.modified = actTime;
 }
 
+/**
+ * Handles a cash dividend payment by adjusting cost basis and cash balance.
+ * @param p - The portfolio to modify
+ * @param asset - The asset paying the dividend
+ * @param amountPerShare - The dividend amount per share
+ * @param taxRate - The tax rate applied to the dividend (default: 0)
+ * @param time - The transaction time (default: current date)
+ * @returns The net cash flow after tax
+ * @throws Error if the dividend amount is negative or tax rate is not between 0 and 1
+ */
 export function handleCashDividend(
   p: Portfolio,
   asset: Asset,
@@ -415,6 +494,15 @@ export function handleCashDividend(
   return cashFlow;
 }
 
+/**
+ * Handles a corporate spinoff by creating positions in the new company.
+ * @param p - The portfolio to modify
+ * @param asset - The original asset
+ * @param newAsset - The spun-off company asset
+ * @param ratio - The number of new shares per original share
+ * @param time - The transaction time (default: current date)
+ * @throws Error if the spinoff ratio is not positive
+ */
 export function handleSpinoff(
   p: Portfolio,
   asset: Asset,
@@ -499,6 +587,17 @@ export function handleSpinoff(
   p.modified = actTime;
 }
 
+/**
+ * Handles a corporate merger by exchanging positions to the acquiring company.
+ * @param p - The portfolio to modify
+ * @param asset - The asset being acquired
+ * @param newAsset - The acquiring company asset
+ * @param ratio - The exchange ratio of new shares per old share
+ * @param cashComponent - The cash amount per share (default: 0)
+ * @param time - The transaction time (default: current date)
+ * @returns The net cash flow from the merger
+ * @throws Error if the merger ratio is not positive or cash component is negative
+ */
 export function handleMerger(
   p: Portfolio,
   asset: Asset,
