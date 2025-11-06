@@ -23,34 +23,10 @@ export interface Asset {
 
   /** Minimum price increment (smallest price movement allowed) */
   tickSize: number;
-}
 
-/**
- * Represents a price quote for an asset at a specific point in time.
- * Includes both the last traded price and optional order book data.
- */
-export interface Quote {
-  /** Symbol of the asset this quote refers to */
-  symbol: string;
+  /** Date from which this asset becomes valid/tradable (null means always valid) */
+  validFrom?: Date;
 
-  /** Last traded price */
-  price: number;
-
-  /** Volume of the last trade (optional) */
-  volume?: number;
-
-  /** Timestamp when this quote was generated */
-  timestamp: Date;
-
-  /** Best bid price (highest buy order) */
-  bid?: number;
-
-  /** Volume available at the bid price */
-  bid_vol?: number;
-
-  /** Best ask price (lowest sell order) */
-  ask?: number;
-
-  /** Volume available at the ask price */
-  ask_vol?: number;
+  /** Date until which this asset is valid/tradable (null means no expiry) */
+  validUntil?: Date;
 }
