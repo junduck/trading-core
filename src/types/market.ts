@@ -95,20 +95,27 @@ export interface MarketQuote {
   bid?: number;
 
   /** Volume available at the bid price */
-  bid_vol?: number;
+  bidVol?: number;
 
   /** Best ask price (lowest sell order) */
   ask?: number;
 
   /** Volume available at the ask price */
-  ask_vol?: number;
+  askVol?: number;
 }
 
 /** Standard time intervals for market bar data */
 export type MarketBarInterval =
-  | "1m" | "5m" | "15m" | "30m"
-  | "1h" | "2h" | "4h"
-  | "1d" | "1w" | "1M";
+  | "1m"
+  | "5m"
+  | "15m"
+  | "30m"
+  | "1h"
+  | "2h"
+  | "4h"
+  | "1d"
+  | "1w"
+  | "1M";
 
 /**
  * OHLCV (Open-High-Low-Close-Volume) bar data for a specific time interval.
