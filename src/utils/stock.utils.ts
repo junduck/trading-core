@@ -3,6 +3,7 @@ import type {
   LongPositionLot,
   ShortPositionLot,
 } from "../types/position.js";
+import { pushLongPositionLot, pushShortPositionLot } from "./position.utils.js";
 
 /**
  * Handles a stock split by adjusting position quantities and costs.
@@ -162,21 +163,7 @@ export function handleSpinoff(
     };
 
     // Add to position
-    let newPos = pos.long!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newShares,
-        totalCost: 0,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.long!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newShares;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    pushLongPositionLot(pos, newSymbol, newLot, actTime);
   }
 
   const short = pos.short?.get(symbol);
@@ -189,21 +176,8 @@ export function handleSpinoff(
       totalProceeds: 0,
     };
 
-    let newPos = pos.short!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newShares,
-        totalProceeds: 0,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.short!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newShares;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushShortPositionLot(pos, newSymbol, newLot, actTime);
   }
 
   if (long || short) {
@@ -257,22 +231,8 @@ export function handleMerger(
       totalCost: newCost,
     };
 
-    let newPos = pos.long!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newLot.quantity,
-        totalCost: newLot.totalCost,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.long!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newLot.quantity;
-      newPos.totalCost += newLot.totalCost;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushLongPositionLot(pos, newSymbol, newLot, actTime);
 
     // Remove old position
     pos.long!.delete(symbol);
@@ -291,23 +251,10 @@ export function handleMerger(
       totalProceeds: newProceeds,
     };
 
-    let newPos = pos.short!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newLot.quantity,
-        totalProceeds: newLot.totalProceeds,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.short!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newLot.quantity;
-      newPos.totalProceeds += newLot.totalProceeds;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushShortPositionLot(pos, newSymbol, newLot, actTime);
 
+    // Remove old position
     pos.short!.delete(symbol);
   }
 

@@ -3,6 +3,7 @@ import type {
   LongPositionLot,
   ShortPositionLot,
 } from "../types/position.js";
+import { pushLongPositionLot, pushShortPositionLot } from "./position.utils.js";
 
 /**
  * Handles a hard fork by creating positions in the new cryptocurrency.
@@ -38,21 +39,7 @@ export function handleHardFork(
     };
 
     // Add to position
-    let newPos = pos.long!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newCoins,
-        totalCost: 0,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.long!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newCoins;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    pushLongPositionLot(pos, newSymbol, newLot, actTime);
   }
 
   const short = pos.short?.get(symbol);
@@ -65,21 +52,8 @@ export function handleHardFork(
       totalProceeds: 0,
     };
 
-    let newPos = pos.short!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newCoins,
-        totalProceeds: 0,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.short!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newCoins;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushShortPositionLot(pos, newSymbol, newLot, actTime);
   }
 
   if (long || short) {
@@ -145,21 +119,8 @@ export function handleAirdrop(
   // Initialize if needed
   pos.long ??= new Map();
 
-  let newPos = pos.long.get(airdropSymbol);
-  if (!newPos) {
-    newPos = {
-      quantity: airdropQuantity,
-      totalCost: 0,
-      realisedPnL: 0,
-      lots: [newLot],
-      modified: actTime,
-    };
-    pos.long.set(airdropSymbol, newPos);
-  } else {
-    newPos.quantity += airdropQuantity;
-    newPos.lots.push(newLot);
-    newPos.modified = actTime;
-  }
+  // Add to position
+  pushLongPositionLot(pos, airdropSymbol, newLot, actTime);
 
   pos.modified = actTime;
 }
@@ -197,22 +158,8 @@ export function handleTokenSwap(
       totalCost: long.totalCost,
     };
 
-    let newPos = pos.long!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newLot.quantity,
-        totalCost: newLot.totalCost,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.long!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newLot.quantity;
-      newPos.totalCost += newLot.totalCost;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushLongPositionLot(pos, newSymbol, newLot, actTime);
 
     // Remove old position
     pos.long!.delete(oldSymbol);
@@ -228,23 +175,10 @@ export function handleTokenSwap(
       totalProceeds: short.totalProceeds,
     };
 
-    let newPos = pos.short!.get(newSymbol);
-    if (!newPos) {
-      newPos = {
-        quantity: newLot.quantity,
-        totalProceeds: newLot.totalProceeds,
-        realisedPnL: 0,
-        lots: [newLot],
-        modified: actTime,
-      };
-      pos.short!.set(newSymbol, newPos);
-    } else {
-      newPos.quantity += newLot.quantity;
-      newPos.totalProceeds += newLot.totalProceeds;
-      newPos.lots.push(newLot);
-      newPos.modified = actTime;
-    }
+    // Add to position
+    pushShortPositionLot(pos, newSymbol, newLot, actTime);
 
+    // Remove old position
     pos.short!.delete(oldSymbol);
   }
 

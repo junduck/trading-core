@@ -35,6 +35,68 @@ export function validatePosition(pos: Position): boolean {
 }
 
 /**
+ * Push a new LongPositionLot to target position
+ * @param to - The position to modify
+ * @param symbol - The asset symbol
+ * @param newLot - The new LongPositionLot
+ * @param time - The transaction time
+ */
+export function pushLongPositionLot(
+  to: Position,
+  symbol: string,
+  newLot: LongPositionLot,
+  time: Date
+) {
+  let pos = to.long!.get(symbol);
+  if (!pos) {
+    pos = {
+      quantity: newLot.quantity,
+      totalCost: newLot.totalCost,
+      realisedPnL: 0,
+      lots: [newLot],
+      modified: time,
+    };
+    to.long!.set(symbol, pos);
+  } else {
+    pos.quantity += newLot.quantity;
+    pos.totalCost += newLot.totalCost;
+    pos.lots.push(newLot);
+    pos.modified = time;
+  }
+}
+
+/**
+ * Push a new ShortPositionLot to target position
+ * @param to - The position to modify
+ * @param symbol - The asset symbol
+ * @param newLot - The new ShortPositionLot
+ * @param time - The transaction time
+ */
+export function pushShortPositionLot(
+  to: Position,
+  symbol: string,
+  newLot: ShortPositionLot,
+  time: Date
+) {
+  let pos = to.short!.get(symbol);
+  if (!pos) {
+    pos = {
+      quantity: newLot.quantity,
+      totalProceeds: newLot.totalProceeds,
+      realisedPnL: 0,
+      lots: [newLot],
+      modified: time,
+    };
+    to.short!.set(symbol, pos);
+  } else {
+    pos.quantity += newLot.quantity;
+    pos.totalProceeds += newLot.totalProceeds;
+    pos.lots.push(newLot);
+    pos.modified = time;
+  }
+}
+
+/**
  * Opens a long position by purchasing an asset.
  * @param pos - The position to modify
  * @param symbol - The asset symbol
@@ -70,22 +132,7 @@ export function openLong(
   pos.long ??= new Map();
 
   // Add to position
-  let assetPos = pos.long.get(symbol);
-  if (!assetPos) {
-    assetPos = {
-      quantity: quant,
-      totalCost: cost,
-      realisedPnL: 0,
-      lots: [lot],
-      modified: actTime,
-    };
-    pos.long.set(symbol, assetPos);
-  } else {
-    assetPos.quantity += quant;
-    assetPos.totalCost += cost;
-    assetPos.lots.push(lot);
-    assetPos.modified = actTime;
-  }
+  pushLongPositionLot(pos, symbol, lot, actTime);
 
   pos.totalCommission += comm;
   pos.modified = actTime;
@@ -211,22 +258,7 @@ export function openShort(
   pos.short ??= new Map();
 
   // Add to position
-  let assetPos = pos.short.get(symbol);
-  if (!assetPos) {
-    assetPos = {
-      quantity: quant,
-      totalProceeds: proceeds,
-      realisedPnL: 0,
-      lots: [lot],
-      modified: actTime,
-    };
-    pos.short.set(symbol, assetPos);
-  } else {
-    assetPos.quantity += quant;
-    assetPos.totalProceeds += proceeds;
-    assetPos.lots.push(lot);
-    assetPos.modified = actTime;
-  }
+  pushShortPositionLot(pos, symbol, lot, actTime);
 
   pos.totalCommission += comm;
   pos.modified = actTime;
