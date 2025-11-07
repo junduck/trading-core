@@ -53,14 +53,14 @@ export function createUniverse(
       const assetList = timestamp
         ? Array.from(this.getValidAssets(timestamp).values())
         : Array.from(assets.values());
-      return assetList.filter((a) => a.type === type);
+      return assetList.filter((a) => (a.type ?? "") === type);
     },
 
     filterByExchange(exchange: string): Asset[] {
       const assetList = timestamp
         ? Array.from(this.getValidAssets(timestamp).values())
         : Array.from(assets.values());
-      return assetList.filter((a) => a.exchange === exchange);
+      return assetList.filter((a) => (a.exchange ?? "") === exchange);
     },
 
     filterByCurrency(currency: string): Asset[] {
