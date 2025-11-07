@@ -255,7 +255,7 @@ export function handleMerger(
     // Create new position in acquiring company
     const newLot: LongPositionLot = {
       quantity: newShares,
-      price: newCost / newShares, // for consistency only
+      price: 0, // new lot from merger we don't have a price basis here
       totalCost: newCost,
     };
 
