@@ -39,14 +39,7 @@ import { pu } from "@junduck/trading-core";
 const portfolio = pu.create("my-portfolio", "My Trading Portfolio");
 
 // Initialize USD position with cash
-const usdPos = {
-  cash: 100000,
-  totalCommission: 0,
-  realisedPnL: 0,
-  created: new Date(),
-  modified: new Date()
-};
-portfolio.positions.set("USD", usdPos);
+portfolio.positions.set("USD", pu.createPosition(100000));
 ```
 
 ### Open a Long Position
@@ -106,18 +99,19 @@ import { validateOrder } from "@junduck/trading-core";
 import type { Order } from "@junduck/trading-core";
 
 const order: Order = {
+  id: "order-1",
   symbol: "AAPL",
   side: "BUY",
-  effect: "OPEN",
+  effect: "OPEN_LONG",
   type: "MARKET",
   quantity: 100,
-  timestamp: new Date()
+  created: new Date()
 };
 
 const position = portfolio.positions.get("USD")!;
 const result = validateOrder(order, position, snapshot);
 if (!result.valid) {
-  console.error(`Order invalid`);
+  console.error(`Order invalid: ${result.error?.type}`);
 }
 ```
 
@@ -153,13 +147,16 @@ Multi-currency portfolio containing:
 
 ### Portfolio Utils
 
-All portfolio utilities are under the `pu` namespace:
+All portfolio utilities are under the `pu` namespace to avoid naming conflicts with position-level utilities (both have `openLong`, `closeLong`, `openShort`, `closeShort` functions).
 
 **Portfolio Management:**
 
 - `pu.create(id, name)` - Create a new portfolio
+- `pu.createPosition(initialCash?, time?)` - Create a new position with initial cash
 - `pu.getPosition(portfolio, currency)` - Get position for currency
 - `pu.getCash(portfolio, currency)` - Get cash balance for currency
+- `pu.getCurrencies(portfolio)` - Get all currency codes in portfolio
+- `pu.hasAsset(portfolio, asset)` - Check if asset exists in portfolio
 
 **Trading (Portfolio-level):**
 
@@ -222,14 +219,7 @@ import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
 
 // 1. Create portfolio with initial cash
 const portfolio = pu.create("backtest-1", "Momentum Strategy");
-const usdPos = portfolio.positions.get("USD") ?? {
-  cash: 100000,
-  totalCommission: 0,
-  realisedPnL: 0,
-  created: new Date(),
-  modified: new Date()
-};
-portfolio.positions.set("USD", usdPos);
+portfolio.positions.set("USD", pu.createPosition(100000));
 
 // 2. Define asset and market data
 const aapl: Asset = { symbol: "AAPL", currency: "USD" };
@@ -241,12 +231,13 @@ const snapshot1: MarketSnapshot = {
 
 // 3. Validate and execute buy order
 const buyOrder: Order = {
+  id: "order-1",
   symbol: "AAPL",
   side: "BUY",
-  effect: "OPEN",
+  effect: "OPEN_LONG",
   type: "MARKET",
   quantity: 100,
-  timestamp: new Date("2024-01-01")
+  created: new Date("2024-01-01")
 };
 
 const validation = validateOrder(buyOrder, usdPos, snapshot1);

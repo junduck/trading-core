@@ -39,14 +39,7 @@ import { pu } from "@junduck/trading-core";
 const portfolio = pu.create("my-portfolio", "我的交易组合");
 
 // 初始化 USD 持仓及现金
-const usdPos = {
-  cash: 100000,
-  totalCommission: 0,
-  realisedPnL: 0,
-  created: new Date(),
-  modified: new Date()
-};
-portfolio.positions.set("USD", usdPos);
+portfolio.positions.set("USD", pu.createPosition(100000));
 ```
 
 ### 开仓做多
@@ -106,18 +99,19 @@ import { validateOrder } from "@junduck/trading-core";
 import type { Order } from "@junduck/trading-core";
 
 const order: Order = {
+  id: "order-1",
   symbol: "AAPL",
   side: "BUY",
-  effect: "OPEN",
+  effect: "OPEN_LONG",
   type: "MARKET",
   quantity: 100,
-  timestamp: new Date()
+  created: new Date()
 };
 
 const position = portfolio.positions.get("USD")!;
 const result = validateOrder(order, position, snapshot);
 if (!result.valid) {
-  console.error(`订单无效`);
+  console.error(`订单无效: ${result.error?.type}`);
 }
 ```
 
@@ -153,13 +147,16 @@ if (!result.valid) {
 
 ### Portfolio 工具函数
 
-所有投资组合工具函数都在 `pu` 命名空间下：
+所有投资组合工具函数都在 `pu` 命名空间下，以避免与持仓级别的工具函数命名冲突（两者都有 `openLong`、`closeLong`、`openShort`、`closeShort` 函数）。
 
 **投资组合管理：**
 
 - `pu.create(id, name)` - 创建新的投资组合
+- `pu.createPosition(initialCash?, time?)` - 创建新的持仓并指定初始现金
 - `pu.getPosition(portfolio, currency)` - 获取指定币种的持仓
 - `pu.getCash(portfolio, currency)` - 获取指定币种的现金余额
+- `pu.getCurrencies(portfolio)` - 获取投资组合中的所有币种代码
+- `pu.hasAsset(portfolio, asset)` - 检查资产是否存在于投资组合中
 
 **交易（投资组合级别）：**
 
@@ -222,14 +219,7 @@ import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
 
 // 1. 创建初始现金的投资组合
 const portfolio = pu.create("backtest-1", "动量策略");
-const usdPos = portfolio.positions.get("USD") ?? {
-  cash: 100000,
-  totalCommission: 0,
-  realisedPnL: 0,
-  created: new Date(),
-  modified: new Date()
-};
-portfolio.positions.set("USD", usdPos);
+portfolio.positions.set("USD", pu.createPosition(100000));
 
 // 2. 定义资产和市场数据
 const aapl: Asset = { symbol: "AAPL", currency: "USD" };
@@ -241,14 +231,16 @@ const snapshot1: MarketSnapshot = {
 
 // 3. 验证并执行买入订单
 const buyOrder: Order = {
+  id: "order-1",
   symbol: "AAPL",
   side: "BUY",
-  effect: "OPEN",
+  effect: "OPEN_LONG",
   type: "MARKET",
   quantity: 100,
-  timestamp: new Date("2024-01-01")
+  created: new Date("2024-01-01")
 };
 
+const usdPos = portfolio.positions.get("USD")!;
 const validation = validateOrder(buyOrder, usdPos, snapshot1);
 if (validation.valid) {
   pu.openLong(portfolio, aapl, 150, 100, 1);
@@ -280,6 +272,12 @@ npm test                # 运行所有测试
 npm run test:watch      # 监视模式
 npm run test:ui         # UI 模式
 npm run test:coverage   # 覆盖率报告
+```
+
+## 运行示例
+
+```bash
+npm run examples        # 运行所有 README 示例
 ```
 
 ## 构建
