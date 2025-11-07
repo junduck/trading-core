@@ -33,46 +33,42 @@ npm install @junduck/trading-core
 ### 创建投资组合
 
 ```typescript
-import { createPortfolio } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
 
-const portfolio = createPortfolio({
-  id: "my-portfolio",
-  name: "我的交易组合",
-  initialCash: { USD: 100000 }
-});
+// 创建投资组合
+const portfolio = pu.create("my-portfolio", "我的交易组合");
+
+// 初始化 USD 持仓及现金
+const usdPos = {
+  cash: 100000,
+  totalCommission: 0,
+  realisedPnL: 0,
+  created: new Date(),
+  modified: new Date()
+};
+portfolio.positions.set("USD", usdPos);
 ```
 
 ### 开仓做多
 
 ```typescript
-import { openLongPosition } from "@junduck/trading-core";
-import type { Fill } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
+import type { Asset } from "@junduck/trading-core";
 
-const fill: Fill = {
+const asset: Asset = {
   symbol: "AAPL",
-  quantity: 100,
-  price: 150,
-  commission: 1,
-  timestamp: new Date()
+  currency: "USD"
 };
 
-openLongPosition(portfolio, "USD", fill);
+pu.openLong(portfolio, asset, 150, 100, 1);
 ```
 
 ### 平仓
 
 ```typescript
-import { closeLongPosition } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
 
-const closeFill: Fill = {
-  symbol: "AAPL",
-  quantity: 50,
-  price: 160,
-  commission: 1,
-  timestamp: new Date()
-};
-
-closeLongPosition(portfolio, "USD", closeFill, "FIFO");
+pu.closeLong(portfolio, asset, 160, 50, 1, "FIFO");
 ```
 
 ### 计算投资组合价值
@@ -118,9 +114,10 @@ const order: Order = {
   timestamp: new Date()
 };
 
-const result = validateOrder(order, portfolio, "USD", snapshot);
+const position = portfolio.positions.get("USD")!;
+const result = validateOrder(order, position, snapshot);
 if (!result.valid) {
-  console.error(`订单无效: ${result.reason}`);
+  console.error(`订单无效`);
 }
 ```
 
@@ -154,60 +151,96 @@ if (!result.valid) {
 
 ## API 参考
 
-### Position 工具函数
-
-- `openLongPosition()` - 开仓或加仓多头
-- `closeLongPosition()` - 减仓或平仓多头
-- `openShortPosition()` - 开仓或加仓空头
-- `closeShortPosition()` - 减仓或平仓空头
-
 ### Portfolio 工具函数
 
-- `createPortfolio()` - 创建新的投资组合
-- `getOrCreatePosition()` - 获取或创建币种持仓
-- `depositCash()` - 向投资组合存入现金
-- `withdrawCash()` - 从投资组合提取现金
+所有投资组合工具函数都在 `pu` 命名空间下：
+
+**投资组合管理：**
+
+- `pu.create(id, name)` - 创建新的投资组合
+- `pu.getPosition(portfolio, currency)` - 获取指定币种的持仓
+- `pu.getCash(portfolio, currency)` - 获取指定币种的现金余额
+
+**交易（投资组合级别）：**
+
+- `pu.openLong(portfolio, asset, price, quantity, commission?, time?)` - 开仓或加仓多头
+- `pu.closeLong(portfolio, asset, price, quantity, commission?, strategy?, time?)` - 平仓多头
+- `pu.openShort(portfolio, asset, price, quantity, commission?, time?)` - 开仓或加仓空头
+- `pu.closeShort(portfolio, asset, price, quantity, commission?, strategy?, time?)` - 平仓空头
+
+**公司行为（投资组合级别）：**
+
+- `pu.handleSplit(portfolio, asset, ratio, time?)` - 处理股票拆分
+- `pu.handleCashDividend(portfolio, asset, amountPerShare, taxRate?, time?)` - 处理现金分红
+- `pu.handleSpinoff(portfolio, asset, newSymbol, ratio, time?)` - 处理分拆
+- `pu.handleMerger(portfolio, asset, newSymbol, ratio, cashComponent?, time?)` - 处理合并
+
+**加密货币行为（投资组合级别）：**
+
+- `pu.handleHardFork(portfolio, asset, newSymbol, ratio?, time?)` - 处理硬分叉
+- `pu.handleAirdrop(portfolio, currency, holderSymbol, airdropSymbol, amountPerToken?, fixedAmount?, time?)` - 处理空投
+- `pu.handleTokenSwap(portfolio, asset, newSymbol, ratio?, time?)` - 处理代币交换
+- `pu.handleStakingReward(portfolio, asset, rewardPerToken, time?)` - 处理质押奖励
+
+### Position 工具函数
+
+持仓级别的交易函数（直接导出）：
+
+- `openLong(pos, symbol, price, quantity, commission?, time?)` - 开仓或加仓多头
+- `closeLong(pos, symbol, price, quantity, commission?, strategy?, time?)` - 平仓多头
+- `openShort(pos, symbol, price, quantity, commission?, time?)` - 开仓或加仓空头
+- `closeShort(pos, symbol, price, quantity, commission?, strategy?, time?)` - 平仓空头
+- `validatePosition(pos)` - 验证持仓完整性
 
 ### Market 工具函数
 
-- `appraisePosition()` - 计算持仓价值
-- `appraisePortfolio()` - 计算跨币种投资组合价值
-- `calculateUnrealizedPnL()` - 计算未实现盈亏
-- `createUniverse()` - 创建可交易资产集合
+- `createUniverse(assets, timestamp?)` - 创建具有过滤功能的资产集合
+- `appraisePosition(position, snapshot)` - 计算持仓总价值
+- `appraisePortfolio(portfolio, snapshot)` - 计算跨币种投资组合价值
+- `calculateUnrealizedPnL(position, snapshot)` - 计算未实现盈亏
+- `isAssetValidAt(asset, timestamp)` - 检查资产在指定时间是否有效
+
+### Fill 工具函数
+
+- `applyFill(position, fill, closeStrategy?)` - 对持仓应用单个成交
+- `applyFills(position, fills, closeStrategy?)` - 顺序应用多个成交
 
 ### 订单验证
 
-- `validateOrder()` - 在执行前验证订单
-- `canOpenPosition()` - 检查是否可以开仓
-- `canClosePosition()` - 检查是否可以平仓
-
-### 公司行为
-
-- `applyStockSplit()` - 对持仓应用股票拆分
-- `applyCashDividend()` - 应用现金分红
-- `applySpinoff()` - 应用分拆行为
+- `validateOrder(order, position, snapshot)` - 验证订单是否符合持仓和市场状态
 
 ## 示例：完整交易流程
 
 ```typescript
 import {
-  createPortfolio,
-  openLongPosition,
-  closeLongPosition,
+  pu,
   appraisePortfolio,
   calculateUnrealizedPnL,
   validateOrder
 } from "@junduck/trading-core";
+import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
 
 // 1. 创建初始现金的投资组合
-const portfolio = createPortfolio({
-  id: "backtest-1",
-  name: "动量策略",
-  initialCash: { USD: 100000 }
-});
+const portfolio = pu.create("backtest-1", "动量策略");
+const usdPos = portfolio.positions.get("USD") ?? {
+  cash: 100000,
+  totalCommission: 0,
+  realisedPnL: 0,
+  created: new Date(),
+  modified: new Date()
+};
+portfolio.positions.set("USD", usdPos);
 
-// 2. 验证并执行买入订单
-const buyOrder = {
+// 2. 定义资产和市场数据
+const aapl: Asset = { symbol: "AAPL", currency: "USD" };
+
+const snapshot1: MarketSnapshot = {
+  timestamp: new Date("2024-01-01"),
+  price: new Map([["AAPL", 150]])
+};
+
+// 3. 验证并执行买入订单
+const buyOrder: Order = {
   symbol: "AAPL",
   side: "BUY",
   effect: "OPEN",
@@ -216,25 +249,13 @@ const buyOrder = {
   timestamp: new Date("2024-01-01")
 };
 
-const snapshot1 = {
-  timestamp: new Date("2024-01-01"),
-  price: new Map([["AAPL", 150]])
-};
-
-const validation = validateOrder(buyOrder, portfolio, "USD", snapshot1);
+const validation = validateOrder(buyOrder, usdPos, snapshot1);
 if (validation.valid) {
-  const buyFill = {
-    symbol: "AAPL",
-    quantity: 100,
-    price: 150,
-    commission: 1,
-    timestamp: new Date("2024-01-01")
-  };
-  openLongPosition(portfolio, "USD", buyFill);
+  pu.openLong(portfolio, aapl, 150, 100, 1);
 }
 
-// 3. 一段时间后检查投资组合价值
-const snapshot2 = {
+// 4. 一段时间后检查投资组合价值
+const snapshot2: MarketSnapshot = {
   timestamp: new Date("2024-02-01"),
   price: new Map([["AAPL", 160]])
 };
@@ -246,15 +267,8 @@ const totalValue = appraisePortfolio(portfolio, snapshot2).get("USD")!;
 console.log(`未实现盈亏: $${unrealizedPnL}`);
 console.log(`总价值: $${totalValue}`);
 
-// 4. 平仓
-const sellFill = {
-  symbol: "AAPL",
-  quantity: 100,
-  price: 160,
-  commission: 1,
-  timestamp: new Date("2024-02-01")
-};
-closeLongPosition(portfolio, "USD", sellFill, "FIFO");
+// 5. 平仓
+pu.closeLong(portfolio, aapl, 160, 100, 1, "FIFO");
 
 console.log(`已实现盈亏: $${position.realisedPnL}`);
 ```

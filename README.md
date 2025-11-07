@@ -33,46 +33,42 @@ npm install @junduck/trading-core
 ### Create a Portfolio
 
 ```typescript
-import { createPortfolio } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
 
-const portfolio = createPortfolio({
-  id: "my-portfolio",
-  name: "My Trading Portfolio",
-  initialCash: { USD: 100000 }
-});
+// Create portfolio
+const portfolio = pu.create("my-portfolio", "My Trading Portfolio");
+
+// Initialize USD position with cash
+const usdPos = {
+  cash: 100000,
+  totalCommission: 0,
+  realisedPnL: 0,
+  created: new Date(),
+  modified: new Date()
+};
+portfolio.positions.set("USD", usdPos);
 ```
 
 ### Open a Long Position
 
 ```typescript
-import { openLongPosition } from "@junduck/trading-core";
-import type { Fill } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
+import type { Asset } from "@junduck/trading-core";
 
-const fill: Fill = {
+const asset: Asset = {
   symbol: "AAPL",
-  quantity: 100,
-  price: 150,
-  commission: 1,
-  timestamp: new Date()
+  currency: "USD"
 };
 
-openLongPosition(portfolio, "USD", fill);
+pu.openLong(portfolio, asset, 150, 100, 1);
 ```
 
 ### Close a Position
 
 ```typescript
-import { closeLongPosition } from "@junduck/trading-core";
+import { pu } from "@junduck/trading-core";
 
-const closeFill: Fill = {
-  symbol: "AAPL",
-  quantity: 50,
-  price: 160,
-  commission: 1,
-  timestamp: new Date()
-};
-
-closeLongPosition(portfolio, "USD", closeFill, "FIFO");
+pu.closeLong(portfolio, asset, 160, 50, 1, "FIFO");
 ```
 
 ### Calculate Portfolio Value
@@ -118,9 +114,10 @@ const order: Order = {
   timestamp: new Date()
 };
 
-const result = validateOrder(order, portfolio, "USD", snapshot);
+const position = portfolio.positions.get("USD")!;
+const result = validateOrder(order, position, snapshot);
 if (!result.valid) {
-  console.error(`Order invalid: ${result.reason}`);
+  console.error(`Order invalid`);
 }
 ```
 
@@ -154,60 +151,96 @@ Multi-currency portfolio containing:
 
 ## API Reference
 
-### Position Utils
-
-- `openLongPosition()` - Open or add to a long position
-- `closeLongPosition()` - Reduce or close a long position
-- `openShortPosition()` - Open or add to a short position
-- `closeShortPosition()` - Reduce or close a short position
-
 ### Portfolio Utils
 
-- `createPortfolio()` - Create a new portfolio
-- `getOrCreatePosition()` - Get or create a currency position
-- `depositCash()` - Add cash to portfolio
-- `withdrawCash()` - Remove cash from portfolio
+All portfolio utilities are under the `pu` namespace:
+
+**Portfolio Management:**
+
+- `pu.create(id, name)` - Create a new portfolio
+- `pu.getPosition(portfolio, currency)` - Get position for currency
+- `pu.getCash(portfolio, currency)` - Get cash balance for currency
+
+**Trading (Portfolio-level):**
+
+- `pu.openLong(portfolio, asset, price, quantity, commission?, time?)` - Open or add to long position
+- `pu.closeLong(portfolio, asset, price, quantity, commission?, strategy?, time?)` - Close long position
+- `pu.openShort(portfolio, asset, price, quantity, commission?, time?)` - Open or add to short position
+- `pu.closeShort(portfolio, asset, price, quantity, commission?, strategy?, time?)` - Close short position
+
+**Corporate Actions (Portfolio-level):**
+
+- `pu.handleSplit(portfolio, asset, ratio, time?)` - Handle stock split
+- `pu.handleCashDividend(portfolio, asset, amountPerShare, taxRate?, time?)` - Handle cash dividend
+- `pu.handleSpinoff(portfolio, asset, newSymbol, ratio, time?)` - Handle spinoff
+- `pu.handleMerger(portfolio, asset, newSymbol, ratio, cashComponent?, time?)` - Handle merger
+
+**Crypto Actions (Portfolio-level):**
+
+- `pu.handleHardFork(portfolio, asset, newSymbol, ratio?, time?)` - Handle hard fork
+- `pu.handleAirdrop(portfolio, currency, holderSymbol, airdropSymbol, amountPerToken?, fixedAmount?, time?)` - Handle airdrop
+- `pu.handleTokenSwap(portfolio, asset, newSymbol, ratio?, time?)` - Handle token swap
+- `pu.handleStakingReward(portfolio, asset, rewardPerToken, time?)` - Handle staking rewards
+
+### Position Utils
+
+Position-level trading functions (exported directly):
+
+- `openLong(pos, symbol, price, quantity, commission?, time?)` - Open or add to long position
+- `closeLong(pos, symbol, price, quantity, commission?, strategy?, time?)` - Close long position
+- `openShort(pos, symbol, price, quantity, commission?, time?)` - Open or add to short position
+- `closeShort(pos, symbol, price, quantity, commission?, strategy?, time?)` - Close short position
+- `validatePosition(pos)` - Validate position integrity
 
 ### Market Utils
 
-- `appraisePosition()` - Calculate position value
-- `appraisePortfolio()` - Calculate portfolio value across currencies
-- `calculateUnrealizedPnL()` - Calculate unrealized profit/loss
-- `createUniverse()` - Create a tradable asset universe
+- `createUniverse(assets, timestamp?)` - Create a Universe with filtering capabilities
+- `appraisePosition(position, snapshot)` - Calculate total position value
+- `appraisePortfolio(portfolio, snapshot)` - Calculate portfolio value across currencies
+- `calculateUnrealizedPnL(position, snapshot)` - Calculate unrealized profit/loss
+- `isAssetValidAt(asset, timestamp)` - Check if asset is valid at timestamp
+
+### Fill Utils
+
+- `applyFill(position, fill, closeStrategy?)` - Apply a single fill to position
+- `applyFills(position, fills, closeStrategy?)` - Apply multiple fills sequentially
 
 ### Order Validation
 
-- `validateOrder()` - Validate order before execution
-- `canOpenPosition()` - Check if position can be opened
-- `canClosePosition()` - Check if position can be closed
-
-### Corporate Actions
-
-- `applyStockSplit()` - Apply stock split to positions
-- `applyCashDividend()` - Apply cash dividend
-- `applySpinoff()` - Apply spinoff action
+- `validateOrder(order, position, snapshot)` - Validate order against position and market state
 
 ## Example: Complete Trading Flow
 
 ```typescript
 import {
-  createPortfolio,
-  openLongPosition,
-  closeLongPosition,
+  pu,
   appraisePortfolio,
   calculateUnrealizedPnL,
   validateOrder
 } from "@junduck/trading-core";
+import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
 
 // 1. Create portfolio with initial cash
-const portfolio = createPortfolio({
-  id: "backtest-1",
-  name: "Momentum Strategy",
-  initialCash: { USD: 100000 }
-});
+const portfolio = pu.create("backtest-1", "Momentum Strategy");
+const usdPos = portfolio.positions.get("USD") ?? {
+  cash: 100000,
+  totalCommission: 0,
+  realisedPnL: 0,
+  created: new Date(),
+  modified: new Date()
+};
+portfolio.positions.set("USD", usdPos);
 
-// 2. Validate and execute buy order
-const buyOrder = {
+// 2. Define asset and market data
+const aapl: Asset = { symbol: "AAPL", currency: "USD" };
+
+const snapshot1: MarketSnapshot = {
+  timestamp: new Date("2024-01-01"),
+  price: new Map([["AAPL", 150]])
+};
+
+// 3. Validate and execute buy order
+const buyOrder: Order = {
   symbol: "AAPL",
   side: "BUY",
   effect: "OPEN",
@@ -216,25 +249,13 @@ const buyOrder = {
   timestamp: new Date("2024-01-01")
 };
 
-const snapshot1 = {
-  timestamp: new Date("2024-01-01"),
-  price: new Map([["AAPL", 150]])
-};
-
-const validation = validateOrder(buyOrder, portfolio, "USD", snapshot1);
+const validation = validateOrder(buyOrder, usdPos, snapshot1);
 if (validation.valid) {
-  const buyFill = {
-    symbol: "AAPL",
-    quantity: 100,
-    price: 150,
-    commission: 1,
-    timestamp: new Date("2024-01-01")
-  };
-  openLongPosition(portfolio, "USD", buyFill);
+  pu.openLong(portfolio, aapl, 150, 100, 1);
 }
 
-// 3. Check portfolio value after some time
-const snapshot2 = {
+// 4. Check portfolio value after some time
+const snapshot2: MarketSnapshot = {
   timestamp: new Date("2024-02-01"),
   price: new Map([["AAPL", 160]])
 };
@@ -246,15 +267,8 @@ const totalValue = appraisePortfolio(portfolio, snapshot2).get("USD")!;
 console.log(`Unrealized P&L: $${unrealizedPnL}`);
 console.log(`Total Value: $${totalValue}`);
 
-// 4. Close position
-const sellFill = {
-  symbol: "AAPL",
-  quantity: 100,
-  price: 160,
-  commission: 1,
-  timestamp: new Date("2024-02-01")
-};
-closeLongPosition(portfolio, "USD", sellFill, "FIFO");
+// 5. Close position
+pu.closeLong(portfolio, aapl, 160, 100, 1, "FIFO");
 
 console.log(`Realized P&L: $${position.realisedPnL}`);
 ```
