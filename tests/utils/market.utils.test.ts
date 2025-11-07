@@ -3,6 +3,7 @@ import {
   createUniverse,
   appraisePosition,
   appraisePortfolio,
+  calculateUnrealizedPnL,
   isAssetValidAt,
 } from "../../src/utils/market.utils.js";
 import type { Asset } from "../../src/types/asset.js";
@@ -517,6 +518,278 @@ describe("Market Utils", () => {
       expect(result.get("USD")).toBe(25000);
       // EUR: 5000 + 2*30000 = 65000
       expect(result.get("EUR")).toBe(65000);
+    });
+  });
+
+  describe("calculateUnrealizedPnL()", () => {
+    it("should return 0 for position with only cash", () => {
+      const position: Position = {
+        cash: 10000,
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map(),
+      };
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(0);
+    });
+
+    it("should calculate unrealized P&L for long position with gain", () => {
+      const position: Position = {
+        cash: 10000,
+        long: new Map([
+          [
+            "AAPL",
+            {
+              symbol: "AAPL",
+              quantity: 100,
+              totalCost: 10000,
+              averageCost: 100,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([["AAPL", 150]]),
+      };
+      // (150 - 100) * 100 = 5000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(5000);
+    });
+
+    it("should calculate unrealized P&L for long position with loss", () => {
+      const position: Position = {
+        cash: 10000,
+        long: new Map([
+          [
+            "AAPL",
+            {
+              symbol: "AAPL",
+              quantity: 100,
+              totalCost: 10000,
+              averageCost: 100,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([["AAPL", 50]]),
+      };
+      // (50 - 100) * 100 = -5000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(-5000);
+    });
+
+    it("should calculate unrealized P&L for short position with gain", () => {
+      const position: Position = {
+        cash: 20000,
+        short: new Map([
+          [
+            "TSLA",
+            {
+              symbol: "TSLA",
+              quantity: 100,
+              totalProceeds: 20000,
+              averageProceeds: 200,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([["TSLA", 150]]),
+      };
+      // (200 - 150) * 100 = 5000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(5000);
+    });
+
+    it("should calculate unrealized P&L for short position with loss", () => {
+      const position: Position = {
+        cash: 20000,
+        short: new Map([
+          [
+            "TSLA",
+            {
+              symbol: "TSLA",
+              quantity: 100,
+              totalProceeds: 20000,
+              averageProceeds: 200,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([["TSLA", 250]]),
+      };
+      // (200 - 250) * 100 = -5000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(-5000);
+    });
+
+    it("should calculate unrealized P&L for mixed long and short positions", () => {
+      const position: Position = {
+        cash: 10000,
+        long: new Map([
+          [
+            "AAPL",
+            {
+              symbol: "AAPL",
+              quantity: 100,
+              totalCost: 10000,
+              averageCost: 100,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        short: new Map([
+          [
+            "TSLA",
+            {
+              symbol: "TSLA",
+              quantity: 50,
+              totalProceeds: 10000,
+              averageProceeds: 200,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([
+          ["AAPL", 150],
+          ["TSLA", 180],
+        ]),
+      };
+      // Long AAPL: (150 - 100) * 100 = 5000
+      // Short TSLA: (200 - 180) * 50 = 1000
+      // Total: 5000 + 1000 = 6000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(6000);
+    });
+
+    it("should calculate unrealized P&L for multiple long positions", () => {
+      const position: Position = {
+        cash: 10000,
+        long: new Map([
+          [
+            "AAPL",
+            {
+              symbol: "AAPL",
+              quantity: 100,
+              totalCost: 10000,
+              averageCost: 100,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+          [
+            "MSFT",
+            {
+              symbol: "MSFT",
+              quantity: 50,
+              totalCost: 10000,
+              averageCost: 200,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map([
+          ["AAPL", 120],
+          ["MSFT", 180],
+        ]),
+      };
+      // AAPL: (120 - 100) * 100 = 2000
+      // MSFT: (180 - 200) * 50 = -1000
+      // Total: 2000 + (-1000) = 1000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(1000);
+    });
+
+    it("should handle missing prices as zero", () => {
+      const position: Position = {
+        cash: 10000,
+        long: new Map([
+          [
+            "AAPL",
+            {
+              symbol: "AAPL",
+              quantity: 100,
+              totalCost: 10000,
+              averageCost: 100,
+              realisedPnL: 0,
+              lots: [],
+              created: new Date(),
+              modified: new Date(),
+            },
+          ],
+        ]),
+        totalCommission: 0,
+        realisedPnL: 0,
+        created: new Date(),
+        modified: new Date(),
+      };
+      const snapshot: MarketSnapshot = {
+        timestamp: new Date(),
+        price: new Map(), // No prices
+      };
+      // (0 - 100) * 100 = -10000
+      expect(calculateUnrealizedPnL(position, snapshot)).toBe(-10000);
     });
   });
 });

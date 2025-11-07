@@ -9,3 +9,5 @@
 - For commission value, if commission exists, use the lot price as commission, for easier manual review.
 
 - For all rate/ratio related actions, (tax, split ect) use 0.5 and/or 2 for easier manual review.
+
+- For all other numbers, prefer simple calculation.

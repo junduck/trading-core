@@ -129,6 +129,41 @@ export function appraisePortfolio(
 }
 
 /**
+ * Calculates unrealized profit and loss for a position.
+ * Long: (currentPrice - averageCost) × quantity
+ * Short: (averageProceeds - currentPrice) × quantity
+ *
+ * @param position - Position to calculate unrealized P&L for
+ * @param snapshot - Market snapshot with current prices
+ * @returns Total unrealized P&L across all positions
+ */
+export function calculateUnrealizedPnL(
+  position: Position,
+  snapshot: MarketSnapshot
+): number {
+  let unrealizedPnL = 0;
+
+  // Calculate unrealized P&L for long positions
+  if (position.long) {
+    for (const [symbol, longPos] of position.long) {
+      const currentPrice = snapshot.price.get(symbol) ?? 0;
+      unrealizedPnL += (currentPrice - longPos.averageCost) * longPos.quantity;
+    }
+  }
+
+  // Calculate unrealized P&L for short positions
+  if (position.short) {
+    for (const [symbol, shortPos] of position.short) {
+      const currentPrice = snapshot.price.get(symbol) ?? 0;
+      unrealizedPnL +=
+        (shortPos.averageProceeds - currentPrice) * shortPos.quantity;
+    }
+  }
+
+  return unrealizedPnL;
+}
+
+/**
  * Checks if an asset is valid at a given timestamp.
  * An asset is valid if:
  * - validFrom is null/undefined OR timestamp >= validFrom
