@@ -340,7 +340,7 @@ export function handleMerger(
       newPos.modified = actTime;
     }
 
-    pos.short!.delete(newSymbol);
+    pos.short!.delete(symbol);
   }
 
   // Adjust cash account
