@@ -62,8 +62,6 @@ export function openLong(
     quantity: quant,
     price,
     totalCost: cost,
-    created: actTime,
-    modified: actTime,
   };
 
   // Initialize long positions map if needed
@@ -151,7 +149,6 @@ export function closeLong(
 
     lot.quantity -= closeQty;
     lot.totalCost -= lotCost;
-    lot.modified = actTime;
   }
 
   // Remove empty lots
@@ -212,8 +209,6 @@ export function openShort(
     quantity: quant,
     price,
     totalProceeds: proceeds,
-    created: actTime,
-    modified: actTime,
   };
 
   // Initialize short positions map if needed
@@ -301,7 +296,6 @@ export function closeShort(
 
     lot.quantity -= closeQty;
     lot.totalProceeds -= lotProceeds;
-    lot.modified = actTime;
   }
 
   // Remove empty lots

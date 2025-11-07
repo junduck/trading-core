@@ -11,12 +11,6 @@ export interface LongPositionLot {
 
   /** Total cost for this lot including commission (cost = price * quantity + commission). This is deducted proportionally when closing positions. */
   totalCost: number;
-
-  /** Timestamp when this lot was created */
-  created: Date;
-
-  /** Timestamp when this lot was last modified */
-  modified: Date;
 }
 
 /**
@@ -62,12 +56,6 @@ export interface ShortPositionLot {
 
   /** Total proceeds from this lot after commission (proceeds = price * quantity - commission). This is deducted proportionally when closing positions. */
   totalProceeds: number;
-
-  /** Timestamp when this lot was created */
-  created: Date;
-
-  /** Timestamp when this lot was last modified */
-  modified: Date;
 }
 
 /**
