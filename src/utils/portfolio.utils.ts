@@ -50,6 +50,24 @@ export function getCurrencies(portfolio: Portfolio): string[] {
   return Array.from(portfolio.positions.keys());
 }
 
+function getOrSetPosition(
+  p: Portfolio,
+  currency: string,
+  time: Date
+): Position {
+  let pos = p.positions.get(currency);
+  if (!pos) {
+    pos = {
+      cash: 0,
+      totalCommission: 0,
+      realisedPnL: 0,
+      modified: time,
+    };
+    p.positions.set(currency, pos);
+  }
+  return pos;
+}
+
 /** Opens a long position by purchasing an asset. Mutates portfolio. */
 export function openLong(
   portfolio: Portfolio,
@@ -62,16 +80,7 @@ export function openLong(
   const actTime = time ?? new Date();
 
   // Initialize position if needed
-  let pos = portfolio.positions.get(asset.currency);
-  if (!pos) {
-    pos = {
-      cash: 0,
-      totalCommission: 0,
-      realisedPnL: 0,
-      modified: actTime,
-    };
-    portfolio.positions.set(asset.currency, pos);
-  }
+  const pos = getOrSetPosition(portfolio, asset.currency, actTime);
 
   const cashFlow = posUtils.openLong(
     pos,
@@ -126,16 +135,7 @@ export function openShort(
   const actTime = time ?? new Date();
 
   // Initialize position if needed
-  let pos = portfolio.positions.get(asset.currency);
-  if (!pos) {
-    pos = {
-      cash: 0,
-      totalCommission: 0,
-      realisedPnL: 0,
-      modified: actTime,
-    };
-    portfolio.positions.set(asset.currency, pos);
-  }
+  const pos = getOrSetPosition(portfolio, asset.currency, actTime);
 
   const proceeds = posUtils.openShort(
     pos,
