@@ -26,9 +26,26 @@
     "test:coverage": "vitest run --coverage",
     "prepublishOnly": "pnpm run clean && pnpm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "trading",
+    "backtest",
+    "portfolio",
+    "position",
+    "spot-market",
+    "bookkeeping",
+    "finance",
+    "investment"
+  ],
   "author": "Jun",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junduck/trading-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/junduck/trading-core/issues"
+  },
+  "homepage": "https://github.com/junduck/trading-core#readme",
   "packageManager": "pnpm@10.20.0",
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.7",
