@@ -2,11 +2,13 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   openLong,
   openShort,
+} from '../../src/utils/portfolio.utils.js';
+import {
   handleSplit,
   handleCashDividend,
   handleSpinoff,
   handleMerger,
-} from '../../src/utils/portfolio.utils.js';
+} from '../../src/utils/stock.utils.js';
 import type { Portfolio } from '../../src/types/portfolio.js';
 import type { Asset } from '../../src/types/asset.js';
 import { createTestPortfolio, createTestAsset, round, getCash } from './test-helpers.js';
