@@ -100,14 +100,29 @@ export interface ShortPosition {
   modified: Date;
 }
 
+/**
+ * Represents a currency account within a portfolio.
+ * Groups all assets, cash, and P&L for a specific currency.
+ */
 export interface Position {
+  /** Cash balance in this currency */
   cash: number;
 
+  /** Long positions in assets denominated in this currency */
   long?: Map<string, LongPosition>;
 
+  /** Short positions in assets denominated in this currency */
   short?: Map<string, ShortPosition>;
 
-  totalCommision: number;
+  /** Total commission paid in this currency */
+  totalCommission: number;
 
+  /** Total realised profit and loss in this currency */
   realisedPnL: number;
+
+  /** Timestamp when this position was created */
+  created: Date;
+
+  /** Timestamp when this position was last modified */
+  modified: Date;
 }

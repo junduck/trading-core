@@ -1,19 +1,20 @@
-import type { Asset } from "../types/asset.js";
-import type { Portfolio } from "../types/portfolio.js";
-import type { LongPositionLot, ShortPositionLot } from "../types/position.js";
-import { deposit } from "./portfolio.utils.js";
+import type {
+  Position,
+  LongPositionLot,
+  ShortPositionLot,
+} from "../types/position.js";
 
 /**
  * Handles a stock split by adjusting position quantities and costs.
- * @param p - The portfolio to modify
- * @param asset - The asset undergoing the split
+ * @param pos - The position to modify
+ * @param symbol - The asset symbol undergoing the split
  * @param ratio - The split ratio (e.g., 2 for a 2-for-1 split)
  * @param time - The transaction time (default: current date)
  * @throws Error if the split ratio is not positive
  */
 export function handleSplit(
-  p: Portfolio,
-  asset: Asset,
+  pos: Position,
+  symbol: string,
   ratio: number,
   time?: Date
 ) {
@@ -23,7 +24,7 @@ export function handleSplit(
 
   const actTime = time ?? new Date();
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     // Update each lot
     for (const lot of long.lots) {
@@ -38,7 +39,7 @@ export function handleSplit(
     long.modified = actTime;
   }
 
-  const short = p.shortPosition?.get(asset.symbol);
+  const short = pos.short?.get(symbol);
   if (short) {
     // Update each lot
     for (const lot of short.lots) {
@@ -53,22 +54,24 @@ export function handleSplit(
     short.modified = actTime;
   }
 
-  p.modified = actTime;
+  if (long || short) {
+    pos.modified = actTime;
+  }
 }
 
 /**
  * Handles a cash dividend payment by adjusting cost basis and cash balance.
- * @param p - The portfolio to modify
- * @param asset - The asset paying the dividend
+ * @param pos - The position to modify
+ * @param symbol - The asset symbol paying the dividend
  * @param amountPerShare - The dividend amount per share
  * @param taxRate - The tax rate applied to the dividend (default: 0)
  * @param time - The transaction time (default: current date)
- * @returns The net cash flow after tax
+ * @returns The net cash flow after tax (positive for long, negative for short)
  * @throws Error if the dividend amount is negative or tax rate is not between 0 and 1
  */
 export function handleCashDividend(
-  p: Portfolio,
-  asset: Asset,
+  pos: Position,
+  symbol: string,
   amountPerShare: number,
   taxRate: number = 0,
   time?: Date
@@ -86,7 +89,7 @@ export function handleCashDividend(
 
   let cashFlow = 0;
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     let totalPaid = 0;
 
@@ -106,7 +109,7 @@ export function handleCashDividend(
     cashFlow += totalPaid;
   }
 
-  const short = p.shortPosition?.get(asset.symbol);
+  const short = pos.short?.get(symbol);
   if (short) {
     let totalOwed = 0;
 
@@ -125,27 +128,27 @@ export function handleCashDividend(
     cashFlow -= totalOwed;
   }
 
-  // Adjust cash account
-  deposit(p, asset.currency, cashFlow);
-
-  p.modified = actTime;
+  if (long || short) {
+    pos.cash += cashFlow;
+    pos.modified = actTime;
+  }
 
   return cashFlow;
 }
 
 /**
  * Handles a corporate spinoff by creating positions in the new company.
- * @param p - The portfolio to modify
- * @param asset - The original asset
- * @param newAsset - The spun-off company asset
+ * @param pos - The source position
+ * @param symbol - The original asset symbol
+ * @param newSymbol - The spun-off company symbol
  * @param ratio - The number of new shares per original share
  * @param time - The transaction time (default: current date)
  * @throws Error if the spinoff ratio is not positive
  */
 export function handleSpinoff(
-  p: Portfolio,
-  asset: Asset,
-  newAsset: Asset,
+  pos: Position,
+  symbol: string,
+  newSymbol: string,
   ratio: number,
   time?: Date
 ) {
@@ -155,7 +158,7 @@ export function handleSpinoff(
 
   const actTime = time ?? new Date();
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     const newShares = long.quantity * ratio;
 
@@ -169,10 +172,10 @@ export function handleSpinoff(
     };
 
     // Add to position
-    let newPos = p.longPosition!.get(newAsset.symbol);
+    let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newShares,
         totalCost: 0,
         averageCost: 0,
@@ -181,7 +184,7 @@ export function handleSpinoff(
         created: actTime,
         modified: actTime,
       };
-      p.longPosition!.set(newAsset.symbol, newPos);
+      pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newShares;
       newPos.averageCost = newPos.totalCost / newPos.quantity;
@@ -190,7 +193,7 @@ export function handleSpinoff(
     }
   }
 
-  const short = p.shortPosition?.get(asset.symbol);
+  const short = pos.short?.get(symbol);
   if (short) {
     const newShares = short.quantity * ratio;
 
@@ -202,10 +205,10 @@ export function handleSpinoff(
       modified: actTime,
     };
 
-    let newPos = p.shortPosition!.get(newAsset.symbol);
+    let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newShares,
         totalProceeds: 0,
         averageProceeds: 0,
@@ -214,7 +217,7 @@ export function handleSpinoff(
         created: actTime,
         modified: actTime,
       };
-      p.shortPosition!.set(newAsset.symbol, newPos);
+      pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newShares;
       newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
@@ -223,14 +226,16 @@ export function handleSpinoff(
     }
   }
 
-  p.modified = actTime;
+  if (long || short) {
+    pos.modified = actTime;
+  }
 }
 
 /**
  * Handles a corporate merger by exchanging positions to the acquiring company.
- * @param p - The portfolio to modify
- * @param asset - The asset being acquired
- * @param newAsset - The acquiring company asset
+ * @param pos - The source position
+ * @param symbol - The asset symbol being acquired
+ * @param newSymbol - The acquiring company symbol
  * @param ratio - The exchange ratio of new shares per old share
  * @param cashComponent - The cash amount per share (default: 0)
  * @param time - The transaction time (default: current date)
@@ -238,9 +243,9 @@ export function handleSpinoff(
  * @throws Error if the merger ratio is not positive or cash component is negative
  */
 export function handleMerger(
-  p: Portfolio,
-  asset: Asset,
-  newAsset: Asset,
+  pos: Position,
+  symbol: string,
+  newSymbol: string,
   ratio: number,
   cashComponent: number = 0,
   time?: Date
@@ -258,7 +263,7 @@ export function handleMerger(
 
   let cashFlow = 0;
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     const newShares = long.quantity * ratio;
     const cashReceived = long.quantity * cashComponent;
@@ -274,10 +279,10 @@ export function handleMerger(
       modified: actTime,
     };
 
-    let newPos = p.longPosition!.get(newAsset.symbol);
+    let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
         averageCost: newLot.price,
@@ -286,7 +291,7 @@ export function handleMerger(
         created: actTime,
         modified: actTime,
       };
-      p.longPosition!.set(newAsset.symbol, newPos);
+      pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalCost += newLot.totalCost;
@@ -296,10 +301,10 @@ export function handleMerger(
     }
 
     // Remove old position
-    p.longPosition!.delete(asset.symbol);
+    pos.long!.delete(symbol);
   }
 
-  const short = p.shortPosition?.get(asset.symbol);
+  const short = pos.short?.get(symbol);
   if (short) {
     const newShorts = short.quantity * ratio;
     const cashOwed = short.quantity * cashComponent;
@@ -314,10 +319,10 @@ export function handleMerger(
       modified: actTime,
     };
 
-    let newPos = p.shortPosition!.get(newAsset.symbol);
+    let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
         averageProceeds: newLot.price,
@@ -326,7 +331,7 @@ export function handleMerger(
         created: actTime,
         modified: actTime,
       };
-      p.shortPosition!.set(newAsset.symbol, newPos);
+      pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalProceeds += newLot.totalProceeds;
@@ -335,13 +340,14 @@ export function handleMerger(
       newPos.modified = actTime;
     }
 
-    p.shortPosition!.delete(asset.symbol);
+    pos.short!.delete(newSymbol);
   }
 
   // Adjust cash account
-  deposit(p, asset.currency, cashFlow);
-
-  p.modified = actTime;
+  if (long || short) {
+    pos.cash += cashFlow;
+    pos.modified = actTime;
+  }
 
   return cashFlow;
 }

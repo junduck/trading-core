@@ -1,20 +1,22 @@
-import type { Asset } from "../types/asset.js";
-import type { Portfolio } from "../types/portfolio.js";
-import type { LongPositionLot, ShortPositionLot } from "../types/position.js";
+import type {
+  Position,
+  LongPositionLot,
+  ShortPositionLot,
+} from "../types/position.js";
 
 /**
  * Handles a hard fork by creating positions in the new cryptocurrency.
- * @param p - The portfolio to modify
- * @param asset - The original cryptocurrency asset
- * @param newAsset - The forked cryptocurrency asset
+ * @param pos - The position to modify
+ * @param symbol - The original cryptocurrency symbol
+ * @param newSymbol - The forked cryptocurrency symbol
  * @param ratio - The number of new coins per original coin (default: 1)
  * @param time - The transaction time (default: current date)
  * @throws Error if the hard fork ratio is not positive
  */
 export function handleHardFork(
-  p: Portfolio,
-  asset: Asset,
-  newAsset: Asset,
+  pos: Position,
+  symbol: string,
+  newSymbol: string,
   ratio: number = 1,
   time?: Date
 ) {
@@ -24,7 +26,7 @@ export function handleHardFork(
 
   const actTime = time ?? new Date();
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     const newCoins = long.quantity * ratio;
 
@@ -37,14 +39,11 @@ export function handleHardFork(
       modified: actTime,
     };
 
-    // Initialize if needed
-    p.longPosition ??= new Map();
-
     // Add to position
-    let newPos = p.longPosition.get(newAsset.symbol);
+    let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newCoins,
         totalCost: 0,
         averageCost: 0,
@@ -53,7 +52,7 @@ export function handleHardFork(
         created: actTime,
         modified: actTime,
       };
-      p.longPosition.set(newAsset.symbol, newPos);
+      pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newCoins;
       newPos.averageCost = newPos.totalCost / newPos.quantity;
@@ -62,7 +61,7 @@ export function handleHardFork(
     }
   }
 
-  const short = p.shortPosition?.get(asset.symbol);
+  const short = pos.short?.get(symbol);
   if (short) {
     const newCoins = short.quantity * ratio;
 
@@ -74,13 +73,10 @@ export function handleHardFork(
       modified: actTime,
     };
 
-    // Initialize if needed
-    p.shortPosition ??= new Map();
-
-    let newPos = p.shortPosition.get(newAsset.symbol);
+    let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newCoins,
         totalProceeds: 0,
         averageProceeds: 0,
@@ -89,7 +85,7 @@ export function handleHardFork(
         created: actTime,
         modified: actTime,
       };
-      p.shortPosition.set(newAsset.symbol, newPos);
+      pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newCoins;
       newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
@@ -98,30 +94,32 @@ export function handleHardFork(
     }
   }
 
-  p.modified = actTime;
+  if (long || short) {
+    pos.modified = actTime;
+  }
 }
 
 /**
  * Handles an airdrop by creating positions in the airdropped token.
- * @param p - The portfolio to modify
- * @param holderAsset - The asset holdings that qualify for the airdrop (can be null for universal airdrops)
- * @param airdropAsset - The airdropped token asset
- * @param amountPerToken - The airdrop amount per token held (ignored if holderAsset is null)
- * @param fixedAmount - Fixed airdrop amount (used if holderAsset is null)
+ * @param pos - The position to modify
+ * @param holderSymbol - The asset symbol that qualifies for the airdrop (can be null for universal airdrops)
+ * @param airdropSymbol - The airdropped token symbol
+ * @param amountPerToken - The airdrop amount per token held (ignored if holderSymbol is null)
+ * @param fixedAmount - Fixed airdrop amount (used if holderSymbol is null)
  * @param time - The transaction time (default: current date)
- * @throws Error if both holderAsset and fixedAmount are null, or amountPerToken is negative
+ * @throws Error if both holderSymbol and fixedAmount are null, or amountPerToken is negative
  */
 export function handleAirdrop(
-  p: Portfolio,
-  holderAsset: Asset | null,
-  airdropAsset: Asset,
+  pos: Position,
+  holderSymbol: string | null,
+  airdropSymbol: string,
   amountPerToken: number = 0,
   fixedAmount: number = 0,
   time?: Date
 ) {
-  if (!holderAsset && fixedAmount <= 0) {
+  if (!holderSymbol && fixedAmount <= 0) {
     throw new Error(
-      "Either holderAsset with amountPerToken or fixedAmount must be specified"
+      "Either holderSymbol with amountPerToken or fixedAmount must be specified"
     );
   }
   if (amountPerToken < 0) {
@@ -134,9 +132,9 @@ export function handleAirdrop(
 
   let airdropQuantity = 0;
 
-  if (holderAsset) {
+  if (holderSymbol) {
     // Proportional airdrop based on holdings
-    const long = p.longPosition?.get(holderAsset.symbol);
+    const long = pos.long?.get(holderSymbol);
     if (long) {
       airdropQuantity = long.quantity * amountPerToken;
     }
@@ -159,12 +157,12 @@ export function handleAirdrop(
   };
 
   // Initialize if needed
-  p.longPosition ??= new Map();
+  pos.long ??= new Map();
 
-  let newPos = p.longPosition.get(airdropAsset.symbol);
+  let newPos = pos.long.get(airdropSymbol);
   if (!newPos) {
     newPos = {
-      symbol: airdropAsset.symbol,
+      symbol: airdropSymbol,
       quantity: airdropQuantity,
       totalCost: 0,
       averageCost: 0,
@@ -173,7 +171,7 @@ export function handleAirdrop(
       created: actTime,
       modified: actTime,
     };
-    p.longPosition.set(airdropAsset.symbol, newPos);
+    pos.long.set(airdropSymbol, newPos);
   } else {
     newPos.quantity += airdropQuantity;
     newPos.averageCost = newPos.totalCost / newPos.quantity;
@@ -181,22 +179,22 @@ export function handleAirdrop(
     newPos.modified = actTime;
   }
 
-  p.modified = actTime;
+  pos.modified = actTime;
 }
 
 /**
  * Handles a token swap/migration by exchanging positions from old to new token.
- * @param p - The portfolio to modify
- * @param oldAsset - The old token asset
- * @param newAsset - The new token asset
+ * @param pos - The position to modify
+ * @param oldSymbol - The old token symbol
+ * @param newSymbol - The new token symbol
  * @param ratio - The exchange ratio of new tokens per old token (default: 1)
  * @param time - The transaction time (default: current date)
  * @throws Error if the swap ratio is not positive
  */
 export function handleTokenSwap(
-  p: Portfolio,
-  oldAsset: Asset,
-  newAsset: Asset,
+  pos: Position,
+  oldSymbol: string,
+  newSymbol: string,
   ratio: number = 1,
   time?: Date
 ) {
@@ -206,7 +204,7 @@ export function handleTokenSwap(
 
   const actTime = time ?? new Date();
 
-  const long = p.longPosition?.get(oldAsset.symbol);
+  const long = pos.long?.get(oldSymbol);
   if (long) {
     const newTokens = long.quantity * ratio;
 
@@ -219,13 +217,10 @@ export function handleTokenSwap(
       modified: actTime,
     };
 
-    // Initialize if needed
-    p.longPosition ??= new Map();
-
-    let newPos = p.longPosition.get(newAsset.symbol);
+    let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
         averageCost: newLot.price,
@@ -234,7 +229,7 @@ export function handleTokenSwap(
         created: actTime,
         modified: actTime,
       };
-      p.longPosition.set(newAsset.symbol, newPos);
+      pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalCost += newLot.totalCost;
@@ -244,10 +239,10 @@ export function handleTokenSwap(
     }
 
     // Remove old position
-    p.longPosition.delete(oldAsset.symbol);
+    pos.long!.delete(oldSymbol);
   }
 
-  const short = p.shortPosition?.get(oldAsset.symbol);
+  const short = pos.short?.get(oldSymbol);
   if (short) {
     const newTokens = short.quantity * ratio;
 
@@ -259,13 +254,10 @@ export function handleTokenSwap(
       modified: actTime,
     };
 
-    // Initialize if needed
-    p.shortPosition ??= new Map();
-
-    let newPos = p.shortPosition.get(newAsset.symbol);
+    let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newAsset.symbol,
+        symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
         averageProceeds: newLot.price,
@@ -274,7 +266,7 @@ export function handleTokenSwap(
         created: actTime,
         modified: actTime,
       };
-      p.shortPosition.set(newAsset.symbol, newPos);
+      pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalProceeds += newLot.totalProceeds;
@@ -283,24 +275,26 @@ export function handleTokenSwap(
       newPos.modified = actTime;
     }
 
-    p.shortPosition.delete(oldAsset.symbol);
+    pos.short!.delete(oldSymbol);
   }
 
-  p.modified = actTime;
+  if (long || short) {
+    pos.modified = actTime;
+  }
 }
 
 /**
  * Handles staking rewards by increasing position quantity.
- * @param p - The portfolio to modify
- * @param asset - The staked asset
+ * @param pos - The position to modify
+ * @param symbol - The staked asset symbol
  * @param rewardPerToken - The reward amount per staked token
  * @param time - The transaction time (default: current date)
  * @returns The total quantity of rewards received
  * @throws Error if the reward amount is negative
  */
 export function handleStakingReward(
-  p: Portfolio,
-  asset: Asset,
+  pos: Position,
+  symbol: string,
   rewardPerToken: number,
   time?: Date
 ): number {
@@ -314,7 +308,7 @@ export function handleStakingReward(
 
   let totalRewards = 0;
 
-  const long = p.longPosition?.get(asset.symbol);
+  const long = pos.long?.get(symbol);
   if (long) {
     const rewardQuantity = long.quantity * rewardPerToken;
     totalRewards = rewardQuantity;
@@ -335,7 +329,9 @@ export function handleStakingReward(
     long.modified = actTime;
   }
 
-  p.modified = actTime;
+  if (long) {
+    pos.modified = actTime;
+  }
 
   return totalRewards;
 }
