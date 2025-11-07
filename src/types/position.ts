@@ -100,8 +100,14 @@ export interface ShortPosition {
   modified: Date;
 }
 
-/** @deprecated Use LongPositionLot instead */
-export type PositionLot = LongPositionLot;
+export interface Position {
+  cash: number;
 
-/** @deprecated Use LongPosition instead */
-export type Position = LongPosition;
+  long?: Map<string, LongPosition>;
+
+  short?: Map<string, ShortPosition>;
+
+  totalCommision: number;
+
+  realisedPnL: number;
+}

@@ -28,13 +28,33 @@ function credit_cash(p: Portfolio, currency: string, amount: number) {
 export { debit_cash as deposit, credit_cash as withdraw };
 
 /**
- * Validates portfolio integrity by checking position lots and realised PnL.
+ * Adds commission to the portfolio for a specific currency.
+ * @param p - The portfolio to modify
+ * @param currency - The currency code
+ * @param amount - The commission amount to add
+ */
+function add_commission(p: Portfolio, currency: string, amount: number) {
+  const current = p.totalCommission.get(currency) ?? 0;
+  p.totalCommission.set(currency, current + amount);
+}
+
+/**
+ * Updates realised PnL for the portfolio in a specific currency.
+ * @param p - The portfolio to modify
+ * @param currency - The currency code
+ * @param pnl - The PnL amount to add (can be negative for losses)
+ */
+function update_realised_pnl(p: Portfolio, currency: string, pnl: number) {
+  const current = p.realisedPnL.get(currency) ?? 0;
+  p.realisedPnL.set(currency, current + pnl);
+}
+
+/**
+ * Validates portfolio integrity by checking position lots.
  * @param p - The portfolio to validate
  * @returns True if portfolio is valid, false otherwise
  */
 export function validatePortfolio(p: Portfolio): boolean {
-  let realisedPnL = 0;
-
   // validate long
   for (const [_, pos] of p.longPosition ?? []) {
     const quantity = pos.lots.reduce((sum, lot) => sum + lot.quantity, 0);
@@ -42,7 +62,6 @@ export function validatePortfolio(p: Portfolio): boolean {
     if (quantity != pos.quantity || totalCost != pos.totalCost) {
       return false;
     }
-    realisedPnL += pos.realisedPnL;
   }
 
   // validate short
@@ -55,13 +74,9 @@ export function validatePortfolio(p: Portfolio): boolean {
     if (quantity != pos.quantity || totalProceeds != pos.totalProceeds) {
       return false;
     }
-    realisedPnL += pos.realisedPnL;
   }
 
-  if (realisedPnL != p.realisedPnL) {
-    return false;
-  }
-
+  // Note: Portfolio-level realisedPnL is not validated as positions don't track currency
   // avg = total/quantity is not validated, this invariant is never used
   return true;
 }
@@ -125,7 +140,7 @@ export function openLong(
     pos.modified = actTime;
   }
 
-  p.totalCommission += comm;
+  add_commission(p, asset.currency, comm);
   p.modified = actTime;
 
   return -cost;
@@ -203,8 +218,8 @@ export function closeLong(
   debit_cash(p, asset.currency, proceeds);
 
   // Update portfolio realised PnL
-  p.totalCommission += comm;
-  p.realisedPnL += realisedPnL;
+  add_commission(p, asset.currency, comm);
+  update_realised_pnl(p, asset.currency, realisedPnL);
   p.modified = actTime;
 
   // Remove position if no lots remain
@@ -274,7 +289,7 @@ export function openShort(
     pos.modified = actTime;
   }
 
-  p.totalCommission += comm;
+  add_commission(p, asset.currency, comm);
   p.modified = actTime;
 
   return proceeds;
@@ -352,8 +367,8 @@ export function closeShort(
   credit_cash(p, asset.currency, cost);
 
   // Update portfolio realised PnL
-  p.totalCommission += comm;
-  p.realisedPnL += realisedPnL;
+  add_commission(p, asset.currency, comm);
+  update_realised_pnl(p, asset.currency, realisedPnL);
   p.modified = actTime;
 
   // Remove position if no lots remain

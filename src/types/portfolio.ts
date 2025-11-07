@@ -20,11 +20,11 @@ export interface Portfolio {
   /** Short positions held in the portfolio, keyed by asset symbol */
   shortPosition?: Map<string, ShortPosition>;
 
-  /** Total commission paid */
-  totalCommission: number;
+  /** Total commission paid by currency (e.g., "USD" -> 100, "EUR" -> 50) */
+  totalCommission: Map<string, number>;
 
-  /** Total realised profit and loss from closed positions */
-  realisedPnL: number;
+  /** Total realised profit and loss from closed positions by currency */
+  realisedPnL: Map<string, number>;
 
   /** Timestamp when the portfolio was created */
   created: Date;

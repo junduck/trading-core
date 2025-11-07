@@ -18,8 +18,8 @@ export function createTestPortfolio(
     cash: new Map([['USD', cashAmount]]),
     longPosition: new Map(),
     shortPosition: new Map(),
-    totalCommission: 0,
-    realisedPnL: 0,
+    totalCommission: new Map(),
+    realisedPnL: new Map(),
     created: now,
     modified: now,
   };
