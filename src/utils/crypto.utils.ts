@@ -196,7 +196,7 @@ export function handleTokenSwap(
     // Create new position in new token with same cost basis
     const newLot: LongPositionLot = {
       quantity: newTokens,
-      price: long.totalCost / newTokens, // Preserve cost basis
+      price: 0, // token from swap we don't have a price basis here
       totalCost: long.totalCost,
     };
 
