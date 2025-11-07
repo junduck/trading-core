@@ -41,7 +41,6 @@ export function handleHardFork(
     let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newCoins,
         totalCost: 0,
         realisedPnL: 0,
@@ -70,7 +69,6 @@ export function handleHardFork(
     let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newCoins,
         totalProceeds: 0,
         realisedPnL: 0,
@@ -152,7 +150,6 @@ export function handleAirdrop(
   let newPos = pos.long.get(airdropSymbol);
   if (!newPos) {
     newPos = {
-      symbol: airdropSymbol,
       quantity: airdropQuantity,
       totalCost: 0,
       realisedPnL: 0,
@@ -206,7 +203,6 @@ export function handleTokenSwap(
     let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
         realisedPnL: 0,
@@ -239,7 +235,6 @@ export function handleTokenSwap(
     let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
         realisedPnL: 0,

@@ -14,13 +14,10 @@ export interface LongPositionLot {
 }
 
 /**
- * Represents a long position in a specific asset.
+ * Represents a long position for book-keeping.
  * Aggregates multiple lots to track overall holdings, and profit/loss.
  */
 export interface LongPosition {
-  /** Symbol of the asset this position represents */
-  symbol: string;
-
   /** Total open quantity of this position */
   quantity: number;
 
@@ -56,13 +53,10 @@ export interface ShortPositionLot {
 }
 
 /**
- * Represents a short position in a specific asset.
+ * Represents a short position for book-keeping.
  * Aggregates multiple lots to track overall short holdings, and profit/loss.
  */
 export interface ShortPosition {
-  /** Symbol of the asset this position represents */
-  symbol: string;
-
   /** Total open quantity of this short position */
   quantity: number;
 

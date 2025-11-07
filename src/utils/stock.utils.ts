@@ -165,7 +165,6 @@ export function handleSpinoff(
     let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newShares,
         totalCost: 0,
         realisedPnL: 0,
@@ -194,7 +193,6 @@ export function handleSpinoff(
     let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newShares,
         totalProceeds: 0,
         realisedPnL: 0,
@@ -264,7 +262,6 @@ export function handleMerger(
     let newPos = pos.long!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
         realisedPnL: 0,
@@ -300,7 +297,6 @@ export function handleMerger(
     let newPos = pos.short!.get(newSymbol);
     if (!newPos) {
       newPos = {
-        symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
         realisedPnL: 0,

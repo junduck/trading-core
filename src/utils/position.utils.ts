@@ -73,7 +73,6 @@ export function openLong(
   let assetPos = pos.long.get(symbol);
   if (!assetPos) {
     assetPos = {
-      symbol,
       quantity: quant,
       totalCost: cost,
       realisedPnL: 0,
@@ -216,7 +215,6 @@ export function openShort(
   let assetPos = pos.short.get(symbol);
   if (!assetPos) {
     assetPos = {
-      symbol,
       quantity: quant,
       totalProceeds: proceeds,
       realisedPnL: 0,
