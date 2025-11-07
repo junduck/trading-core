@@ -15,7 +15,7 @@ export interface LongPositionLot {
 
 /**
  * Represents a long position in a specific asset.
- * Aggregates multiple lots to track overall holdings, average cost, and profit/loss.
+ * Aggregates multiple lots to track overall holdings, and profit/loss.
  */
 export interface LongPosition {
   /** Symbol of the asset this position represents */
@@ -26,9 +26,6 @@ export interface LongPosition {
 
   /** Total cost of all open lots combined (sum of all lot totalCosts). This is deducted when closing positions. */
   totalCost: number;
-
-  /** Average opening cost per unit across all lots (weighted average, calculated as totalCost / quantity) */
-  averageCost: number;
 
   /** Realised profit and loss accumulated when reducing position size */
   realisedPnL: number;
@@ -60,7 +57,7 @@ export interface ShortPositionLot {
 
 /**
  * Represents a short position in a specific asset.
- * Aggregates multiple lots to track overall short holdings, average proceeds, and profit/loss.
+ * Aggregates multiple lots to track overall short holdings, and profit/loss.
  */
 export interface ShortPosition {
   /** Symbol of the asset this position represents */
@@ -71,9 +68,6 @@ export interface ShortPosition {
 
   /** Total proceeds from all open lots combined (sum of all lot totalProceeds). This is deducted when closing positions. */
   totalProceeds: number;
-
-  /** Average proceeds per unit across all lots (weighted average, calculated as totalProceeds / quantity) */
-  averageProceeds: number;
 
   /** Realised profit and loss accumulated when reducing position size */
   realisedPnL: number;

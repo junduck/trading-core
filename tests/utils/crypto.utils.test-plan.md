@@ -18,7 +18,6 @@
 - Original BTC position: unchanged, qty=10
 - New BCH position: qty = 10 * 1 = 10
 - BCH totalCost: 0 (forked coins have no cost basis)
-- BCH averageCost: 0
 - Cash: unchanged = 98,900
 
 ### 2. Hard Fork - 2-for-1 Ratio (Long Position)
@@ -31,7 +30,6 @@
 - Original BTC position: unchanged, qty=10
 - New BCH position: qty = 10 * 2 = 20
 - BCH totalCost: 0
-- BCH averageCost: 0
 
 ### 3. Hard Fork - Short Position
 | Step | Action | Details | BTC Position Qty | BCH Position Qty | BCH Avg Proceeds | BCH Total Proceeds |
@@ -43,7 +41,6 @@
 - Original BTC short: unchanged, qty=10
 - New BCH short: qty = 10 * 2 = 20
 - BCH totalProceeds: 0
-- BCH averageProceeds: 0
 
 ### 4. Airdrop - Proportional to Holdings (Long Position)
 | Step | Action | Details | ETH Position Qty | AIRDROP Position Qty | AIRDROP Total Cost |
@@ -55,7 +52,6 @@
 - Original ETH position: unchanged, qty=10
 - Airdrop quantity: 10 * 2 = 20
 - AIRDROP totalCost: 0 (airdropped tokens have no cost basis)
-- AIRDROP averageCost: 0
 
 ### 5. Airdrop - Fixed Amount (No Holder Asset)
 | Step | Action | Details | AIRDROP Position Qty | AIRDROP Total Cost |
@@ -65,7 +61,6 @@
 **Verification Step 1:**
 - Airdrop quantity: 100
 - AIRDROP totalCost: 0
-- AIRDROP averageCost: 0
 
 ### 6. Airdrop - No Holdings (Should Do Nothing)
 | Step | Action | Details | AIRDROP Position Qty |
@@ -99,7 +94,6 @@
 - OLD position: deleted
 - NEW position: qty = 10 * 1 = 10
 - NEW totalCost: 1,100 (transferred, preserves cost basis)
-- NEW averageCost: 1,100 / 10 = 110
 
 ### 9. Token Swap - 2-for-1 (Long Position)
 | Step | Action | Details | OLD Position | NEW Position Qty | NEW Avg Cost | NEW Total Cost |
@@ -111,7 +105,6 @@
 - OLD position: deleted
 - NEW position: qty = 10 * 2 = 20
 - NEW totalCost: 1,100 (transferred)
-- NEW averageCost: 1,100 / 20 = 55
 
 ### 10. Token Swap - Short Position
 | Step | Action | Details | OLD Position | NEW Position Qty | NEW Avg Proceeds | NEW Total Proceeds |
@@ -123,7 +116,6 @@
 - OLD position: deleted
 - NEW position: qty = 10 * 2 = 20
 - NEW totalProceeds: 900 (transferred)
-- NEW averageProceeds: 900 / 20 = 45
 
 ### 11. Token Swap - Into Existing Position (Long)
 | Step | Action | Details | OLD Position | NEW Position Qty | NEW Avg Cost | NEW Total Cost |
@@ -161,7 +153,6 @@
 - Reward quantity: 10 * 0.5 = 5
 - New quantity: 10 + 5 = 15
 - TotalCost: unchanged = 1,100 (rewards have no cost)
-- Average Cost: 1,100 / 15 = 73.33
 
 ### 14. Staking Reward - No Position (Should Return 0)
 | Step | Action | Details | Rewards Received |

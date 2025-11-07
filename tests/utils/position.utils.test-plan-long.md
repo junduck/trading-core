@@ -15,7 +15,6 @@
 - Cash: 100,000 - (100 * 10 + 100) = 98,900
 - Position: 1 lot with quantity 10
 - TotalCost: 1,100
-- Average Cost: 1,100 / 10 = 110
 
 ### 2. Open Long - Multiple Lots
 | Step | Action | Price | Quantity | Commission | Expected Cash | Expected Position Qty | Expected Total Cost | Expected Avg Cost |
@@ -27,7 +26,6 @@
 - Cash: 98,900 - (120 * 5 + 120) = 98,180
 - Position: 2 lots with total quantity 15
 - TotalCost: 1,100 + 720 = 1,820
-- Average Cost: 1,820 / 15 = 121.33
 
 ### 3. Close Long - FIFO Strategy - Partial Close
 | Step | Action | Price | Quantity | Commission | Expected Cash | Expected Position Qty | Expected Realized PnL |

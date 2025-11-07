@@ -36,7 +36,7 @@ function createFill(
     price,
     quantity,
     commission,
-    timestamp,
+    created: timestamp,
   } as Fill;
 }
 
@@ -77,7 +77,6 @@ describe("Fill Utils - applyFill", () => {
       expect(longPosition).toBeDefined();
       expect(longPosition!.quantity).toBe(10);
       expect(longPosition!.totalCost).toBe(1_100);
-      expect(longPosition!.averageCost).toBe(110);
     });
   });
 
@@ -156,7 +155,6 @@ describe("Fill Utils - applyFill", () => {
       expect(shortPosition).toBeDefined();
       expect(shortPosition!.quantity).toBe(10);
       expect(shortPosition!.totalProceeds).toBe(1_800);
-      expect(shortPosition!.averageProceeds).toBe(180);
     });
   });
 

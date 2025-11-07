@@ -15,7 +15,6 @@
 - Cash: 100,000 + (100 * 10 - 100) = 100,900
 - Position: 1 lot with quantity 10
 - TotalProceeds: 900
-- Average Proceeds: 900 / 10 = 90
 
 ### 2. Open Short - Multiple Lots
 | Step | Action | Price | Quantity | Commission | Expected Cash | Expected Position Qty | Expected Total Proceeds | Expected Avg Proceeds |
@@ -27,7 +26,6 @@
 - Cash: 100,900 + (120 * 5 - 120) = 101,380
 - Position: 2 lots with total quantity 15
 - TotalProceeds: 900 + 480 = 1,380
-- Average Proceeds: 1,380 / 15 = 92
 
 ### 3. Close Short - FIFO Strategy - Partial Close (Profit)
 | Step | Action | Price | Quantity | Commission | Expected Cash | Expected Position Qty | Expected Realized PnL |

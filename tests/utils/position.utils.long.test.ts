@@ -24,7 +24,7 @@ describe("Position Utils - Long Position Operations", () => {
   });
 
   describe("1. Open Long - Single Lot", () => {
-    it("should open a long position with correct cash, quantity, cost, and average cost", () => {
+    it("should open a long position with correct cash, quantity, cost", () => {
       // Step 1: Open Long - price=100, qty=10, commission=100
       openLong(position, "AAPL", 100, 10, 100);
 
@@ -36,7 +36,6 @@ describe("Position Utils - Long Position Operations", () => {
       expect(longPosition).toBeDefined();
       expect(longPosition!.quantity).toBe(10);
       expect(longPosition!.totalCost).toBe(1_100);
-      expect(round(longPosition!.averageCost)).toBe(110);
 
       // Verify lots
       expect(longPosition!.lots).toHaveLength(1);
@@ -47,7 +46,7 @@ describe("Position Utils - Long Position Operations", () => {
   });
 
   describe("2. Open Long - Multiple Lots", () => {
-    it("should correctly accumulate multiple lots with weighted average cost", () => {
+    it("should correctly accumulate multiple lots", () => {
       // Step 1: Open Long - price=100, qty=10, commission=100
       openLong(position, "AAPL", 100, 10, 100);
       expect(position.cash).toBe(98_900);
@@ -63,7 +62,6 @@ describe("Position Utils - Long Position Operations", () => {
       expect(longPosition).toBeDefined();
       expect(longPosition!.quantity).toBe(15);
       expect(longPosition!.totalCost).toBe(1_820); // 1,100 + 720
-      expect(round(longPosition!.averageCost)).toBe(121.33); // 1,820 / 15
 
       // Verify lots
       expect(longPosition!.lots).toHaveLength(2);

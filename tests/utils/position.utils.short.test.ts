@@ -24,7 +24,7 @@ describe("Position Utils - Short Position Operations", () => {
   });
 
   describe("1. Open Short - Single Lot", () => {
-    it("should open a short position with correct cash, quantity, proceeds, and average proceeds", () => {
+    it("should open a short position with correct cash, quantity, proceeds", () => {
       // Step 1: Open Short - price=100, qty=10, commission=100
       openShort(position, "AAPL", 100, 10, 100);
 
@@ -36,7 +36,6 @@ describe("Position Utils - Short Position Operations", () => {
       expect(shortPosition).toBeDefined();
       expect(shortPosition!.quantity).toBe(10);
       expect(shortPosition!.totalProceeds).toBe(900);
-      expect(round(shortPosition!.averageProceeds)).toBe(90);
 
       // Verify lots
       expect(shortPosition!.lots).toHaveLength(1);
@@ -47,7 +46,7 @@ describe("Position Utils - Short Position Operations", () => {
   });
 
   describe("2. Open Short - Multiple Lots", () => {
-    it("should correctly accumulate multiple lots with weighted average proceeds", () => {
+    it("should correctly accumulate multiple lots", () => {
       // Step 1: Open Short - price=100, qty=10, commission=100
       openShort(position, "AAPL", 100, 10, 100);
       expect(position.cash).toBe(100_900);
@@ -63,7 +62,6 @@ describe("Position Utils - Short Position Operations", () => {
       expect(shortPosition).toBeDefined();
       expect(shortPosition!.quantity).toBe(15);
       expect(shortPosition!.totalProceeds).toBe(1_380); // 900 + 480
-      expect(round(shortPosition!.averageProceeds)).toBe(92); // 1,380 / 15
 
       // Verify lots
       expect(shortPosition!.lots).toHaveLength(2);

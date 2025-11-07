@@ -44,7 +44,6 @@ export function handleHardFork(
         symbol: newSymbol,
         quantity: newCoins,
         totalCost: 0,
-        averageCost: 0,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -53,7 +52,6 @@ export function handleHardFork(
       pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newCoins;
-      newPos.averageCost = newPos.totalCost / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -75,7 +73,6 @@ export function handleHardFork(
         symbol: newSymbol,
         quantity: newCoins,
         totalProceeds: 0,
-        averageProceeds: 0,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -84,7 +81,6 @@ export function handleHardFork(
       pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newCoins;
-      newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -159,7 +155,6 @@ export function handleAirdrop(
       symbol: airdropSymbol,
       quantity: airdropQuantity,
       totalCost: 0,
-      averageCost: 0,
       realisedPnL: 0,
       lots: [newLot],
       created: actTime,
@@ -168,7 +163,6 @@ export function handleAirdrop(
     pos.long.set(airdropSymbol, newPos);
   } else {
     newPos.quantity += airdropQuantity;
-    newPos.averageCost = newPos.totalCost / newPos.quantity;
     newPos.lots.push(newLot);
     newPos.modified = actTime;
   }
@@ -215,7 +209,6 @@ export function handleTokenSwap(
         symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
-        averageCost: newLot.price,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -225,7 +218,6 @@ export function handleTokenSwap(
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalCost += newLot.totalCost;
-      newPos.averageCost = newPos.totalCost / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -250,7 +242,6 @@ export function handleTokenSwap(
         symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
-        averageProceeds: newLot.price,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -260,7 +251,6 @@ export function handleTokenSwap(
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalProceeds += newLot.totalProceeds;
-      newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -312,7 +302,6 @@ export function handleStakingReward(
 
     long.quantity += rewardQuantity;
     // totalCost remains unchanged (rewards have no cost)
-    long.averageCost = long.totalCost / long.quantity;
     long.lots.push(rewardLot);
     long.modified = actTime;
   }

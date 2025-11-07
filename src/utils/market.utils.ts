@@ -130,8 +130,8 @@ export function appraisePortfolio(
 
 /**
  * Calculates unrealized profit and loss for a position.
- * Long: (currentPrice - averageCost) × quantity
- * Short: (averageProceeds - currentPrice) × quantity
+ * Long: currentPrice × quantity - totalCost
+ * Short: totalProceeds - currentPrice × quantity
  *
  * @param position - Position to calculate unrealized P&L for
  * @param snapshot - Market snapshot with current prices
@@ -147,7 +147,7 @@ export function calculateUnrealizedPnL(
   if (position.long) {
     for (const [symbol, longPos] of position.long) {
       const currentPrice = snapshot.price.get(symbol) ?? 0;
-      unrealizedPnL += (currentPrice - longPos.averageCost) * longPos.quantity;
+      unrealizedPnL += currentPrice * longPos.quantity - longPos.totalCost;
     }
   }
 
@@ -156,7 +156,7 @@ export function calculateUnrealizedPnL(
     for (const [symbol, shortPos] of position.short) {
       const currentPrice = snapshot.price.get(symbol) ?? 0;
       unrealizedPnL +=
-        (shortPos.averageProceeds - currentPrice) * shortPos.quantity;
+        shortPos.totalProceeds - currentPrice * shortPos.quantity;
     }
   }
 

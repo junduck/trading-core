@@ -22,7 +22,7 @@ describe("Stock Utils - Corporate Actions", () => {
 
   describe("Stock Splits", () => {
     describe("1. Stock Split - 2-for-1 (Long Position)", () => {
-      it("should double quantity and halve average cost while keeping total cost unchanged", () => {
+      it("should double quantity while keeping total cost unchanged", () => {
         // Step 1: Open Long - price=100, qty=10, commission=100
         openLong(position, symbol, 100, 10, 100);
         expect(position.cash).toBe(98_900);
@@ -35,7 +35,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(longPos).toBeDefined();
         expect(longPos!.quantity).toBe(20); // 10 * 2
         expect(longPos!.totalCost).toBe(1_100); // unchanged
-        expect(round(longPos!.averageCost)).toBe(55); // 1,100 / 20
 
         // Verify lots
         expect(longPos!.lots).toHaveLength(1);
@@ -45,7 +44,7 @@ describe("Stock Utils - Corporate Actions", () => {
     });
 
     describe("2. Stock Split - 1-for-2 Reverse Split (Long Position)", () => {
-      it("should halve quantity and double average cost while keeping total cost unchanged", () => {
+      it("should halve quantity while keeping total cost unchanged", () => {
         // Step 1: Open Long - price=100, qty=10, commission=100
         openLong(position, symbol, 100, 10, 100);
 
@@ -57,7 +56,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(longPos).toBeDefined();
         expect(longPos!.quantity).toBe(5); // 10 * 0.5
         expect(longPos!.totalCost).toBe(1_100); // unchanged
-        expect(round(longPos!.averageCost)).toBe(220); // 1,100 / 5
       });
     });
 
@@ -75,7 +73,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(shortPos).toBeDefined();
         expect(shortPos!.quantity).toBe(20); // 10 * 2
         expect(shortPos!.totalProceeds).toBe(900); // unchanged
-        expect(round(shortPos!.averageProceeds)).toBe(45); // 900 / 20
       });
     });
   });
@@ -100,7 +97,6 @@ describe("Stock Utils - Corporate Actions", () => {
         const longPos = position.long?.get("AAPL");
         expect(longPos).toBeDefined();
         expect(longPos!.totalCost).toBe(1_000); // 1,100 - 100
-        expect(round(longPos!.averageCost)).toBe(100); // 1,000 / 10
       });
     });
 
@@ -123,7 +119,6 @@ describe("Stock Utils - Corporate Actions", () => {
         const longPos = position.long?.get("AAPL");
         expect(longPos).toBeDefined();
         expect(longPos!.totalCost).toBe(1_050); // 1,100 - 50
-        expect(round(longPos!.averageCost)).toBe(105); // 1,050 / 10
       });
     });
 
@@ -146,7 +141,6 @@ describe("Stock Utils - Corporate Actions", () => {
         const shortPos = position.short?.get("AAPL");
         expect(shortPos).toBeDefined();
         expect(shortPos!.totalProceeds).toBe(800); // 900 - 100
-        expect(round(shortPos!.averageProceeds)).toBe(80); // 800 / 10
       });
     });
   });
@@ -172,7 +166,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newcoPosition).toBeDefined();
         expect(newcoPosition!.quantity).toBe(5); // 10 * 0.5
         expect(newcoPosition!.totalCost).toBe(0); // spinoff has no cost basis
-        expect(newcoPosition!.averageCost).toBe(0);
       });
     });
 
@@ -196,7 +189,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newcoPosition).toBeDefined();
         expect(newcoPosition!.quantity).toBe(5); // 10 * 0.5
         expect(newcoPosition!.totalProceeds).toBe(0); // spinoff has no proceeds
-        expect(newcoPosition!.averageProceeds).toBe(0);
       });
     });
 
@@ -223,7 +215,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newcoPosition).toBeDefined();
         expect(newcoPosition!.quantity).toBe(25); // 20 + 5
         expect(newcoPosition!.totalCost).toBe(1_050); // original totalCost unchanged
-        expect(round(newcoPosition!.averageCost)).toBe(42); // 1,050 / 25
       });
     });
 
@@ -250,7 +241,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newcoPosition).toBeDefined();
         expect(newcoPosition!.quantity).toBe(25); // 20 + 5
         expect(newcoPosition!.totalProceeds).toBe(950); // original totalProceeds unchanged
-        expect(round(newcoPosition!.averageProceeds)).toBe(38); // 950 / 25
       });
     });
   });
@@ -276,7 +266,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newPosition).toBeDefined();
         expect(newPosition!.quantity).toBe(20); // 10 * 2
         expect(newPosition!.totalCost).toBe(1_100); // transferred
-        expect(round(newPosition!.averageCost)).toBe(55); // 1,100 / 20
 
         // Verify cash: unchanged
         expect(position.cash).toBe(98_900);
@@ -303,7 +292,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newPosition).toBeDefined();
         expect(newPosition!.quantity).toBe(20); // 10 * 2
         expect(newPosition!.totalCost).toBe(1_000); // 1,100 - 100
-        expect(round(newPosition!.averageCost)).toBe(50); // 1,000 / 20
       });
     });
 
@@ -327,7 +315,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(newPosition).toBeDefined();
         expect(newPosition!.quantity).toBe(20); // 10 * 2
         expect(newPosition!.totalProceeds).toBe(800); // 900 - 100
-        expect(round(newPosition!.averageProceeds)).toBe(40); // 800 / 20
       });
     });
 
@@ -355,7 +342,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(acquirerPosition).toBeDefined();
         expect(acquirerPosition!.quantity).toBe(40); // 20 + 20
         expect(acquirerPosition!.totalCost).toBe(2_050); // 1,050 + 1,000
-        expect(round(acquirerPosition!.averageCost)).toBe(51.25); // 2,050 / 40
 
         // Verify cash from merger: 10 * 10 = 100
         expect(position.cash).toBe(97_950); // 97,850 + 100
@@ -386,7 +372,6 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(acquirerPosition).toBeDefined();
         expect(acquirerPosition!.quantity).toBe(40); // 20 + 20
         expect(acquirerPosition!.totalProceeds).toBe(1_750); // 950 + 800
-        expect(round(acquirerPosition!.averageProceeds)).toBe(43.75); // 1,750 / 40
 
         // Verify cash owed for merger: 10 * 10 = 100
         expect(position.cash).toBe(101_750); // 101,850 - 100
@@ -402,28 +387,24 @@ describe("Stock Utils - Corporate Actions", () => {
 
       let longPos = position.long?.get("AAPL");
       expect(longPos!.quantity).toBe(10);
-      expect(round(longPos!.averageCost)).toBe(110);
 
       // Step 2: Split - ratio=2
       handleSplit(position, symbol, 2);
       longPos = position.long?.get("AAPL");
       expect(longPos!.quantity).toBe(20);
       expect(longPos!.totalCost).toBe(1_100);
-      expect(round(longPos!.averageCost)).toBe(55);
 
       // Step 3: Dividend - amountPerShare=5, taxRate=0
       handleCashDividend(position, symbol, 5, 0);
       expect(position.cash).toBe(99_000); // 98,900 + 100
       longPos = position.long?.get("AAPL");
       expect(longPos!.totalCost).toBe(1_000); // 1,100 - 100
-      expect(round(longPos!.averageCost)).toBe(50);
 
       // Step 4: Split - ratio=0.5
       handleSplit(position, symbol, 0.5);
       longPos = position.long?.get("AAPL");
       expect(longPos!.quantity).toBe(10);
       expect(longPos!.totalCost).toBe(1_000);
-      expect(round(longPos!.averageCost)).toBe(100);
     });
   });
 });

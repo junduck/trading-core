@@ -34,7 +34,6 @@ export function handleSplit(
 
     long.quantity *= ratio;
     // totalCost remains unchanged (total investment value doesn't change)
-    long.averageCost = long.totalCost / long.quantity;
     long.modified = actTime;
   }
 
@@ -48,7 +47,6 @@ export function handleSplit(
 
     short.quantity *= ratio;
     // totalProceeds remains unchanged (total investment value doesn't change)
-    short.averageProceeds = short.totalProceeds / short.quantity;
     short.modified = actTime;
   }
 
@@ -100,7 +98,6 @@ export function handleCashDividend(
     }
 
     long.totalCost -= totalPaid;
-    long.averageCost = long.totalCost / long.quantity;
     long.modified = actTime;
 
     cashFlow += totalPaid;
@@ -118,7 +115,6 @@ export function handleCashDividend(
     }
 
     short.totalProceeds -= totalOwed;
-    short.averageProceeds = short.totalProceeds / short.quantity;
     short.modified = actTime;
 
     cashFlow -= totalOwed;
@@ -172,7 +168,6 @@ export function handleSpinoff(
         symbol: newSymbol,
         quantity: newShares,
         totalCost: 0,
-        averageCost: 0,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -181,7 +176,6 @@ export function handleSpinoff(
       pos.long!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newShares;
-      newPos.averageCost = newPos.totalCost / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -203,7 +197,6 @@ export function handleSpinoff(
         symbol: newSymbol,
         quantity: newShares,
         totalProceeds: 0,
-        averageProceeds: 0,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -212,7 +205,6 @@ export function handleSpinoff(
       pos.short!.set(newSymbol, newPos);
     } else {
       newPos.quantity += newShares;
-      newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -275,7 +267,6 @@ export function handleMerger(
         symbol: newSymbol,
         quantity: newLot.quantity,
         totalCost: newLot.totalCost,
-        averageCost: newLot.price,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -285,7 +276,6 @@ export function handleMerger(
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalCost += newLot.totalCost;
-      newPos.averageCost = newPos.totalCost / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }
@@ -313,7 +303,6 @@ export function handleMerger(
         symbol: newSymbol,
         quantity: newLot.quantity,
         totalProceeds: newLot.totalProceeds,
-        averageProceeds: newLot.price,
         realisedPnL: 0,
         lots: [newLot],
         created: actTime,
@@ -323,7 +312,6 @@ export function handleMerger(
     } else {
       newPos.quantity += newLot.quantity;
       newPos.totalProceeds += newLot.totalProceeds;
-      newPos.averageProceeds = newPos.totalProceeds / newPos.quantity;
       newPos.lots.push(newLot);
       newPos.modified = actTime;
     }

@@ -16,7 +16,6 @@
 **Verification Step 2:**
 - Quantity: 10 * 2 = 20
 - TotalCost: unchanged = 1,100
-- Average Cost: 1,100 / 20 = 55
 - Lot quantities doubled, totalCost unchanged
 
 ### 2. Stock Split - 1-for-2 Reverse Split (Long Position)
@@ -28,7 +27,6 @@
 **Verification Step 2:**
 - Quantity: 10 * 0.5 = 5
 - TotalCost: unchanged = 1,100
-- Average Cost: 1,100 / 5 = 220
 
 ### 3. Stock Split - Short Position
 | Step | Action | Details | Expected Position Qty | Expected Avg Proceeds | Expected Total Proceeds |
@@ -39,7 +37,6 @@
 **Verification Step 2:**
 - Quantity: 10 * 2 = 20
 - TotalProceeds: unchanged = 900
-- Average Proceeds: 900 / 20 = 45
 
 ### 4. Cash Dividend - No Tax (Long Position)
 | Step | Action | Details | Expected Cash | Expected Avg Cost | Expected Total Cost |
@@ -51,7 +48,6 @@
 - Dividend amount: 10 * 10 = 100
 - Cash: 98,900 + 100 = 99,000
 - Total Cost reduced: 1,100 - 100 = 1,000
-- Average Cost: 1,000 / 10 = 100
 
 ### 5. Cash Dividend - With Tax (Long Position)
 | Step | Action | Details | Expected Cash | Expected Avg Cost | Expected Total Cost |
@@ -64,7 +60,6 @@
 - After tax: 100 * (1 - 0.5) = 50
 - Cash: 98,900 + 50 = 98,950
 - Total Cost reduced: 1,100 - 50 = 1,050
-- Average Cost: 1,050 / 10 = 105
 
 ### 6. Cash Dividend - Short Position (Owe Dividend)
 | Step | Action | Details | Expected Cash | Expected Avg Proceeds | Expected Total Proceeds |
@@ -76,7 +71,6 @@
 - Dividend owed: 10 * 10 = 100
 - Cash: 100,900 - 100 = 100,800
 - Total Proceeds reduced: 900 - 100 = 800
-- Average Proceeds: 800 / 10 = 80
 
 ### 7. Stock Spinoff - Long Position
 | Step | Action | Details | Original Position Qty | New Position Qty | New Avg Cost |
@@ -88,7 +82,6 @@
 - Original position (AAPL): unchanged, qty=10
 - New position (NEWCO): qty = 10 * 0.5 = 5
 - New position totalCost: 0 (spinoff has no cost basis)
-- New position averageCost: 0
 
 ### 8. Stock Spinoff - Short Position
 | Step | Action | Details | Original Position Qty | New Position Qty | New Avg Proceeds |
@@ -100,7 +93,6 @@
 - Original position (AAPL): unchanged, qty=10
 - New short position (NEWCO): qty = 10 * 0.5 = 5
 - New position totalProceeds: 0 (spinoff has no proceeds)
-- New position averageProceeds: 0
 
 ### 9. Stock Merger - No Cash Component (Long Position)
 | Step | Action | Details | Old Position Qty | New Position Qty | New Avg Cost |
@@ -112,7 +104,6 @@
 - Old position (TARGET): deleted
 - New position (ACQUIRER): qty = 10 * 2 = 20
 - New totalCost: 1,100 (transferred from old position)
-- New averageCost: 1,100 / 20 = 55
 - Cash: unchanged = 98,900
 
 ### 10. Stock Merger - With Cash Component (Long Position)
@@ -126,7 +117,6 @@
 - Cash: 98,900 + 100 = 99,000
 - New position qty: 10 * 2 = 20
 - New totalCost: 1,100 - 100 = 1,000
-- New averageCost: 1,000 / 20 = 50
 
 ### 11. Stock Merger - Short Position with Cash
 | Step | Action | Details | Expected Cash | New Position Qty | New Total Proceeds |
@@ -139,7 +129,6 @@
 - Cash: 100,900 - 100 = 100,800
 - New position qty: 10 * 2 = 20
 - New totalProceeds: 900 - 100 = 800
-- New averageProceeds: 800 / 20 = 40
 
 ### 12. Multiple Corporate Actions Sequence
 | Step | Action | Details | Position Qty | Avg Cost/Proceeds | Cash |

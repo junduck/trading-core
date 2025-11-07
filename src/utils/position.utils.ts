@@ -2,6 +2,8 @@ import type {
   Position,
   LongPositionLot,
   ShortPositionLot,
+  LongPosition,
+  ShortPosition,
 } from "../types/position.js";
 import type { CloseStrategy } from "../types/trade.js";
 
@@ -74,7 +76,6 @@ export function openLong(
       symbol,
       quantity: quant,
       totalCost: cost,
-      averageCost: cost / quant,
       realisedPnL: 0,
       lots: [lot],
       created: actTime,
@@ -84,7 +85,6 @@ export function openLong(
   } else {
     assetPos.quantity += quant;
     assetPos.totalCost += cost;
-    assetPos.averageCost = assetPos.totalCost / assetPos.quantity;
     assetPos.lots.push(lot);
     assetPos.modified = actTime;
   }
@@ -159,8 +159,6 @@ export function closeLong(
   assetPos.realisedPnL += realisedPnL;
   assetPos.quantity -= quant;
   assetPos.totalCost -= totalCost;
-  assetPos.averageCost =
-    assetPos.quantity > 0 ? assetPos.totalCost / assetPos.quantity : 0;
   assetPos.modified = actTime;
 
   // Add cash back
@@ -221,7 +219,6 @@ export function openShort(
       symbol,
       quantity: quant,
       totalProceeds: proceeds,
-      averageProceeds: proceeds / quant,
       realisedPnL: 0,
       lots: [lot],
       created: actTime,
@@ -231,7 +228,6 @@ export function openShort(
   } else {
     assetPos.quantity += quant;
     assetPos.totalProceeds += proceeds;
-    assetPos.averageProceeds = assetPos.totalProceeds / assetPos.quantity;
     assetPos.lots.push(lot);
     assetPos.modified = actTime;
   }
@@ -306,8 +302,6 @@ export function closeShort(
   assetPos.realisedPnL += realisedPnL;
   assetPos.quantity -= quant;
   assetPos.totalProceeds -= totalProceeds;
-  assetPos.averageProceeds =
-    assetPos.quantity > 0 ? assetPos.totalProceeds / assetPos.quantity : 0;
   assetPos.modified = actTime;
 
   // Deduct cash (buying back the asset)
@@ -324,4 +318,14 @@ export function closeShort(
   }
 
   return realisedPnL;
+}
+
+/** Calculate average cost per unit for a long position */
+export function getAverageCost(position: LongPosition): number {
+  return position.quantity > 0 ? position.totalCost / position.quantity : 0;
+}
+
+/** Calculate average proceeds per unit for a short position */
+export function getAverageProceeds(position: ShortPosition): number {
+  return position.quantity > 0 ? position.totalProceeds / position.quantity : 0;
 }

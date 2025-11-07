@@ -3,7 +3,11 @@ import * as portfolioUtils from "../../src/utils/portfolio.utils.js";
 import type { Portfolio } from "../../src/types/portfolio.js";
 import type { Asset } from "../../src/types/asset.js";
 
-function createAsset(symbol: string, currency: string = "USD", type: string = "stock"): Asset {
+function createAsset(
+  symbol: string,
+  currency: string = "USD",
+  type: string = "stock"
+): Asset {
   return {
     symbol,
     type,
@@ -28,7 +32,13 @@ describe("Portfolio Utils", () => {
       const positions = new Map();
       const testDate = new Date("2024-01-01");
 
-      const portfolio = portfolioUtils.create("P1", "Test", positions, testDate, testDate);
+      const portfolio = portfolioUtils.create(
+        "P1",
+        "Test",
+        positions,
+        testDate,
+        testDate
+      );
 
       expect(portfolio.positions).toBe(positions);
       expect(portfolio.created).toBe(testDate);
@@ -111,7 +121,6 @@ describe("Portfolio Utils", () => {
       expect(longPos).toBeDefined();
       expect(longPos!.quantity).toBe(10);
       expect(longPos!.totalCost).toBe(1100);
-      expect(longPos!.averageCost).toBe(110);
     });
 
     it("should add to existing long position", () => {
@@ -126,7 +135,6 @@ describe("Portfolio Utils", () => {
       const longPos = position!.long?.get("AAPL");
       expect(longPos!.quantity).toBe(15);
       expect(longPos!.totalCost).toBe(1820);
-      expect(Math.round(longPos!.averageCost * 100) / 100).toBeCloseTo(121.33, 2);
     });
 
     it("should update portfolio modified timestamp", () => {
@@ -134,7 +142,9 @@ describe("Portfolio Utils", () => {
       portfolioUtils.openLong(portfolio, asset, 100, 10, 100);
       const after = new Date();
 
-      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(before.getTime());
+      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(
+        before.getTime()
+      );
       expect(portfolio.modified.getTime()).toBeLessThanOrEqual(after.getTime());
     });
 
@@ -207,7 +217,9 @@ describe("Portfolio Utils", () => {
       portfolioUtils.openShort(portfolio, asset, 200, 10, 200);
       const after = new Date();
 
-      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(before.getTime());
+      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(
+        before.getTime()
+      );
       expect(portfolio.modified.getTime()).toBeLessThanOrEqual(after.getTime());
     });
   });
@@ -229,12 +241,16 @@ describe("Portfolio Utils", () => {
       const longPos = position!.long?.get("AAPL");
 
       expect(longPos!.quantity).toBe(20);
-      expect(longPos!.averageCost).toBe(55); // 110 / 2
       expect(portfolio.modified).toBeInstanceOf(Date);
     });
 
     it("should handle cash dividend", () => {
-      const cashFlow = portfolioUtils.handleCashDividend(portfolio, asset, 5, 0.5);
+      const cashFlow = portfolioUtils.handleCashDividend(
+        portfolio,
+        asset,
+        5,
+        0.5
+      );
 
       // 10 shares * $5 * (1 - 0.5 tax) = 25
       expect(cashFlow).toBe(25);
@@ -258,7 +274,13 @@ describe("Portfolio Utils", () => {
     });
 
     it("should handle merger", () => {
-      const cashFlow = portfolioUtils.handleMerger(portfolio, asset, "MERGED", 2, 10);
+      const cashFlow = portfolioUtils.handleMerger(
+        portfolio,
+        asset,
+        "MERGED",
+        2,
+        10
+      );
 
       // Cash component: 10 shares * $10 = 100
       expect(cashFlow).toBe(100);
@@ -331,7 +353,14 @@ describe("Portfolio Utils", () => {
 
     it("should handle fixed amount airdrop", () => {
       const emptyPortfolio = portfolioUtils.create("P2", "Empty");
-      portfolioUtils.handleAirdrop(emptyPortfolio, "USD", null, "AIRDROP", 0, 500);
+      portfolioUtils.handleAirdrop(
+        emptyPortfolio,
+        "USD",
+        null,
+        "AIRDROP",
+        0,
+        500
+      );
 
       const position = emptyPortfolio.positions.get("USD");
       expect(position).toBeDefined();
@@ -355,7 +384,11 @@ describe("Portfolio Utils", () => {
     });
 
     it("should handle staking rewards", () => {
-      const rewards = portfolioUtils.handleStakingReward(portfolio, asset, 0.05);
+      const rewards = portfolioUtils.handleStakingReward(
+        portfolio,
+        asset,
+        0.05
+      );
 
       // 2 BTC * 0.05 = 0.1
       expect(rewards).toBe(0.1);
@@ -378,7 +411,11 @@ describe("Portfolio Utils", () => {
         portfolioUtils.handleTokenSwap(emptyPortfolio, testAsset, "WETH", 1);
       }).not.toThrow();
 
-      const reward = portfolioUtils.handleStakingReward(emptyPortfolio, testAsset, 0.05);
+      const reward = portfolioUtils.handleStakingReward(
+        emptyPortfolio,
+        testAsset,
+        0.05
+      );
       expect(reward).toBe(0);
     });
   });
@@ -404,10 +441,14 @@ describe("Portfolio Utils", () => {
         const beforeOp = portfolio.modified;
         op();
         // Modified should be updated (greater than or equal, accounting for same millisecond)
-        expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(beforeOp.getTime());
+        expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(
+          beforeOp.getTime()
+        );
       }
 
-      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(initialModified.getTime());
+      expect(portfolio.modified.getTime()).toBeGreaterThanOrEqual(
+        initialModified.getTime()
+      );
     });
   });
 });

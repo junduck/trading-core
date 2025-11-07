@@ -7,8 +7,8 @@ import type { MarketSnapshot } from "../../src/types/market.js";
 describe("Order Validation", () => {
   const basePosition: Position = {
     cash: 10000,
-    long: new Map([["AAPL", { quantity: 100, averagePrice: 150 }]]),
-    short: new Map([["TSLA", { quantity: 50, averagePrice: 200 }]]),
+    long: new Map([["AAPL", { quantity: 100 }]]),
+    short: new Map([["TSLA", { quantity: 50 }]]),
   };
 
   const snapshot: MarketSnapshot = {
@@ -29,7 +29,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 50,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -44,7 +44,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 200,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -60,7 +60,7 @@ describe("Order Validation", () => {
         side: "SELL",
         effect: "CLOSE_LONG",
         quantity: 50,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -75,7 +75,7 @@ describe("Order Validation", () => {
         side: "SELL",
         effect: "CLOSE_LONG",
         quantity: 200,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -94,7 +94,7 @@ describe("Order Validation", () => {
         effect: "OPEN_LONG",
         quantity: 50,
         price: 100,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -109,7 +109,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 50,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -128,7 +128,7 @@ describe("Order Validation", () => {
         effect: "OPEN_LONG",
         quantity: 50,
         stopPrice: 150, // currentPrice is 100
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -144,7 +144,7 @@ describe("Order Validation", () => {
         effect: "OPEN_LONG",
         quantity: 50,
         stopPrice: 80, // currentPrice is 100
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -161,7 +161,7 @@ describe("Order Validation", () => {
         effect: "CLOSE_LONG",
         quantity: 50,
         stopPrice: 80, // currentPrice is 100
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -177,7 +177,7 @@ describe("Order Validation", () => {
         effect: "CLOSE_LONG",
         quantity: 50,
         stopPrice: 150, // currentPrice is 100
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -194,7 +194,7 @@ describe("Order Validation", () => {
         effect: "CLOSE_SHORT",
         quantity: 20,
         stopPrice: 200, // currentPrice is 150
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -210,7 +210,7 @@ describe("Order Validation", () => {
         effect: "OPEN_SHORT",
         quantity: 10,
         stopPrice: 250, // currentPrice is 300
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -232,7 +232,7 @@ describe("Order Validation", () => {
         effect: "OPEN_LONG",
         quantity: 50,
         stopPrice: 150, // Would cost 7500
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       // Should pass validation at placement despite insufficient cash
@@ -255,7 +255,7 @@ describe("Order Validation", () => {
         effect: "CLOSE_LONG",
         quantity: 50,
         stopPrice: 80,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       // Should pass validation at placement despite no position
@@ -275,7 +275,7 @@ describe("Order Validation", () => {
         quantity: 50,
         stopPrice: 150,
         price: 155,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -292,7 +292,7 @@ describe("Order Validation", () => {
         quantity: 50,
         stopPrice: 150,
         price: 145,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -316,7 +316,7 @@ describe("Order Validation", () => {
         quantity: 50,
         stopPrice: 150,
         price: 155,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       // Should pass despite insufficient cash
@@ -334,7 +334,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 0,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -350,7 +350,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 50,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
@@ -366,7 +366,7 @@ describe("Order Validation", () => {
         side: "BUY",
         effect: "OPEN_LONG",
         quantity: 50,
-        timestamp: new Date(),
+        created: new Date(),
       };
 
       const result = validateOrder(order, basePosition, snapshot);
