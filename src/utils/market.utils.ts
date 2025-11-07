@@ -1,6 +1,7 @@
 import type { Portfolio } from "../types/portfolio.js";
 import type { MarketSnapshot, Universe } from "../types/market.js";
 import type { Asset } from "../types/asset.js";
+import type { Position } from "../types/position.js";
 
 /**
  * Creates a Universe implementation with filtering capabilities.
@@ -74,44 +75,54 @@ export function createUniverse(
 }
 
 /**
- * Appraises a portfolio by calculating its total value across currencies.
- * Sums cash + long positions - short positions per currency.
+ * Appraises a single position by calculating its total value.
+ * Sums cash + long positions - short positions.
  *
- * @param p - Portfolio to appraise
+ * @param position - Position to appraise
  * @param snapshot - Market snapshot with current prices
- * @param universe - Trading universe with asset metadata
- * @returns Map of currency to total portfolio value
+ * @returns Total position value
  */
-export function appraisePortfolio(
-  p: Portfolio,
-  snapshot: MarketSnapshot,
-  universe: Universe
-): Map<string, number> {
-  const result = new Map<string, number>();
-
-  // Initialize with cash balances
-  for (const [currency, amount] of p.cash) {
-    result.set(currency, amount);
-  }
+export function appraisePosition(
+  position: Position,
+  snapshot: MarketSnapshot
+): number {
+  let total = position.cash;
 
   // Add long position values
-  if (p.longPosition) {
-    for (const [symbol, pos] of p.longPosition) {
-      const p = snapshot.price.get(symbol) ?? 0;
-      const v = pos.quantity * p;
-      const c = universe.getCurrency(symbol);
-      result.set(c, (result.get(c) || 0) + v);
+  if (position.long) {
+    for (const [symbol, longPos] of position.long) {
+      const price = snapshot.price.get(symbol) ?? 0;
+      total += longPos.quantity * price;
     }
   }
 
   // Subtract short position liabilities
-  if (p.shortPosition) {
-    for (const [symbol, pos] of p.shortPosition) {
-      const p = snapshot.price.get(symbol) ?? 0;
-      const l = pos.quantity * p;
-      const c = universe.getCurrency(symbol);
-      result.set(c, (result.get(c) || 0) - l);
+  if (position.short) {
+    for (const [symbol, shortPos] of position.short) {
+      const price = snapshot.price.get(symbol) ?? 0;
+      total -= shortPos.quantity * price;
     }
+  }
+
+  return total;
+}
+
+/**
+ * Appraises a portfolio by calculating its total value across currencies.
+ * Sums cash + long positions - short positions per currency.
+ *
+ * @param portfolio - Portfolio to appraise
+ * @param snapshot - Market snapshot with current prices
+ * @returns Map of currency to total portfolio value
+ */
+export function appraisePortfolio(
+  portfolio: Portfolio,
+  snapshot: MarketSnapshot
+): Map<string, number> {
+  const result = new Map<string, number>();
+
+  for (const [currency, pos] of portfolio.positions) {
+    result.set(currency, appraisePosition(pos, snapshot));
   }
 
   return result;
