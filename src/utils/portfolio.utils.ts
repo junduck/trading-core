@@ -6,7 +6,14 @@ import * as posUtils from "./position.utils.js";
 import * as stockUtils from "./stock.utils.js";
 import * as cryptoUtils from "./crypto.utils.js";
 
-/** Creates a new Portfolio data structure. */
+/**
+ * Creates a new Portfolio data structure.
+ * @param id - Unique identifier for the portfolio
+ * @param name - Human-readable name for the portfolio
+ * @param positions - Optional initial positions map
+ * @param modified - Optional modification timestamp (defaults to current date)
+ * @returns A new Portfolio instance
+ */
 export function create(
   id: string,
   name: string,
@@ -22,7 +29,12 @@ export function create(
   };
 }
 
-/** Checks if an asset exists in the portfolio. */
+/**
+ * Checks if an asset exists in the portfolio.
+ * @param portfolio - The portfolio to check
+ * @param asset - The asset to look for
+ * @returns True if the asset has a long or short position
+ */
 export function hasAsset(portfolio: Portfolio, asset: Asset): boolean {
   const pos = portfolio.positions.get(asset.currency);
   if (!pos) return false;
@@ -32,7 +44,12 @@ export function hasAsset(portfolio: Portfolio, asset: Asset): boolean {
   return hasLong || hasShort;
 }
 
-/** Gets the position for a specific currency. */
+/**
+ * Gets the position for a specific currency.
+ * @param portfolio - The portfolio to query
+ * @param currency - The currency code to look up
+ * @returns The Position for that currency, or undefined if not found
+ */
 export function getPosition(
   portfolio: Portfolio,
   currency: string
@@ -40,14 +57,41 @@ export function getPosition(
   return portfolio.positions.get(currency);
 }
 
-/** Gets the cash balance for a specific currency. */
+/**
+ * Gets the cash balance for a specific currency.
+ * @param portfolio - The portfolio to query
+ * @param currency - The currency code to look up
+ * @returns The cash balance, or 0 if currency not found
+ */
 export function getCash(portfolio: Portfolio, currency: string): number {
   return portfolio.positions.get(currency)?.cash ?? 0;
 }
 
-/** Gets all currencies in the portfolio. */
+/**
+ * Gets all currencies in the portfolio.
+ * @param portfolio - The portfolio to query
+ * @returns Array of currency codes
+ */
 export function getCurrencies(portfolio: Portfolio): string[] {
   return Array.from(portfolio.positions.keys());
+}
+
+/**
+ * Creates a new Position data structure with initial cash.
+ * @param initialCash - Initial cash balance (default: 0)
+ * @param time - Optional creation timestamp (defaults to current date)
+ * @returns A new Position instance
+ */
+export function createPosition(
+  initialCash: number = 0,
+  time?: Date
+): Position {
+  return {
+    cash: initialCash,
+    totalCommission: 0,
+    realisedPnL: 0,
+    modified: time ?? new Date(),
+  };
 }
 
 function getOrSetPosition(
