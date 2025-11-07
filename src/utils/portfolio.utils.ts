@@ -11,7 +11,6 @@ export function create(
   id: string,
   name: string,
   positions?: Map<string, Position>,
-  created?: Date,
   modified?: Date
 ): Portfolio {
   const now = new Date();
@@ -19,7 +18,6 @@ export function create(
     id,
     name,
     positions: positions ?? new Map<string, Position>(),
-    created: created ?? now,
     modified: modified ?? now,
   };
 }
@@ -35,7 +33,10 @@ export function hasAsset(portfolio: Portfolio, asset: Asset): boolean {
 }
 
 /** Gets the position for a specific currency. */
-export function getPosition(portfolio: Portfolio, currency: string): Position | undefined {
+export function getPosition(
+  portfolio: Portfolio,
+  currency: string
+): Position | undefined {
   return portfolio.positions.get(currency);
 }
 
@@ -67,13 +68,19 @@ export function openLong(
       cash: 0,
       totalCommission: 0,
       realisedPnL: 0,
-      created: actTime,
       modified: actTime,
     };
     portfolio.positions.set(asset.currency, pos);
   }
 
-  const cashFlow = posUtils.openLong(pos, asset.symbol, price, quantity, commission, actTime);
+  const cashFlow = posUtils.openLong(
+    pos,
+    asset.symbol,
+    price,
+    quantity,
+    commission,
+    actTime
+  );
   portfolio.modified = actTime;
   return cashFlow;
 }
@@ -94,7 +101,15 @@ export function closeLong(
     throw new Error(`No position found for currency ${asset.currency}`);
   }
 
-  const pnl = posUtils.closeLong(pos, asset.symbol, price, quantity, commission, strategy, actTime);
+  const pnl = posUtils.closeLong(
+    pos,
+    asset.symbol,
+    price,
+    quantity,
+    commission,
+    strategy,
+    actTime
+  );
   portfolio.modified = actTime;
   return pnl;
 }
@@ -117,13 +132,19 @@ export function openShort(
       cash: 0,
       totalCommission: 0,
       realisedPnL: 0,
-      created: actTime,
       modified: actTime,
     };
     portfolio.positions.set(asset.currency, pos);
   }
 
-  const proceeds = posUtils.openShort(pos, asset.symbol, price, quantity, commission, actTime);
+  const proceeds = posUtils.openShort(
+    pos,
+    asset.symbol,
+    price,
+    quantity,
+    commission,
+    actTime
+  );
   portfolio.modified = actTime;
   return proceeds;
 }
@@ -144,7 +165,15 @@ export function closeShort(
     throw new Error(`No position found for currency ${asset.currency}`);
   }
 
-  const pnl = posUtils.closeShort(pos, asset.symbol, price, quantity, commission, strategy, actTime);
+  const pnl = posUtils.closeShort(
+    pos,
+    asset.symbol,
+    price,
+    quantity,
+    commission,
+    strategy,
+    actTime
+  );
   portfolio.modified = actTime;
   return pnl;
 }
@@ -176,7 +205,13 @@ export function handleCashDividend(
   const pos = portfolio.positions.get(asset.currency);
   if (!pos) return 0;
 
-  const cashFlow = stockUtils.handleCashDividend(pos, asset.symbol, amountPerShare, taxRate, actTime);
+  const cashFlow = stockUtils.handleCashDividend(
+    pos,
+    asset.symbol,
+    amountPerShare,
+    taxRate,
+    actTime
+  );
   portfolio.modified = actTime;
   return cashFlow;
 }
@@ -210,7 +245,14 @@ export function handleMerger(
   const pos = portfolio.positions.get(asset.currency);
   if (!pos) return 0;
 
-  const cashFlow = stockUtils.handleMerger(pos, asset.symbol, newSymbol, ratio, cashComponent, actTime);
+  const cashFlow = stockUtils.handleMerger(
+    pos,
+    asset.symbol,
+    newSymbol,
+    ratio,
+    cashComponent,
+    actTime
+  );
   portfolio.modified = actTime;
   return cashFlow;
 }
@@ -250,13 +292,19 @@ export function handleAirdrop(
       cash: 0,
       totalCommission: 0,
       realisedPnL: 0,
-      created: actTime,
       modified: actTime,
     };
     portfolio.positions.set(currency, pos);
   }
 
-  cryptoUtils.handleAirdrop(pos, holderSymbol, airdropSymbol, amountPerToken, fixedAmount, actTime);
+  cryptoUtils.handleAirdrop(
+    pos,
+    holderSymbol,
+    airdropSymbol,
+    amountPerToken,
+    fixedAmount,
+    actTime
+  );
   portfolio.modified = actTime;
 }
 
@@ -287,7 +335,12 @@ export function handleStakingReward(
   const pos = portfolio.positions.get(asset.currency);
   if (!pos) return 0;
 
-  const rewards = cryptoUtils.handleStakingReward(pos, asset.symbol, rewardPerToken, actTime);
+  const rewards = cryptoUtils.handleStakingReward(
+    pos,
+    asset.symbol,
+    rewardPerToken,
+    actTime
+  );
   portfolio.modified = actTime;
   return rewards;
 }

@@ -16,7 +16,7 @@
 
 | Test Case | Parameters | Expected Result |
 |-----------|------------|-----------------|
-| Create basic portfolio | id="P1", name="Test" | Portfolio with empty positions, created=now, modified=now |
+| Create basic portfolio | id="P1", name="Test" | Portfolio with empty positions, modified=now |
 | Create with positions | id="P1", name="Test", positions map | Portfolio with provided positions |
 | Create with timestamps | All params including dates | Portfolio with provided dates |
 

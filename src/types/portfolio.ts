@@ -14,9 +14,6 @@ export interface Portfolio {
   /** Map of currency code to Position (e.g., "USD" -> Position) */
   positions: Map<string, Position>;
 
-  /** Timestamp when the portfolio was created */
-  readonly created: Date;
-
   /** Timestamp when the portfolio was last modified */
   modified: Date;
 }

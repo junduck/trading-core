@@ -11,7 +11,6 @@ function createTestPosition(cash: number = 100_000): Position {
     short: new Map(),
     totalCommission: 0,
     realisedPnL: 0,
-    created: now,
     modified: now,
   };
 }

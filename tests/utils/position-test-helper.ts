@@ -16,7 +16,6 @@ export function createTestPosition(cashAmount: number = 100_000): Position {
     short: new Map(),
     totalCommission: 0,
     realisedPnL: 0,
-    created: now,
     modified: now,
   };
 }
@@ -47,7 +46,15 @@ export function closeLong(
   strategy: CloseStrategy = "FIFO",
   time?: Date
 ): number {
-  return posUtils.closeLong(pos, symbol, price, quantity, commission, strategy, time);
+  return posUtils.closeLong(
+    pos,
+    symbol,
+    price,
+    quantity,
+    commission,
+    strategy,
+    time
+  );
 }
 
 /**
@@ -76,7 +83,15 @@ export function closeShort(
   strategy: CloseStrategy = "FIFO",
   time?: Date
 ): number {
-  return posUtils.closeShort(pos, symbol, price, quantity, commission, strategy, time);
+  return posUtils.closeShort(
+    pos,
+    symbol,
+    price,
+    quantity,
+    commission,
+    strategy,
+    time
+  );
 }
 
 /**
@@ -101,7 +116,13 @@ export function handleCashDividend(
   taxRate: number = 0,
   time?: Date
 ): number {
-  return stockUtils.handleCashDividend(pos, symbol, amountPerShare, taxRate, time);
+  return stockUtils.handleCashDividend(
+    pos,
+    symbol,
+    amountPerShare,
+    taxRate,
+    time
+  );
 }
 
 /**
@@ -128,7 +149,14 @@ export function handleMerger(
   cashComponent: number = 0,
   time?: Date
 ): number {
-  return stockUtils.handleMerger(pos, symbol, newSymbol, ratio, cashComponent, time);
+  return stockUtils.handleMerger(
+    pos,
+    symbol,
+    newSymbol,
+    ratio,
+    cashComponent,
+    time
+  );
 }
 
 /**
@@ -155,7 +183,14 @@ export function handleAirdrop(
   fixedAmount: number = 0,
   time?: Date
 ): void {
-  return cryptoUtils.handleAirdrop(pos, holderSymbol, airdropSymbol, amountPerToken, fixedAmount, time);
+  return cryptoUtils.handleAirdrop(
+    pos,
+    holderSymbol,
+    airdropSymbol,
+    amountPerToken,
+    fixedAmount,
+    time
+  );
 }
 
 /**

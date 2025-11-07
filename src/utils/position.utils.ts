@@ -77,7 +77,6 @@ export function openLong(
       totalCost: cost,
       realisedPnL: 0,
       lots: [lot],
-      created: actTime,
       modified: actTime,
     };
     pos.long.set(symbol, assetPos);
@@ -219,7 +218,6 @@ export function openShort(
       totalProceeds: proceeds,
       realisedPnL: 0,
       lots: [lot],
-      created: actTime,
       modified: actTime,
     };
     pos.short.set(symbol, assetPos);

@@ -169,7 +169,6 @@ export function handleSpinoff(
         totalCost: 0,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.long!.set(newSymbol, newPos);
@@ -197,7 +196,6 @@ export function handleSpinoff(
         totalProceeds: 0,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.short!.set(newSymbol, newPos);
@@ -266,7 +264,6 @@ export function handleMerger(
         totalCost: newLot.totalCost,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.long!.set(newSymbol, newPos);
@@ -301,7 +298,6 @@ export function handleMerger(
         totalProceeds: newLot.totalProceeds,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.short!.set(newSymbol, newPos);

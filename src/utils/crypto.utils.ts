@@ -45,7 +45,6 @@ export function handleHardFork(
         totalCost: 0,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.long!.set(newSymbol, newPos);
@@ -73,7 +72,6 @@ export function handleHardFork(
         totalProceeds: 0,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.short!.set(newSymbol, newPos);
@@ -154,7 +152,6 @@ export function handleAirdrop(
       totalCost: 0,
       realisedPnL: 0,
       lots: [newLot],
-      created: actTime,
       modified: actTime,
     };
     pos.long.set(airdropSymbol, newPos);
@@ -207,7 +204,6 @@ export function handleTokenSwap(
         totalCost: newLot.totalCost,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.long!.set(newSymbol, newPos);
@@ -239,7 +235,6 @@ export function handleTokenSwap(
         totalProceeds: newLot.totalProceeds,
         realisedPnL: 0,
         lots: [newLot],
-        created: actTime,
         modified: actTime,
       };
       pos.short!.set(newSymbol, newPos);

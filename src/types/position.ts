@@ -30,9 +30,6 @@ export interface LongPosition {
   /** Individual lots that make up this position. New lots are pushed to the end. Quantities are mutated in-place when closing positions. */
   lots: LongPositionLot[];
 
-  /** Timestamp when this position was created */
-  created: Date;
-
   /** Timestamp when this position was last modified */
   modified: Date;
 }
@@ -69,9 +66,6 @@ export interface ShortPosition {
   /** Individual lots that make up this position. New lots are pushed to the end. Quantities are mutated in-place when closing positions. */
   lots: ShortPositionLot[];
 
-  /** Timestamp when this position was created */
-  created: Date;
-
   /** Timestamp when this position was last modified */
   modified: Date;
 }
@@ -95,9 +89,6 @@ export interface Position {
 
   /** Total realised profit and loss in this currency */
   realisedPnL: number;
-
-  /** Timestamp when this position was created */
-  created: Date;
 
   /** Timestamp when this position was last modified */
   modified: Date;

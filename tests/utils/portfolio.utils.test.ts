@@ -24,7 +24,6 @@ describe("Portfolio Utils", () => {
       expect(portfolio.id).toBe("P1");
       expect(portfolio.name).toBe("Test Portfolio");
       expect(portfolio.positions.size).toBe(0);
-      expect(portfolio.created).toBeInstanceOf(Date);
       expect(portfolio.modified).toBeInstanceOf(Date);
     });
 
@@ -36,12 +35,10 @@ describe("Portfolio Utils", () => {
         "P1",
         "Test",
         positions,
-        testDate,
         testDate
       );
 
       expect(portfolio.positions).toBe(positions);
-      expect(portfolio.created).toBe(testDate);
       expect(portfolio.modified).toBe(testDate);
     });
   });
@@ -61,7 +58,6 @@ describe("Portfolio Utils", () => {
         cash: 5000,
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       });
     });

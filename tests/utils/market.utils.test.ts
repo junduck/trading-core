@@ -218,7 +218,6 @@ describe("Market Utils", () => {
         cash: 10000,
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -243,7 +242,6 @@ describe("Market Utils", () => {
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -269,7 +267,6 @@ describe("Market Utils", () => {
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -305,7 +302,6 @@ describe("Market Utils", () => {
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -334,7 +330,6 @@ describe("Market Utils", () => {
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -358,12 +353,10 @@ describe("Market Utils", () => {
               cash: 10000,
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -395,12 +388,10 @@ describe("Market Utils", () => {
               ]),
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -422,7 +413,6 @@ describe("Market Utils", () => {
               cash: 15000,
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
@@ -432,12 +422,10 @@ describe("Market Utils", () => {
               cash: 8000,
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -470,7 +458,6 @@ describe("Market Utils", () => {
               ]),
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
@@ -490,12 +477,10 @@ describe("Market Utils", () => {
               ]),
               totalCommission: 0,
               realisedPnL: 0,
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -519,7 +504,6 @@ describe("Market Utils", () => {
         cash: 10000,
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -541,14 +525,12 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -571,14 +553,12 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -601,14 +581,12 @@ describe("Market Utils", () => {
               totalProceeds: 20000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -631,14 +609,12 @@ describe("Market Utils", () => {
               totalProceeds: 20000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -661,7 +637,6 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
@@ -675,14 +650,12 @@ describe("Market Utils", () => {
               totalProceeds: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -710,7 +683,6 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
@@ -722,14 +694,12 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
@@ -757,14 +727,12 @@ describe("Market Utils", () => {
               totalCost: 10000,
               realisedPnL: 0,
               lots: [],
-              created: new Date(),
               modified: new Date(),
             },
           ],
         ]),
         totalCommission: 0,
         realisedPnL: 0,
-        created: new Date(),
         modified: new Date(),
       };
       const snapshot: MarketSnapshot = {
