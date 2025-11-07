@@ -30,7 +30,6 @@ export function handleSplit(
     for (const lot of long.lots) {
       lot.quantity *= ratio;
       // lot.totalCost remains unchanged (total investment value doesn't change)
-      lot.modified = actTime;
     }
 
     long.quantity *= ratio;
@@ -45,7 +44,6 @@ export function handleSplit(
     for (const lot of short.lots) {
       lot.quantity *= ratio;
       // lot.totalProceeds remains unchanged (total investment value doesn't change)
-      lot.modified = actTime;
     }
 
     short.quantity *= ratio;
@@ -99,7 +97,6 @@ export function handleCashDividend(
       const afterTax = divAmount * (1 - taxRate);
       totalPaid += afterTax;
       lot.totalCost -= afterTax;
-      lot.modified = actTime;
     }
 
     long.totalCost -= totalPaid;
@@ -118,7 +115,6 @@ export function handleCashDividend(
       const divAmount = lot.quantity * amountPerShare;
       totalOwed += divAmount;
       lot.totalProceeds -= divAmount;
-      lot.modified = actTime;
     }
 
     short.totalProceeds -= totalOwed;
@@ -167,8 +163,6 @@ export function handleSpinoff(
       quantity: newShares,
       price: 0, // Spinoff shares have no cost basis
       totalCost: 0,
-      created: actTime,
-      modified: actTime,
     };
 
     // Add to position
@@ -201,8 +195,6 @@ export function handleSpinoff(
       quantity: newShares,
       price: 0, // Spinoff shares have no proceeds
       totalProceeds: 0,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.short!.get(newSymbol);
@@ -275,8 +267,6 @@ export function handleMerger(
       quantity: newShares,
       price: newCost / newShares, // for consistency only
       totalCost: newCost,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.long!.get(newSymbol);
@@ -315,8 +305,6 @@ export function handleMerger(
       quantity: newShorts,
       price: newProceeds / newShorts, // for consistency only
       totalProceeds: newProceeds,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.short!.get(newSymbol);

@@ -35,8 +35,6 @@ export function handleHardFork(
       quantity: newCoins,
       price: 0, // Forked coins have no cost basis
       totalCost: 0,
-      created: actTime,
-      modified: actTime,
     };
 
     // Add to position
@@ -69,8 +67,6 @@ export function handleHardFork(
       quantity: newCoins,
       price: 0, // Forked coins have no proceeds
       totalProceeds: 0,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.short!.get(newSymbol);
@@ -152,8 +148,6 @@ export function handleAirdrop(
     quantity: airdropQuantity,
     price: 0, // Airdropped tokens have no cost basis
     totalCost: 0,
-    created: actTime,
-    modified: actTime,
   };
 
   // Initialize if needed
@@ -213,8 +207,6 @@ export function handleTokenSwap(
       quantity: newTokens,
       price: long.totalCost / newTokens, // Preserve cost basis
       totalCost: long.totalCost,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.long!.get(newSymbol);
@@ -250,8 +242,6 @@ export function handleTokenSwap(
       quantity: newTokens,
       price: short.totalProceeds / newTokens, // Preserve proceeds basis
       totalProceeds: short.totalProceeds,
-      created: actTime,
-      modified: actTime,
     };
 
     let newPos = pos.short!.get(newSymbol);
@@ -318,8 +308,6 @@ export function handleStakingReward(
       quantity: rewardQuantity,
       price: 0,
       totalCost: 0,
-      created: actTime,
-      modified: actTime,
     };
 
     long.quantity += rewardQuantity;
