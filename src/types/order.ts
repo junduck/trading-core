@@ -54,7 +54,7 @@ export type Order = OrderAction & {
   stopPrice?: number;
 
   /** When the order was created */
-  timestamp: Date;
+  created: Date;
 };
 
 /**
@@ -72,8 +72,8 @@ export type OrderState = Order & {
   /** Current status of the order */
   status: OrderStatus;
 
-  /** When the order was filled/cancelled (if applicable) */
-  closedAt?: Date;
+  /** When the order state was modified */
+  modified: Date;
 };
 
 /**
@@ -101,5 +101,5 @@ export type Fill = OrderAction & {
   commission: number;
 
   /** When this fill occurred */
-  timestamp: Date;
+  created: Date;
 };

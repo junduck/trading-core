@@ -44,7 +44,7 @@ export function applyFill(
         fill.price,
         fill.quantity,
         fill.commission,
-        fill.timestamp
+        fill.created
       );
       realisedPnL = 0;
       break;
@@ -57,7 +57,7 @@ export function applyFill(
         fill.quantity,
         fill.commission,
         closeStrategy,
-        fill.timestamp
+        fill.created
       );
       cashFlow = fill.price * fill.quantity - fill.commission;
       break;
@@ -69,7 +69,7 @@ export function applyFill(
         fill.price,
         fill.quantity,
         fill.commission,
-        fill.timestamp
+        fill.created
       );
       realisedPnL = 0;
       break;
@@ -82,7 +82,7 @@ export function applyFill(
         fill.quantity,
         fill.commission,
         closeStrategy,
-        fill.timestamp
+        fill.created
       );
       cashFlow = -(fill.price * fill.quantity + fill.commission);
       break;
