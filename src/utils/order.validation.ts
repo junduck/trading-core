@@ -4,6 +4,165 @@ import type { MarketSnapshot } from "../types/market.js";
 import type { OrderValidationResult } from "./order.utils.js";
 
 /**
+ * Validates that price field exists and is positive.
+ */
+function validatePriceField(
+  price: number | undefined | null
+): OrderValidationResult {
+  if (price === undefined || price === null) {
+    return {
+      valid: false,
+      error: { type: "MISSING_PRICE" },
+    };
+  }
+  if (price <= 0) {
+    return {
+      valid: false,
+      error: {
+        type: "INVALID_PRICE",
+        value: price,
+      },
+    };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validates that stopPrice field exists and is positive.
+ */
+function validateStopPriceField(
+  stopPrice: number | undefined | null
+): OrderValidationResult {
+  if (stopPrice === undefined || stopPrice === null) {
+    return {
+      valid: false,
+      error: { type: "MISSING_STOP_PRICE" },
+    };
+  }
+  if (stopPrice <= 0) {
+    return {
+      valid: false,
+      error: {
+        type: "INVALID_STOP_PRICE",
+        value: stopPrice,
+      },
+    };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validates OPEN_LONG effect - requires sufficient cash at the given price.
+ */
+function validateOpenLongEffect(
+  quantity: number,
+  price: number,
+  position: Position
+): OrderValidationResult {
+  const cost = price * quantity;
+  if (position.cash < cost) {
+    return {
+      valid: false,
+      error: {
+        type: "INSUFFICIENT_CASH",
+        required: cost,
+        available: position.cash,
+      },
+    };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validates CLOSE_LONG effect - requires sufficient long position.
+ */
+function validateCloseLongEffect(
+  symbol: string,
+  quantity: number,
+  position: Position
+): OrderValidationResult {
+  const longPos = position.long?.get(symbol);
+  if (!longPos) {
+    return {
+      valid: false,
+      error: {
+        type: "POSITION_NOT_FOUND",
+        symbol: symbol,
+        positionType: "LONG",
+      },
+    };
+  }
+  if (longPos.quantity < quantity) {
+    return {
+      valid: false,
+      error: {
+        type: "INSUFFICIENT_POSITION",
+        symbol: symbol,
+        positionType: "LONG",
+        required: quantity,
+        available: longPos.quantity,
+      },
+    };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validates OPEN_SHORT effect - no requirements (selling to open short).
+ */
+function validateOpenShortEffect(): OrderValidationResult {
+  return { valid: true };
+}
+
+/**
+ * Validates CLOSE_SHORT effect - requires sufficient short position and cash to cover.
+ */
+function validateCloseShortEffect(
+  symbol: string,
+  quantity: number,
+  price: number,
+  position: Position
+): OrderValidationResult {
+  const shortPos = position.short?.get(symbol);
+  if (!shortPos) {
+    return {
+      valid: false,
+      error: {
+        type: "POSITION_NOT_FOUND",
+        symbol: symbol,
+        positionType: "SHORT",
+      },
+    };
+  }
+  if (shortPos.quantity < quantity) {
+    return {
+      valid: false,
+      error: {
+        type: "INSUFFICIENT_POSITION",
+        symbol: symbol,
+        positionType: "SHORT",
+        required: quantity,
+        available: shortPos.quantity,
+      },
+    };
+  }
+
+  // Need enough cash to buy at the given price to cover short
+  const cost = price * quantity;
+  if (position.cash < cost) {
+    return {
+      valid: false,
+      error: {
+        type: "INSUFFICIENT_CASH",
+        required: cost,
+        available: position.cash,
+      },
+    };
+  }
+  return { valid: true };
+}
+
+/**
  * Validates a MARKET order against current position and market state.
  * MARKET orders execute immediately at current market price.
  *
@@ -29,93 +188,22 @@ function validateMarketOrder(
   }
 
   switch (order.effect) {
-    case "OPEN_LONG": {
-      // Need enough cash to buy at market price (estimated)
-      const cost = marketPrice * order.quantity;
-      if (position.cash < cost) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_CASH",
-            required: cost,
-            available: position.cash,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "OPEN_LONG":
+      return validateOpenLongEffect(order.quantity, marketPrice, position);
 
-    case "CLOSE_LONG": {
-      const longPos = position.long?.get(order.symbol);
-      if (!longPos) {
-        return {
-          valid: false,
-          error: {
-            type: "POSITION_NOT_FOUND",
-            symbol: order.symbol,
-            positionType: "LONG",
-          },
-        };
-      }
-      if (longPos.quantity < order.quantity) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_POSITION",
-            symbol: order.symbol,
-            positionType: "LONG",
-            required: order.quantity,
-            available: longPos.quantity,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "CLOSE_LONG":
+      return validateCloseLongEffect(order.symbol, order.quantity, position);
 
-    case "OPEN_SHORT": {
-      // Selling to open short - no cash requirement
-      return { valid: true };
-    }
+    case "OPEN_SHORT":
+      return validateOpenShortEffect();
 
-    case "CLOSE_SHORT": {
-      const shortPos = position.short?.get(order.symbol);
-      if (!shortPos) {
-        return {
-          valid: false,
-          error: {
-            type: "POSITION_NOT_FOUND",
-            symbol: order.symbol,
-            positionType: "SHORT",
-          },
-        };
-      }
-      if (shortPos.quantity < order.quantity) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_POSITION",
-            symbol: order.symbol,
-            positionType: "SHORT",
-            required: order.quantity,
-            available: shortPos.quantity,
-          },
-        };
-      }
-
-      // Need enough cash to buy at market price (estimated)
-      const cost = marketPrice * order.quantity;
-      if (position.cash < cost) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_CASH",
-            required: cost,
-            available: position.cash,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "CLOSE_SHORT":
+      return validateCloseShortEffect(
+        order.symbol,
+        order.quantity,
+        marketPrice,
+        position
+      );
   }
 }
 
@@ -134,91 +222,22 @@ function validateLimitOrder(
   _snapshot: MarketSnapshot
 ): OrderValidationResult {
   switch (order.effect) {
-    case "OPEN_LONG": {
-      const cost = order.price! * order.quantity;
-      if (position.cash < cost) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_CASH",
-            required: cost,
-            available: position.cash,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "OPEN_LONG":
+      return validateOpenLongEffect(order.quantity, order.price!, position);
 
-    case "CLOSE_LONG": {
-      const longPos = position.long?.get(order.symbol);
-      if (!longPos) {
-        return {
-          valid: false,
-          error: {
-            type: "POSITION_NOT_FOUND",
-            symbol: order.symbol,
-            positionType: "LONG",
-          },
-        };
-      }
-      if (longPos.quantity < order.quantity) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_POSITION",
-            symbol: order.symbol,
-            positionType: "LONG",
-            required: order.quantity,
-            available: longPos.quantity,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "CLOSE_LONG":
+      return validateCloseLongEffect(order.symbol, order.quantity, position);
 
-    case "OPEN_SHORT": {
-      // Selling to open short - no cash requirement
-      return { valid: true };
-    }
+    case "OPEN_SHORT":
+      return validateOpenShortEffect();
 
-    case "CLOSE_SHORT": {
-      const shortPos = position.short?.get(order.symbol);
-      if (!shortPos) {
-        return {
-          valid: false,
-          error: {
-            type: "POSITION_NOT_FOUND",
-            symbol: order.symbol,
-            positionType: "SHORT",
-          },
-        };
-      }
-      if (shortPos.quantity < order.quantity) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_POSITION",
-            symbol: order.symbol,
-            positionType: "SHORT",
-            required: order.quantity,
-            available: shortPos.quantity,
-          },
-        };
-      }
-
-      const cost = order.price! * order.quantity;
-      if (position.cash < cost) {
-        return {
-          valid: false,
-          error: {
-            type: "INSUFFICIENT_CASH",
-            required: cost,
-            available: position.cash,
-          },
-        };
-      }
-      return { valid: true };
-    }
+    case "CLOSE_SHORT":
+      return validateCloseShortEffect(
+        order.symbol,
+        order.quantity,
+        order.price!,
+        position
+      );
   }
 }
 
@@ -313,80 +332,32 @@ export function validateOrder(
     case "MARKET":
       return validateMarketOrder(order, position, snapshot);
 
-    case "LIMIT":
-      // Validate price is set
-      if (order.price === undefined || order.price === null) {
-        return {
-          valid: false,
-          error: { type: "MISSING_PRICE" },
-        };
-      }
-      if (order.price <= 0) {
-        return {
-          valid: false,
-          error: {
-            type: "INVALID_PRICE",
-            value: order.price,
-          },
-        };
+    case "LIMIT": {
+      const priceValidation = validatePriceField(order.price);
+      if (!priceValidation.valid) {
+        return priceValidation;
       }
       return validateLimitOrder(order, position, snapshot);
+    }
 
-    case "STOP":
-      // Validate stopPrice is set
-      if (order.stopPrice === undefined || order.stopPrice === null) {
-        return {
-          valid: false,
-          error: { type: "MISSING_STOP_PRICE" },
-        };
+    case "STOP": {
+      const stopPriceValidation = validateStopPriceField(order.stopPrice);
+      if (!stopPriceValidation.valid) {
+        return stopPriceValidation;
       }
-      if (order.stopPrice <= 0) {
-        return {
-          valid: false,
-          error: {
-            type: "INVALID_STOP_PRICE",
-            value: order.stopPrice,
-          },
-        };
-      }
-      // STOP orders are triggers - only validate direction sanity
-      // No cash/position validation at placement time
       return validateStopOrderDirection(order, snapshot);
+    }
 
-    case "STOP_LIMIT":
-      // Validate both price and stopPrice are set
-      if (order.price === undefined || order.price === null) {
-        return {
-          valid: false,
-          error: { type: "MISSING_PRICE" },
-        };
+    case "STOP_LIMIT": {
+      const priceValidation = validatePriceField(order.price);
+      if (!priceValidation.valid) {
+        return priceValidation;
       }
-      if (order.price <= 0) {
-        return {
-          valid: false,
-          error: {
-            type: "INVALID_PRICE",
-            value: order.price,
-          },
-        };
+      const stopPriceValidation = validateStopPriceField(order.stopPrice);
+      if (!stopPriceValidation.valid) {
+        return stopPriceValidation;
       }
-      if (order.stopPrice === undefined || order.stopPrice === null) {
-        return {
-          valid: false,
-          error: { type: "MISSING_STOP_PRICE" },
-        };
-      }
-      if (order.stopPrice <= 0) {
-        return {
-          valid: false,
-          error: {
-            type: "INVALID_STOP_PRICE",
-            value: order.stopPrice,
-          },
-        };
-      }
-      // STOP_LIMIT orders are triggers - only validate direction sanity
-      // No cash/position validation at placement time
       return validateStopOrderDirection(order, snapshot);
+    }
   }
 }
