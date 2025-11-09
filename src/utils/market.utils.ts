@@ -164,6 +164,12 @@ export function calculateUnrealizedPnL(
 }
 
 /**
+ * Alias for {@link calculateUnrealizedPnL} using British/AU spelling.
+ * Provided for consistency with interface field naming (`realisedPnL`).
+ */
+export const calculateUnrealisedPnL = calculateUnrealizedPnL;
+
+/**
  * Checks if an asset is valid at a given timestamp.
  * An asset is valid if:
  * - validFrom is null/undefined OR timestamp >= validFrom

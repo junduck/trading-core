@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - When enabled, maintains single merged lot instead of tracking separate lots
   - Fully backward-compatible (default: `false`)
 
+**Market Utilities:**
+
+- `calculateUnrealisedPnL()` - Alias for `calculateUnrealizedPnL()` using British/AU spelling
+  - Provides API consistency with interface field naming (`realisedPnL`)
+  - Both spellings now available for user preference
+
 **Documentation:**
 
 - `amendLongPositionLot()` - JSDoc for merging long position lots
