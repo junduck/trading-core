@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Market Utilities:**
 
+- `updateSnapshotQuote()` - Updates MarketSnapshot with new MarketQuote using LOCF
+  - Updates price for the symbol and ensures timestamp reflects most recent data
+- `updateSnapshotBar()` - Updates MarketSnapshot with new MarketBar using close price
+  - Updates price with bar's close price and ensures timestamp reflects most recent data
 - `calculateUnrealisedPnL()` - Alias for `calculateUnrealizedPnL()` using British/AU spelling
   - Provides API consistency with interface field naming (`realisedPnL`)
   - Both spellings now available for user preference
