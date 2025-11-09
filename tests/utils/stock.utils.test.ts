@@ -1,15 +1,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Position } from "../../src/types/position.js";
+import { createTestPosition, round } from "./position-test-helper.js";
 import {
-  createTestPosition,
-  round,
   openLong,
   openShort,
   handleSplit,
   handleCashDividend,
   handleSpinoff,
   handleMerger,
-} from "./position-test-helper.js";
+} from "../../src/utils/index.js";
 
 describe("Stock Utils - Corporate Actions", () => {
   let position: Position;
@@ -405,6 +404,62 @@ describe("Stock Utils - Corporate Actions", () => {
       longPos = position.long?.get("AAPL");
       expect(longPos!.quantity).toBe(10);
       expect(longPos!.totalCost).toBe(1_000);
+    });
+  });
+
+  describe("DisableLot Mode", () => {
+    it("handleSpinoff should maintain single lot when disableLot is true", () => {
+      const spinoffSymbol = "SPINOFF";
+
+      // Step 1: Open Long AAPL with disableLot
+      openLong(position, symbol, 100, 10, 100, undefined, true);
+
+      // Step 2: Spinoff with disableLot
+      handleSpinoff(position, symbol, spinoffSymbol, 1, undefined, true);
+
+      // Verify spinoff position has only one lot
+      const spinoffPosition = position.long?.get("SPINOFF");
+      expect(spinoffPosition).toBeDefined();
+      expect(spinoffPosition!.lots).toHaveLength(1);
+      expect(spinoffPosition!.quantity).toBe(10);
+
+      // Step 3: Another spinoff to same symbol should merge
+      openLong(position, symbol, 110, 5, 50, undefined, true);
+      handleSpinoff(position, symbol, spinoffSymbol, 1, undefined, true);
+
+      const spinoffPosition2 = position.long?.get("SPINOFF");
+      expect(spinoffPosition2!.lots).toHaveLength(1);
+      expect(spinoffPosition2!.quantity).toBe(25); // 10 (from first spinoff) + 15 (AAPL now has 15 total, spinoff creates 15 more)
+    });
+
+    it("handleMerger should maintain single lot when disableLot is true", () => {
+      const targetSymbol = "TARGET";
+      const acquirerSymbol = "ACQUIRER";
+
+      // Step 1: Open Long TARGET with disableLot
+      openLong(position, targetSymbol, 100, 10, 100, undefined, true);
+      openLong(position, targetSymbol, 110, 5, 50, undefined, true);
+
+      // Verify TARGET has only one lot
+      const targetPosition = position.long?.get("TARGET");
+      expect(targetPosition!.lots).toHaveLength(1);
+
+      // Step 2: Merger with disableLot
+      handleMerger(
+        position,
+        targetSymbol,
+        acquirerSymbol,
+        2,
+        10,
+        undefined,
+        true
+      );
+
+      // Verify ACQUIRER position has only one lot
+      const acquirerPosition = position.long?.get("ACQUIRER");
+      expect(acquirerPosition).toBeDefined();
+      expect(acquirerPosition!.lots).toHaveLength(1);
+      expect(acquirerPosition!.quantity).toBe(30); // 15 * 2
     });
   });
 });

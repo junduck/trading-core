@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-11-09
+
+### Added
+
+**Position Management:**
+
+- `disableLot` parameter for providers without lot-level accounting support
+  - Added to `openLong()` and `openShort()` functions
+  - When enabled, maintains single merged lot instead of tracking separate lots
+  - Fully backward-compatible (default: `false`)
+
+**Documentation:**
+
+- `amendLongPositionLot()` - JSDoc for merging long position lots
+- `amendShortPositionLot()` - JSDoc for merging short position lots
+
+**Corporate Actions:**
+
+- `disableLot` support for all corporate action functions:
+  - `handleHardFork()`, `handleAirdrop()`, `handleTokenSwap()`, `handleStakingReward()`
+  - `handleSpinoff()`, `handleMerger()`
+
+**Testing:**
+
+- 8 new tests for `disableLot` functionality (155 total tests)
+- Comprehensive coverage for single-lot mode across all position operations
+
 ## [1.0.0] - 2025-11-08
 
 ### Added

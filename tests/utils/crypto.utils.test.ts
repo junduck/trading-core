@@ -1,15 +1,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Position } from "../../src/types/position.js";
+import { createTestPosition, round } from "./position-test-helper.js";
 import {
-  createTestPosition,
-  round,
   openLong,
   openShort,
   handleHardFork,
   handleAirdrop,
   handleTokenSwap,
   handleStakingReward,
-} from "./position-test-helper.js";
+} from "../../src/utils/index.js";
 
 describe("Crypto Utils", () => {
   let position: Position;
@@ -426,6 +425,94 @@ describe("Crypto Utils", () => {
       expect(() => {
         handleStakingReward(position, ethSymbol, -1);
       }).toThrow("Invalid reward amount");
+    });
+  });
+
+  describe("DisableLot Mode", () => {
+    it("handleHardFork should maintain single lot when disableLot is true", () => {
+      const bchSymbol = "BCH";
+
+      // Step 1: Open Long BTC with disableLot
+      openLong(position, btcSymbol, 100, 10, 100, undefined, true);
+
+      // Step 2: Hard Fork with disableLot
+      handleHardFork(position, btcSymbol, bchSymbol, 1, undefined, true);
+
+      // Verify BCH position has only one lot
+      const bchPosition = position.long?.get("BCH");
+      expect(bchPosition).toBeDefined();
+      expect(bchPosition!.lots).toHaveLength(1);
+      expect(bchPosition!.quantity).toBe(10);
+
+      // Step 3: Another hard fork to same symbol should merge
+      openLong(position, btcSymbol, 110, 5, 50, undefined, true);
+      handleHardFork(position, btcSymbol, bchSymbol, 1, undefined, true);
+
+      const bchPosition2 = position.long?.get("BCH");
+      expect(bchPosition2!.lots).toHaveLength(1);
+      expect(bchPosition2!.quantity).toBe(25); // 10 (from first fork) + 15 (BTC now has 15 total, fork creates 15 more)
+    });
+
+    it("handleAirdrop should maintain single lot when disableLot is true", () => {
+      const airdropSymbol = "AIRDROP";
+
+      // Step 1: Open Long ETH
+      openLong(position, ethSymbol, 100, 10, 100);
+
+      // Step 2: Airdrop with disableLot
+      handleAirdrop(position, ethSymbol, airdropSymbol, 2, 0, undefined, true);
+
+      // Verify airdrop position has only one lot
+      const airdropPosition = position.long?.get("AIRDROP");
+      expect(airdropPosition).toBeDefined();
+      expect(airdropPosition!.lots).toHaveLength(1);
+      expect(airdropPosition!.quantity).toBe(20);
+
+      // Step 3: Another airdrop should merge
+      handleAirdrop(position, ethSymbol, airdropSymbol, 1, 0, undefined, true);
+      const airdropPosition2 = position.long?.get("AIRDROP");
+      expect(airdropPosition2!.lots).toHaveLength(1);
+      expect(airdropPosition2!.quantity).toBe(30); // 20 + 10
+    });
+
+    it("handleTokenSwap should maintain single lot when disableLot is true", () => {
+      const oldSymbol = "OLD";
+      const newSymbol = "NEW";
+
+      // Step 1: Open Long OLD with disableLot
+      openLong(position, oldSymbol, 100, 10, 100, undefined, true);
+      openLong(position, oldSymbol, 110, 5, 50, undefined, true);
+
+      // Verify OLD has only one lot
+      const oldPosition = position.long?.get("OLD");
+      expect(oldPosition!.lots).toHaveLength(1);
+
+      // Step 2: Token Swap with disableLot
+      handleTokenSwap(position, oldSymbol, newSymbol, 1, undefined, true);
+
+      // Verify NEW position has only one lot
+      const newPosition = position.long?.get("NEW");
+      expect(newPosition).toBeDefined();
+      expect(newPosition!.lots).toHaveLength(1);
+      expect(newPosition!.quantity).toBe(15);
+    });
+
+    it("handleStakingReward should maintain single lot when disableLot is true", () => {
+      // Step 1: Open Long ETH with disableLot
+      openLong(position, ethSymbol, 100, 10, 100, undefined, true);
+
+      // Verify only one lot
+      let ethPosition = position.long?.get("ETH");
+      expect(ethPosition!.lots).toHaveLength(1);
+
+      // Step 2: Staking Reward with disableLot
+      handleStakingReward(position, ethSymbol, 0.5, undefined, true);
+
+      // Verify still only one lot (merged)
+      ethPosition = position.long?.get("ETH");
+      expect(ethPosition!.lots).toHaveLength(1);
+      expect(ethPosition!.quantity).toBe(15); // 10 + 5
+      expect(ethPosition!.totalCost).toBe(1_100); // unchanged
     });
   });
 });

@@ -3,7 +3,12 @@ import type {
   LongPositionLot,
   ShortPositionLot,
 } from "../types/position.js";
-import { pushLongPositionLot, pushShortPositionLot } from "./position.utils.js";
+import {
+  pushLongPositionLot,
+  pushShortPositionLot,
+  amendLongPositionLot,
+  amendShortPositionLot,
+} from "./position.utils.js";
 
 /**
  * Handles a hard fork by creating positions in the new cryptocurrency.
@@ -12,6 +17,7 @@ import { pushLongPositionLot, pushShortPositionLot } from "./position.utils.js";
  * @param newSymbol - The forked cryptocurrency symbol
  * @param ratio - The number of new coins per original coin (default: 1)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the hard fork ratio is not positive
  */
 export function handleHardFork(
@@ -19,7 +25,8 @@ export function handleHardFork(
   symbol: string,
   newSymbol: string,
   ratio: number = 1,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   if (ratio <= 0) {
     throw new Error(`Invalid hard fork ratio: ${ratio}. Must be positive.`);
@@ -39,7 +46,11 @@ export function handleHardFork(
     };
 
     // Add to position
-    pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendLongPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    }
   }
 
   const short = pos.short?.get(symbol);
@@ -53,7 +64,11 @@ export function handleHardFork(
     };
 
     // Add to position
-    pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendShortPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    }
   }
 
   if (long || short) {
@@ -69,6 +84,7 @@ export function handleHardFork(
  * @param amountPerToken - The airdrop amount per token held (ignored if holderSymbol is null)
  * @param fixedAmount - Fixed airdrop amount (used if holderSymbol is null)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if both holderSymbol and fixedAmount are null, or amountPerToken is negative
  */
 export function handleAirdrop(
@@ -77,7 +93,8 @@ export function handleAirdrop(
   airdropSymbol: string,
   amountPerToken: number = 0,
   fixedAmount: number = 0,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   if (!holderSymbol && fixedAmount <= 0) {
     throw new Error(
@@ -120,7 +137,11 @@ export function handleAirdrop(
   pos.long ??= new Map();
 
   // Add to position
-  pushLongPositionLot(pos, airdropSymbol, newLot, actTime);
+  if (disableLot) {
+    amendLongPositionLot(pos, airdropSymbol, newLot, actTime);
+  } else {
+    pushLongPositionLot(pos, airdropSymbol, newLot, actTime);
+  }
 
   pos.modified = actTime;
 }
@@ -132,6 +153,7 @@ export function handleAirdrop(
  * @param newSymbol - The new token symbol
  * @param ratio - The exchange ratio of new tokens per old token (default: 1)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the swap ratio is not positive
  */
 export function handleTokenSwap(
@@ -139,7 +161,8 @@ export function handleTokenSwap(
   oldSymbol: string,
   newSymbol: string,
   ratio: number = 1,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   if (ratio <= 0) {
     throw new Error(`Invalid swap ratio: ${ratio}. Must be positive.`);
@@ -159,7 +182,11 @@ export function handleTokenSwap(
     };
 
     // Add to position
-    pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendLongPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    }
 
     // Remove old position
     pos.long!.delete(oldSymbol);
@@ -176,7 +203,11 @@ export function handleTokenSwap(
     };
 
     // Add to position
-    pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendShortPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    }
 
     // Remove old position
     pos.short!.delete(oldSymbol);
@@ -193,6 +224,7 @@ export function handleTokenSwap(
  * @param symbol - The staked asset symbol
  * @param rewardPerToken - The reward amount per staked token
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The total quantity of rewards received
  * @throws Error if the reward amount is negative
  */
@@ -200,7 +232,8 @@ export function handleStakingReward(
   pos: Position,
   symbol: string,
   rewardPerToken: number,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ): number {
   if (rewardPerToken < 0) {
     throw new Error(
@@ -226,7 +259,13 @@ export function handleStakingReward(
 
     long.quantity += rewardQuantity;
     // totalCost remains unchanged (rewards have no cost)
-    long.lots.push(rewardLot);
+    if (disableLot && long.lots.length > 0) {
+      // Merge into existing lot
+      long.lots[0]!.quantity += rewardQuantity;
+      // totalCost remains unchanged (rewards have no cost)
+    } else {
+      long.lots.push(rewardLot);
+    }
     long.modified = actTime;
   }
 
