@@ -54,8 +54,8 @@ export type Order = OrderAction & {
   /** Stop price (for STOP and STOP_LIMIT orders) */
   stopPrice?: number;
 
-  /** When the order was created */
-  created: Date;
+  /** When the order was created (optional - intent time, not audit time) */
+  created?: Date;
 };
 
 /**
