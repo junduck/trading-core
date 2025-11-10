@@ -49,6 +49,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Represents the previous closing price for comparison with current price
   - Optional field to support price change calculations
   - Non-breaking change to existing interface
+- `totalVolume` property to `MarketQuote` interface
+  - Represents total traded volume for the session (cumulative)
+  - Distinguishes from `volume` which represents last trade volume
+  - Supports data providers with different volume reporting semantics
+  - Non-breaking change to existing interface
 
 **Market Utilities:**
 
