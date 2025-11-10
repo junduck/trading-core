@@ -10,7 +10,8 @@ export type OrderStatus =
   | "OPEN" // Order placed but not filled yet
   | "PARTIAL" // Partially filled
   | "FILLED" // Completely filled
-  | "CANCELLED"; // Order cancelled
+  | "CANCELLED" // Order cancelled
+  | "REJECT"; //Order rejected
 
 /**
  * Order action combining side and position effect.
