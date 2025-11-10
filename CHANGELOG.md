@@ -24,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - When enabled, maintains single merged lot instead of tracking separate lots
   - Fully backward-compatible (default: `false`)
 
+**Market Data:**
+
+- `preClose` property to `MarketQuote` interface
+  - Represents the previous closing price for comparison with current price
+  - Optional field to support price change calculations
+  - Non-breaking change to existing interface
+
 **Market Utilities:**
 
 - `updateSnapshotQuote()` - Updates MarketSnapshot with new MarketQuote using LOCF

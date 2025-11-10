@@ -102,6 +102,9 @@ export interface MarketQuote {
 
   /** Volume available at the ask price */
   askVol?: number;
+
+  /** Previous close price */
+  preClose?: number;
 }
 
 /** Standard time intervals for market bar data */
