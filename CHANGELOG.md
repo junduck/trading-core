@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - 2025-11-10
+## [1.1.0] - 2025-11-10
 
 ### Changed
 
@@ -22,8 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Previously internal utility now available for external use
   - Gets existing position or creates new one if not found
   - Added JSDoc documentation for clarity
-
-## [1.1.0] - 2025-11-10
+- Added `getAllSymbols()` function
+  - Returns all symbols in portfolio organized by currency
+  - Efficiently collects symbols from both long and short positions
+  - Avoids duplicates when same symbol exists in both directions
+  - Returns Map<currency, string[]> following TypeScript conventions
 
 ### Added
 
@@ -32,8 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `REJECT` status to `OrderStatus` type
   - Represents orders rejected by the system or exchange
   - Non-breaking change to existing order status union type
-
-**Position Management:**
 
 **Position Management:**
 
@@ -72,8 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Testing:**
 
-- 8 new tests for `disableLot` functionality (155 total tests)
-- Comprehensive coverage for single-lot mode across all position operations
+- 8 new tests for `disableLot` functionality
+- 8 new tests for `getAllSymbols()` functionality
+- 163 total tests with comprehensive coverage
 
 ## [1.0.0] - 2025-11-08
 

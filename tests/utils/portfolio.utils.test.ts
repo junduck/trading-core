@@ -95,6 +95,137 @@ describe("Portfolio Utils", () => {
     });
   });
 
+  describe("getAllSymbols()", () => {
+    it("should return empty map for portfolio with no symbols", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(0);
+    });
+
+    it("should return symbols from long positions", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const aapl = createAsset("AAPL", "USD");
+      const tsla = createAsset("TSLA", "USD");
+
+      portfolioUtils.openLong(portfolio, aapl, 100, 10, 0);
+      portfolioUtils.openLong(portfolio, tsla, 200, 5, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(1);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(2);
+      expect(usdSymbols).toContain("AAPL");
+      expect(usdSymbols).toContain("TSLA");
+    });
+
+    it("should return symbols from short positions", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const tsla = createAsset("TSLA", "USD");
+
+      portfolioUtils.openShort(portfolio, tsla, 200, 10, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(1);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(1);
+      expect(usdSymbols?.[0]).toBe("TSLA");
+    });
+
+    it("should return symbols from both long and short positions without duplicates", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const aapl = createAsset("AAPL", "USD");
+      const tsla = createAsset("TSLA", "USD");
+
+      portfolioUtils.openLong(portfolio, aapl, 100, 10, 0);
+      portfolioUtils.openShort(portfolio, tsla, 200, 5, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(1);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(2);
+      expect(usdSymbols).toContain("AAPL");
+      expect(usdSymbols).toContain("TSLA");
+    });
+
+    it("should handle same symbol in both long and short without duplication", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const aapl = createAsset("AAPL", "USD");
+
+      portfolioUtils.openLong(portfolio, aapl, 100, 10, 0);
+      portfolioUtils.openShort(portfolio, aapl, 100, 5, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(1);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(1);
+      expect(usdSymbols?.[0]).toBe("AAPL");
+    });
+
+    it("should organize symbols by currency", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const aapl = createAsset("AAPL", "USD");
+      const btc = createAsset("BTC", "EUR");
+      const eth = createAsset("ETH", "EUR");
+
+      portfolioUtils.openLong(portfolio, aapl, 100, 10, 0);
+      portfolioUtils.openLong(portfolio, btc, 50000, 1, 0);
+      portfolioUtils.openShort(portfolio, eth, 3000, 5, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(2);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(1);
+      expect(usdSymbols?.[0]).toBe("AAPL");
+
+      const eurSymbols = symbols.get("EUR");
+      expect(eurSymbols).toBeDefined();
+      expect(eurSymbols).toHaveLength(2);
+      expect(eurSymbols).toContain("BTC");
+      expect(eurSymbols).toContain("ETH");
+    });
+
+    it("should not include currencies with only cash positions", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      portfolio.positions.set("USD", {
+        cash: 10000,
+        totalCommission: 0,
+        realisedPnL: 0,
+        modified: new Date(),
+      });
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(0);
+    });
+
+    it("should return symbols after closing some positions", () => {
+      const portfolio = portfolioUtils.create("P1", "Test Portfolio");
+      const aapl = createAsset("AAPL", "USD");
+      const tsla = createAsset("TSLA", "USD");
+
+      portfolioUtils.openLong(portfolio, aapl, 100, 10, 0);
+      portfolioUtils.openLong(portfolio, tsla, 200, 10, 0);
+      portfolioUtils.closeLong(portfolio, aapl, 110, 10, 0);
+
+      const symbols = portfolioUtils.getAllSymbols(portfolio);
+      expect(symbols.size).toBe(1);
+
+      const usdSymbols = symbols.get("USD");
+      expect(usdSymbols).toBeDefined();
+      expect(usdSymbols).toHaveLength(1);
+      expect(usdSymbols?.[0]).toBe("TSLA");
+    });
+  });
+
   describe("Long Position Operations", () => {
     let portfolio: Portfolio;
     let asset: Asset;

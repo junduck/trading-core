@@ -77,6 +77,42 @@ export function getCurrencies(portfolio: Portfolio): string[] {
 }
 
 /**
+ * Gets all symbols in the portfolio organized by currency.
+ * @param portfolio - The portfolio to query
+ * @returns Map of currency code to array of symbols with positions
+ */
+export function getAllSymbols(portfolio: Portfolio): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+
+  for (const [currency, position] of portfolio.positions) {
+    const symbols: string[] = [];
+
+    // Collect symbols from long positions
+    if (position.long) {
+      for (const symbol of position.long.keys()) {
+        symbols.push(symbol);
+      }
+    }
+
+    // Collect symbols from short positions
+    if (position.short) {
+      for (const symbol of position.short.keys()) {
+        // Only add if not already added from long positions
+        if (!position.long?.has(symbol)) {
+          symbols.push(symbol);
+        }
+      }
+    }
+
+    if (symbols.length > 0) {
+      result.set(currency, symbols);
+    }
+  }
+
+  return result;
+}
+
+/**
  * Creates a new Position data structure with initial cash.
  * @param initialCash - Initial cash balance (default: 0)
  * @param time - Optional creation timestamp (defaults to current date)
