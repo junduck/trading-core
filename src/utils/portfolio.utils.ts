@@ -82,10 +82,7 @@ export function getCurrencies(portfolio: Portfolio): string[] {
  * @param time - Optional creation timestamp (defaults to current date)
  * @returns A new Position instance
  */
-export function createPosition(
-  initialCash: number = 0,
-  time?: Date
-): Position {
+export function createPosition(initialCash: number = 0, time?: Date): Position {
   return {
     cash: initialCash,
     totalCommission: 0,
@@ -94,20 +91,27 @@ export function createPosition(
   };
 }
 
-function getOrSetPosition(
-  p: Portfolio,
+/**
+ * Gets an existing position or creates a new one if it doesn't exist.
+ * @param portfolio - The portfolio to query or modify
+ * @param currency - The currency code for the position
+ * @param time - Optional timestamp for new position creation (defaults to current date)
+ * @returns The existing or newly created Position
+ */
+export function getOrSetPosition(
+  portfolio: Portfolio,
   currency: string,
-  time: Date
+  time?: Date
 ): Position {
-  let pos = p.positions.get(currency);
+  let pos = portfolio.positions.get(currency);
   if (!pos) {
     pos = {
       cash: 0,
       totalCommission: 0,
       realisedPnL: 0,
-      modified: time,
+      modified: time ?? new Date(),
     };
-    p.positions.set(currency, pos);
+    portfolio.positions.set(currency, pos);
   }
   return pos;
 }

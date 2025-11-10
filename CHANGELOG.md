@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Actual effective timing for audit purposes comes from `OrderState.modified`
   - Users can choose whether to record the intent creation time or not
 
+**Portfolio Utilities:**
+
+- Exported `getOrSetPosition()` function
+  - Previously internal utility now available for external use
+  - Gets existing position or creates new one if not found
+  - Added JSDoc documentation for clarity
+
 ## [1.1.0] - 2025-11-10
 
 ### Added
