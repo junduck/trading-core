@@ -10,7 +10,8 @@ export type OrderStatus =
   | "OPEN" // Order placed but not filled yet
   | "PARTIAL" // Partially filled
   | "FILLED" // Completely filled
-  | "CANCELLED"; // Order cancelled
+  | "CANCELLED" // Order cancelled
+  | "REJECT"; //Order rejected
 
 /**
  * Order action combining side and position effect.
@@ -53,8 +54,8 @@ export type Order = OrderAction & {
   /** Stop price (for STOP and STOP_LIMIT orders) */
   stopPrice?: number;
 
-  /** When the order was created */
-  created: Date;
+  /** When the order was created (optional - intent time, not audit time) */
+  created?: Date;
 };
 
 /**

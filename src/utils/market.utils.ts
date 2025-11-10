@@ -1,5 +1,10 @@
 import type { Portfolio } from "../types/portfolio.js";
-import type { MarketSnapshot, Universe } from "../types/market.js";
+import type {
+  MarketBar,
+  MarketQuote,
+  MarketSnapshot,
+  Universe,
+} from "../types/market.js";
 import type { Asset } from "../types/asset.js";
 import type { Position } from "../types/position.js";
 
@@ -164,6 +169,12 @@ export function calculateUnrealizedPnL(
 }
 
 /**
+ * Alias for {@link calculateUnrealizedPnL} using British/AU spelling.
+ * Provided for consistency with interface field naming (`realisedPnL`).
+ */
+export const calculateUnrealisedPnL = calculateUnrealizedPnL;
+
+/**
  * Checks if an asset is valid at a given timestamp.
  * An asset is valid if:
  * - validFrom is null/undefined OR timestamp >= validFrom
@@ -177,4 +188,52 @@ export function isAssetValidAt(asset: Asset, timestamp: Date): boolean {
   const validFromCheck = !asset.validFrom || timestamp >= asset.validFrom;
   const validUntilCheck = !asset.validUntil || timestamp <= asset.validUntil;
   return validFromCheck && validUntilCheck;
+}
+
+/**
+ * Updates a MarketSnapshot with a new MarketQuote using LOCF (Last Observation Carried Forward).
+ * The function updates the price for the symbol in the snapshot and ensures the timestamp
+ * reflects the most recent data.
+ *
+ * @param snapshot - The MarketSnapshot to update
+ * @param quote - The MarketQuote containing the new price data
+ * @returns The updated MarketSnapshot
+ */
+export function updateSnapshotQuote(
+  snapshot: MarketSnapshot,
+  quote: MarketQuote
+): MarketSnapshot {
+  // Update the price for the symbol in the snapshot
+  snapshot.price.set(quote.symbol, quote.price);
+
+  // Update the snapshot timestamp if the quote is more recent
+  if (quote.timestamp > snapshot.timestamp) {
+    snapshot.timestamp = quote.timestamp;
+  }
+
+  return snapshot;
+}
+
+/**
+ * Updates a MarketSnapshot with a new MarketBar using the close price.
+ * The function updates the price for the symbol in the snapshot with the bar's close price
+ * and ensures the timestamp reflects the most recent data.
+ *
+ * @param snapshot - The MarketSnapshot to update
+ * @param bar - The MarketBar containing the new price data
+ * @returns The updated MarketSnapshot
+ */
+export function updateSnapshotBar(
+  snapshot: MarketSnapshot,
+  bar: MarketBar
+): MarketSnapshot {
+  // Update the price for the symbol in the snapshot with the bar's close price
+  snapshot.price.set(bar.symbol, bar.close);
+
+  // Update the snapshot timestamp if the bar is more recent
+  if (bar.timestamp > snapshot.timestamp) {
+    snapshot.timestamp = bar.timestamp;
+  }
+
+  return snapshot;
 }

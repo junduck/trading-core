@@ -3,7 +3,12 @@ import type {
   LongPositionLot,
   ShortPositionLot,
 } from "../types/position.js";
-import { pushLongPositionLot, pushShortPositionLot } from "./position.utils.js";
+import {
+  pushLongPositionLot,
+  pushShortPositionLot,
+  amendLongPositionLot,
+  amendShortPositionLot,
+} from "./position.utils.js";
 
 /**
  * Handles a stock split by adjusting position quantities and costs.
@@ -136,6 +141,7 @@ export function handleCashDividend(
  * @param newSymbol - The spun-off company symbol
  * @param ratio - The number of new shares per original share
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the spinoff ratio is not positive
  */
 export function handleSpinoff(
@@ -143,7 +149,8 @@ export function handleSpinoff(
   symbol: string,
   newSymbol: string,
   ratio: number,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   if (ratio <= 0) {
     throw new Error(`Invalid spinoff ratio: ${ratio}. Must be positive.`);
@@ -163,7 +170,11 @@ export function handleSpinoff(
     };
 
     // Add to position
-    pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendLongPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    }
   }
 
   const short = pos.short?.get(symbol);
@@ -177,7 +188,11 @@ export function handleSpinoff(
     };
 
     // Add to position
-    pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendShortPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    }
   }
 
   if (long || short) {
@@ -193,6 +208,7 @@ export function handleSpinoff(
  * @param ratio - The exchange ratio of new shares per old share
  * @param cashComponent - The cash amount per share (default: 0)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The net cash flow from the merger
  * @throws Error if the merger ratio is not positive or cash component is negative
  */
@@ -202,7 +218,8 @@ export function handleMerger(
   newSymbol: string,
   ratio: number,
   cashComponent: number = 0,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ): number {
   if (ratio <= 0) {
     throw new Error(`Invalid merger ratio: ${ratio}. Must be positive.`);
@@ -232,7 +249,11 @@ export function handleMerger(
     };
 
     // Add to position
-    pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendLongPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushLongPositionLot(pos, newSymbol, newLot, actTime);
+    }
 
     // Remove old position
     pos.long!.delete(symbol);
@@ -252,7 +273,11 @@ export function handleMerger(
     };
 
     // Add to position
-    pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    if (disableLot) {
+      amendShortPositionLot(pos, newSymbol, newLot, actTime);
+    } else {
+      pushShortPositionLot(pos, newSymbol, newLot, actTime);
+    }
 
     // Remove old position
     pos.short!.delete(symbol);

@@ -85,8 +85,11 @@ export interface MarketQuote {
   /** Last traded price */
   price: number;
 
-  /** Volume of the last trade (optional) */
+  /** Last traded volume */
   volume?: number;
+
+  /** Total traded volume */
+  totalVolume?: number;
 
   /** Timestamp when this quote was generated */
   timestamp: Date;
@@ -102,6 +105,9 @@ export interface MarketQuote {
 
   /** Volume available at the ask price */
   askVol?: number;
+
+  /** Previous close price */
+  preClose?: number;
 }
 
 /** Standard time intervals for market bar data */

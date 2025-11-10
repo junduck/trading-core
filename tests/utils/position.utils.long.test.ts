@@ -234,4 +234,42 @@ describe("Position Utils - Long Position Operations", () => {
       expect(round(pnl)).toBe(50); // Same as FIFO test
     });
   });
+
+  describe("8. Open Long - DisableLot Mode", () => {
+    it("should maintain single merged lot when disableLot is true", () => {
+      // Step 1: Open Long - price=100, qty=10, commission=100, disableLot=true
+      openLong(position, "AAPL", 100, 10, 100, undefined, true);
+      expect(position.cash).toBe(98_900);
+
+      // Verify position
+      let longPosition = position.long?.get("AAPL");
+      expect(longPosition).toBeDefined();
+      expect(longPosition!.quantity).toBe(10);
+      expect(longPosition!.totalCost).toBe(1_100);
+
+      // Verify only one lot exists
+      expect(longPosition!.lots).toHaveLength(1);
+      expect(longPosition!.lots[0].quantity).toBe(10);
+      expect(longPosition!.lots[0].price).toBe(100);
+      expect(longPosition!.lots[0].totalCost).toBe(1_100);
+
+      // Step 2: Open Long again - price=120, qty=5, commission=120, disableLot=true
+      openLong(position, "AAPL", 120, 5, 120, undefined, true);
+
+      // Verify cash: 98,900 - (120 * 5 + 120) = 98,180
+      expect(position.cash).toBe(98_180);
+
+      // Verify position
+      longPosition = position.long?.get("AAPL");
+      expect(longPosition).toBeDefined();
+      expect(longPosition!.quantity).toBe(15); // 10 + 5
+      expect(longPosition!.totalCost).toBe(1_820); // 1,100 + 720
+
+      // Verify still only one lot (merged)
+      expect(longPosition!.lots).toHaveLength(1);
+      expect(longPosition!.lots[0].quantity).toBe(15);
+      expect(longPosition!.lots[0].price).toBe(120); // Updated to latest price
+      expect(longPosition!.lots[0].totalCost).toBe(1_820);
+    });
+  });
 });

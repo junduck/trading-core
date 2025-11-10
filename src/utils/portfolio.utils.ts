@@ -77,15 +77,48 @@ export function getCurrencies(portfolio: Portfolio): string[] {
 }
 
 /**
+ * Gets all symbols in the portfolio organized by currency.
+ * @param portfolio - The portfolio to query
+ * @returns Map of currency code to array of symbols with positions
+ */
+export function getAllSymbols(portfolio: Portfolio): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+
+  for (const [currency, position] of portfolio.positions) {
+    const symbols: string[] = [];
+
+    // Collect symbols from long positions
+    if (position.long) {
+      for (const symbol of position.long.keys()) {
+        symbols.push(symbol);
+      }
+    }
+
+    // Collect symbols from short positions
+    if (position.short) {
+      for (const symbol of position.short.keys()) {
+        // Only add if not already added from long positions
+        if (!position.long?.has(symbol)) {
+          symbols.push(symbol);
+        }
+      }
+    }
+
+    if (symbols.length > 0) {
+      result.set(currency, symbols);
+    }
+  }
+
+  return result;
+}
+
+/**
  * Creates a new Position data structure with initial cash.
  * @param initialCash - Initial cash balance (default: 0)
  * @param time - Optional creation timestamp (defaults to current date)
  * @returns A new Position instance
  */
-export function createPosition(
-  initialCash: number = 0,
-  time?: Date
-): Position {
+export function createPosition(initialCash: number = 0, time?: Date): Position {
   return {
     cash: initialCash,
     totalCommission: 0,
@@ -94,20 +127,27 @@ export function createPosition(
   };
 }
 
-function getOrSetPosition(
-  p: Portfolio,
+/**
+ * Gets an existing position or creates a new one if it doesn't exist.
+ * @param portfolio - The portfolio to query or modify
+ * @param currency - The currency code for the position
+ * @param time - Optional timestamp for new position creation (defaults to current date)
+ * @returns The existing or newly created Position
+ */
+export function getOrSetPosition(
+  portfolio: Portfolio,
   currency: string,
-  time: Date
+  time?: Date
 ): Position {
-  let pos = p.positions.get(currency);
+  let pos = portfolio.positions.get(currency);
   if (!pos) {
     pos = {
       cash: 0,
       totalCommission: 0,
       realisedPnL: 0,
-      modified: time,
+      modified: time ?? new Date(),
     };
-    p.positions.set(currency, pos);
+    portfolio.positions.set(currency, pos);
   }
   return pos;
 }

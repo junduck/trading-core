@@ -5,6 +5,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-11-10
+
+### Changed
+
+**Order Types:**
+
+- Updated `Order.created` field to be optional (`created?: Date`)
+  - Clarifies that this represents intent time, not audit time
+  - Actual effective timing for audit purposes comes from `OrderState.modified`
+  - Users can choose whether to record the intent creation time or not
+
+**Portfolio Utilities:**
+
+- Exported `getOrSetPosition()` function
+  - Previously internal utility now available for external use
+  - Gets existing position or creates new one if not found
+  - Added JSDoc documentation for clarity
+- Added `getAllSymbols()` function
+  - Returns all symbols in portfolio organized by currency
+  - Efficiently collects symbols from both long and short positions
+  - Avoids duplicates when same symbol exists in both directions
+  - Returns Map<currency, string[]> following TypeScript conventions
+
+### Added
+
+**Order Types:**
+
+- `REJECT` status to `OrderStatus` type
+  - Represents orders rejected by the system or exchange
+  - Non-breaking change to existing order status union type
+
+**Position Management:**
+
+- `disableLot` parameter for providers without lot-level accounting support
+  - Added to `openLong()` and `openShort()` functions
+  - When enabled, maintains single merged lot instead of tracking separate lots
+  - Fully backward-compatible (default: `false`)
+
+**Market Data:**
+
+- `preClose` property to `MarketQuote` interface
+  - Represents the previous closing price for comparison with current price
+  - Optional field to support price change calculations
+  - Non-breaking change to existing interface
+- `totalVolume` property to `MarketQuote` interface
+  - Represents total traded volume for the session (cumulative)
+  - Distinguishes from `volume` which represents last trade volume
+  - Supports data providers with different volume reporting semantics
+  - Non-breaking change to existing interface
+
+**Market Utilities:**
+
+- `updateSnapshotQuote()` - Updates MarketSnapshot with new MarketQuote using LOCF
+  - Updates price for the symbol and ensures timestamp reflects most recent data
+- `updateSnapshotBar()` - Updates MarketSnapshot with new MarketBar using close price
+  - Updates price with bar's close price and ensures timestamp reflects most recent data
+- `calculateUnrealisedPnL()` - Alias for `calculateUnrealizedPnL()` using British/AU spelling
+  - Provides API consistency with interface field naming (`realisedPnL`)
+  - Both spellings now available for user preference
+
+**Documentation:**
+
+- `amendLongPositionLot()` - JSDoc for merging long position lots
+- `amendShortPositionLot()` - JSDoc for merging short position lots
+
+**Corporate Actions:**
+
+- `disableLot` support for all corporate action functions:
+  - `handleHardFork()`, `handleAirdrop()`, `handleTokenSwap()`, `handleStakingReward()`
+  - `handleSpinoff()`, `handleMerger()`
+
+**Testing:**
+
+- 8 new tests for `disableLot` functionality
+- 8 new tests for `getAllSymbols()` functionality
+- 163 total tests with comprehensive coverage
+
 ## [1.0.0] - 2025-11-08
 
 ### Added

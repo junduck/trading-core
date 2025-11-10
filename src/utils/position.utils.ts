@@ -66,6 +66,41 @@ export function pushLongPositionLot(
 }
 
 /**
+ * Amend a LongPositionLot by merging into a single lot (for providers without lot-level accounting).
+ * Creates a new position if none exists, otherwise merges the new lot into the existing single lot.
+ * @param to - The position to modify
+ * @param symbol - The asset symbol
+ * @param newLot - The new LongPositionLot to merge
+ * @param time - The transaction time
+ */
+export function amendLongPositionLot(
+  to: Position,
+  symbol: string,
+  newLot: LongPositionLot,
+  time: Date
+) {
+  let pos = to.long!.get(symbol);
+  if (!pos) {
+    pos = {
+      quantity: newLot.quantity,
+      totalCost: newLot.totalCost,
+      realisedPnL: 0,
+      lots: [newLot],
+      modified: time,
+    };
+    to.long!.set(symbol, pos);
+  } else {
+    pos.lots[0]!.quantity += newLot.quantity;
+    pos.lots[0]!.totalCost += newLot.totalCost;
+    // updated to latest price
+    pos.lots[0]!.price = newLot.price;
+    pos.quantity += newLot.quantity;
+    pos.totalCost += newLot.totalCost;
+    pos.modified = time;
+  }
+}
+
+/**
  * Push a new ShortPositionLot to target position
  * @param to - The position to modify
  * @param symbol - The asset symbol
@@ -97,6 +132,41 @@ export function pushShortPositionLot(
 }
 
 /**
+ * Amend a ShortPositionLot by merging into a single lot (for providers without lot-level accounting).
+ * Creates a new position if none exists, otherwise merges the new lot into the existing single lot.
+ * @param to - The position to modify
+ * @param symbol - The asset symbol
+ * @param newLot - The new ShortPositionLot to merge
+ * @param time - The transaction time
+ */
+export function amendShortPositionLot(
+  to: Position,
+  symbol: string,
+  newLot: ShortPositionLot,
+  time: Date
+) {
+  let pos = to.short!.get(symbol);
+  if (!pos) {
+    pos = {
+      quantity: newLot.quantity,
+      totalProceeds: newLot.totalProceeds,
+      realisedPnL: 0,
+      lots: [newLot],
+      modified: time,
+    };
+    to.short!.set(symbol, pos);
+  } else {
+    pos.lots[0]!.quantity += newLot.quantity;
+    pos.lots[0]!.totalProceeds += newLot.totalProceeds;
+    // updated to latest price
+    pos.lots[0]!.price = newLot.price;
+    pos.quantity += newLot.quantity;
+    pos.totalProceeds += newLot.totalProceeds;
+    pos.modified = time;
+  }
+}
+
+/**
  * Opens a long position by purchasing an asset.
  * @param pos - The position to modify
  * @param symbol - The asset symbol
@@ -104,6 +174,7 @@ export function pushShortPositionLot(
  * @param quant - The quantity to purchase
  * @param comm - The commission paid (default: 0)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The cash flow (negative value representing cost)
  */
 export function openLong(
@@ -112,7 +183,8 @@ export function openLong(
   price: number,
   quant: number,
   comm: number = 0,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ): number {
   const actTime = time ?? new Date();
 
@@ -132,7 +204,11 @@ export function openLong(
   pos.long ??= new Map();
 
   // Add to position
-  pushLongPositionLot(pos, symbol, lot, actTime);
+  if (disableLot) {
+    amendLongPositionLot(pos, symbol, lot, actTime);
+  } else {
+    pushLongPositionLot(pos, symbol, lot, actTime);
+  }
 
   pos.totalCommission += comm;
   pos.modified = actTime;
@@ -230,6 +306,7 @@ export function closeLong(
  * @param quant - The quantity to short
  * @param comm - The commission paid (default: 0)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The cash proceeds from the short sale
  */
 export function openShort(
@@ -238,7 +315,8 @@ export function openShort(
   price: number,
   quant: number,
   comm: number = 0,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ): number {
   const actTime = time ?? new Date();
 
@@ -258,7 +336,11 @@ export function openShort(
   pos.short ??= new Map();
 
   // Add to position
-  pushShortPositionLot(pos, symbol, lot, actTime);
+  if (disableLot) {
+    amendShortPositionLot(pos, symbol, lot, actTime);
+  } else {
+    pushShortPositionLot(pos, symbol, lot, actTime);
+  }
 
   pos.totalCommission += comm;
   pos.modified = actTime;

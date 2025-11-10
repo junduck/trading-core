@@ -156,6 +156,7 @@ All portfolio utilities are under the `pu` namespace to avoid naming conflicts w
 - `pu.getPosition(portfolio, currency)` - Get position for currency
 - `pu.getCash(portfolio, currency)` - Get cash balance for currency
 - `pu.getCurrencies(portfolio)` - Get all currency codes in portfolio
+- `pu.getAllSymbols(portfolio)` - Get all symbols organized by currency
 - `pu.hasAsset(portfolio, asset)` - Check if asset exists in portfolio
 
 **Trading (Portfolio-level):**
