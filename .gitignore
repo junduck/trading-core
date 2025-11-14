@@ -44,3 +44,6 @@ Thumbs.db
 # Agent configs
 .claude
 CLAUDE.md
+
+# Local dev 
+memo/
