@@ -120,6 +120,7 @@ if (!result.valid) {
 ### Position
 
 Represents a currency account with:
+
 - Cash balance
 - Long positions (Map of symbol → LongPosition)
 - Short positions (Map of symbol → ShortPosition)
@@ -128,6 +129,7 @@ Represents a currency account with:
 ### Portfolio
 
 Multi-currency portfolio containing:
+
 - Map of currency → Position
 - Portfolio metadata (id, name, timestamps)
 
