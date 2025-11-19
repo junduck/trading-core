@@ -20,3 +20,4 @@ export {
   RollingArgMinMax,
 } from "./minmax.js";
 export { RollingMedian, RollingQuantile } from "./rank.js";
+export { RollingSkew, RollingKurt } from "./moments.js";
