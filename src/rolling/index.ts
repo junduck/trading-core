@@ -10,5 +10,5 @@ export {
   RollingCov,
   RollingCorr,
   RollingBeta,
-  RollingMedian,
 } from "./stats.js";
+export { RollingMedian, RollingQuantile } from "./rank.js";

@@ -9,7 +9,6 @@ import {
   RollingCov,
   RollingCorr,
   RollingBeta,
-  RollingMedian,
 } from "../../src/rolling/stats";
 import { exp_factor } from "../../src/rolling/accum";
 
@@ -194,29 +193,6 @@ function naiveBeta(
   return result;
 }
 
-/**
- * Naive median calculation
- */
-function naiveMedian(data: number[], period: number): number[] {
-  const result: number[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const start = Math.max(0, i - period + 1);
-    const window: number[] = [];
-    for (let j = start; j <= i; j++) {
-      window.push(data[j]);
-    }
-    window.sort((a, b) => a - b);
-    const n = window.length;
-    if (n % 2 === 1) {
-      result.push(window[Math.floor(n / 2)]);
-    } else {
-      const mid = n / 2;
-      result.push((window[mid - 1] + window[mid]) / 2);
-    }
-  }
-  return result;
-}
-
 describe("RollingVar", () => {
   it("should compute rolling variance with period 4 and ddof 0", () => {
     const data = [10, 20, 30, 40, 50, 60];
@@ -344,10 +320,7 @@ describe("RollingStddevEW", () => {
 
     for (let i = 0; i < result.length; i++) {
       expect(result[i].mean).toBeCloseTo(expected[i].mean, 8);
-      expect(result[i].stddev).toBeCloseTo(
-        Math.sqrt(expected[i].variance),
-        8
-      );
+      expect(result[i].stddev).toBeCloseTo(Math.sqrt(expected[i].variance), 8);
     }
   });
 });
@@ -524,72 +497,5 @@ describe("RollingBeta", () => {
     expect(() => new RollingBeta({ period: 2, ddof: 2 })).toThrow(
       "Period should be larger than DDoF."
     );
-  });
-});
-
-describe("RollingMedian", () => {
-  it("should compute rolling median with period 4", () => {
-    const data = [10, 20, 30, 40, 50, 60, 70, 80];
-    const period = 4;
-    const expected = naiveMedian(data, period);
-
-    const rm = new RollingMedian({ period });
-    const result = data.map((x) => rm.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
-    }
-  });
-
-  it("should compute median with odd window size", () => {
-    const data = [10, 20, 30, 40, 50];
-    const period = 5;
-    const expected = naiveMedian(data, period);
-
-    const rm = new RollingMedian({ period });
-    const result = data.map((x) => rm.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
-    }
-  });
-
-  it("should compute median with even window size", () => {
-    const data = [100, 200, 300, 400, 500, 600];
-    const period = 4;
-    const expected = naiveMedian(data, period);
-
-    const rm = new RollingMedian({ period });
-    const result = data.map((x) => rm.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
-    }
-  });
-
-  it("should handle period 2", () => {
-    const data = [10, 20, 30, 40];
-    const period = 2;
-    const expected = naiveMedian(data, period);
-
-    const rm = new RollingMedian({ period });
-    const result = data.map((x) => rm.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
-    }
-  });
-
-  it("should handle unsorted data", () => {
-    const data = [50, 10, 30, 70, 20, 60];
-    const period = 4;
-    const expected = naiveMedian(data, period);
-
-    const rm = new RollingMedian({ period });
-    const result = data.map((x) => rm.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
-    }
   });
 });
