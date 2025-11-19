@@ -87,3 +87,5 @@ export {
   maxDrawUp,
   maxRelDrawUp,
 } from "./drawdown.js";
+
+export { Kahan, SmoothedAccum, exp_factor, wilders_factor } from "./accum.js";

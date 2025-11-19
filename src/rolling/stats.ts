@@ -1,5 +1,5 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
-import { exp_factor, SmoothedAccum, Kahan } from "./accum.js";
+import { exp_factor, SmoothedAccum, Kahan } from "../utils/accum.js";
 
 /**
  * O(1) rolling variance using Welford's online algorithm.
@@ -429,5 +429,141 @@ export class RollingBeta {
 
       return { meanX: this.mx, meanY: this.my, cov, beta };
     }
+  }
+}
+
+/**
+ * Exponentially weighted covariance with infinite window.
+ */
+export class RollingCovEW {
+  private mx?: number;
+  private my?: number;
+  private sxy: SmoothedAccum = new SmoothedAccum();
+  private alpha: number;
+
+  /**
+   * @param opts.period Period to calculate alpha
+   * @param opts.alpha Direct smoothing factor
+   */
+  constructor(opts: { period: number } | { alpha: number }) {
+    if ("alpha" in opts) {
+      this.alpha = opts.alpha;
+    } else {
+      this.alpha = exp_factor(opts.period);
+    }
+  }
+
+  update(x: number, y: number): { meanX: number; meanY: number; cov: number } {
+    if (this.mx === undefined || this.my === undefined) {
+      this.mx = x;
+      this.my = y;
+      return { meanX: this.mx, meanY: this.my, cov: 0 };
+    }
+    const dx = x - this.mx;
+    const dy = y - this.my;
+    this.mx += dx * this.alpha;
+    this.my += dy * this.alpha;
+    const dy2 = y - this.my;
+    this.sxy.accum(dx * dy2, this.alpha);
+    return { meanX: this.mx, meanY: this.my, cov: this.sxy.val };
+  }
+}
+
+/**
+ * Exponentially weighted correlation with infinite window.
+ */
+export class RollingCorrEW {
+  private mx?: number;
+  private my?: number;
+  private sxy: SmoothedAccum = new SmoothedAccum();
+  private s2x: SmoothedAccum = new SmoothedAccum();
+  private s2y: SmoothedAccum = new SmoothedAccum();
+  private alpha: number;
+
+  /**
+   * @param opts.period Period to calculate alpha
+   * @param opts.alpha Direct smoothing factor
+   */
+  constructor(opts: { period: number } | { alpha: number }) {
+    if ("alpha" in opts) {
+      this.alpha = opts.alpha;
+    } else {
+      this.alpha = exp_factor(opts.period);
+    }
+  }
+
+  update(
+    x: number,
+    y: number
+  ): { meanX: number; meanY: number; cov: number; corr: number } {
+    if (this.mx === undefined || this.my === undefined) {
+      this.mx = x;
+      this.my = y;
+      return { meanX: this.mx, meanY: this.my, cov: 0, corr: 0 };
+    }
+    const dx = x - this.mx;
+    const dy = y - this.my;
+    this.mx += dx * this.alpha;
+    this.my += dy * this.alpha;
+    const dx2 = x - this.mx;
+    const dy2 = y - this.my;
+    this.sxy.accum(dx * dy2, this.alpha);
+    this.s2x.accum(dx * dx2, this.alpha);
+    this.s2y.accum(dy * dy2, this.alpha);
+    const denom = Math.sqrt(this.s2x.val * this.s2y.val);
+    return {
+      meanX: this.mx,
+      meanY: this.my,
+      cov: this.sxy.val,
+      corr: denom === 0 ? 0 : this.sxy.val / denom,
+    };
+  }
+}
+
+/**
+ * Exponentially weighted beta coefficient with infinite window.
+ */
+export class RollingBetaEW {
+  private mx?: number;
+  private my?: number;
+  private sxy: SmoothedAccum = new SmoothedAccum();
+  private s2x: SmoothedAccum = new SmoothedAccum();
+  private alpha: number;
+
+  /**
+   * @param opts.period Period to calculate alpha
+   * @param opts.alpha Direct smoothing factor
+   */
+  constructor(opts: { period: number } | { alpha: number }) {
+    if ("alpha" in opts) {
+      this.alpha = opts.alpha;
+    } else {
+      this.alpha = exp_factor(opts.period);
+    }
+  }
+
+  update(
+    x: number,
+    y: number
+  ): { meanX: number; meanY: number; cov: number; beta: number } {
+    if (this.mx === undefined || this.my === undefined) {
+      this.mx = x;
+      this.my = y;
+      return { meanX: this.mx, meanY: this.my, cov: 0, beta: 0 };
+    }
+    const dx = x - this.mx;
+    const dy = y - this.my;
+    this.mx += dx * this.alpha;
+    this.my += dy * this.alpha;
+    const dx2 = x - this.mx;
+    const dy2 = y - this.my;
+    this.sxy.accum(dx * dy2, this.alpha);
+    this.s2x.accum(dx * dx2, this.alpha);
+    return {
+      meanX: this.mx,
+      meanY: this.my,
+      cov: this.sxy.val,
+      beta: this.s2x.val > 0 ? this.sxy.val / this.s2x.val : 0,
+    };
   }
 }

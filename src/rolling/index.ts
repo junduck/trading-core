@@ -1,4 +1,3 @@
-export { Kahan, SmoothedAccum, exp_factor, wilders_factor } from "./accum.js";
 export { RollingSum, SMA, EMA, EWMA } from "./average.js";
 export {
   RollingVar,
@@ -8,8 +7,11 @@ export {
   RollingZScore,
   RollingZScoreEW,
   RollingCov,
+  RollingCovEW,
   RollingCorr,
+  RollingCorrEW,
   RollingBeta,
+  RollingBetaEW,
 } from "./stats.js";
 export {
   RollingMin,
