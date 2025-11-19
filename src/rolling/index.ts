@@ -11,4 +11,12 @@ export {
   RollingCorr,
   RollingBeta,
 } from "./stats.js";
+export {
+  RollingMin,
+  RollingMax,
+  RollingMinMax,
+  RollingArgMin,
+  RollingArgMax,
+  RollingArgMinMax,
+} from "./minmax.js";
 export { RollingMedian, RollingQuantile } from "./rank.js";
