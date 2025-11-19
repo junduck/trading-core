@@ -1,5 +1,5 @@
 export { Kahan, SmoothedAccum, exp_factor, wilders_factor } from "./accum.js";
-export { RollingSum, SMA, EWMA } from "./average.js";
+export { RollingSum, SMA, EMA, EWMA } from "./average.js";
 export {
   RollingVar,
   RollingVarEW,
