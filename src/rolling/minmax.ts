@@ -1,0 +1,294 @@
+import { CircularBuffer } from "../containers/circular-buffer.js";
+import { Deque } from "../containers/deque.js";
+
+/**
+ * Rolling minimum over a sliding window using monotonic deque.
+ * O(1) amortized time per update.
+ */
+export class RollingMin {
+  readonly buffer: CircularBuffer<number>;
+  private minDeque: Deque<number>;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    this.minDeque = new Deque(Math.ceil(opts.period * 1.5));
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Minimum value in the window
+   */
+  update(x: number): number {
+    if (this.buffer.full()) {
+      const old = this.buffer.front()!;
+      if (!this.minDeque.empty() && this.minDeque.front() === old) {
+        this.minDeque.pop_front();
+      }
+    }
+
+    this.buffer.push(x);
+
+    while (!this.minDeque.empty() && this.minDeque.back()! >= x) {
+      this.minDeque.pop_back();
+    }
+    this.minDeque.push_back(x);
+
+    return this.minDeque.front()!;
+  }
+}
+
+/**
+ * Rolling maximum over a sliding window using monotonic deque.
+ * O(1) amortized time per update.
+ */
+export class RollingMax {
+  readonly buffer: CircularBuffer<number>;
+  private maxDeque: Deque<number>;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    this.maxDeque = new Deque(Math.ceil(opts.period * 1.5));
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Maximum value in the window
+   */
+  update(x: number): number {
+    if (this.buffer.full()) {
+      const old = this.buffer.front()!;
+      if (!this.maxDeque.empty() && this.maxDeque.front() === old) {
+        this.maxDeque.pop_front();
+      }
+    }
+
+    this.buffer.push(x);
+
+    while (!this.maxDeque.empty() && this.maxDeque.back()! <= x) {
+      this.maxDeque.pop_back();
+    }
+    this.maxDeque.push_back(x);
+
+    return this.maxDeque.front()!;
+  }
+}
+
+/**
+ * Rolling minimum and maximum over a sliding window.
+ * O(1) amortized time per update.
+ */
+export class RollingMinMax {
+  readonly buffer: CircularBuffer<number>;
+  private minDeque: Deque<number>;
+  private maxDeque: Deque<number>;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    const dequeCapacity = Math.ceil(opts.period * 1.5);
+    this.minDeque = new Deque(dequeCapacity);
+    this.maxDeque = new Deque(dequeCapacity);
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Object with min and max values in the window
+   */
+  update(x: number): { min: number; max: number } {
+    if (this.buffer.full()) {
+      const old = this.buffer.front()!;
+      if (!this.minDeque.empty() && this.minDeque.front() === old) {
+        this.minDeque.pop_front();
+      }
+      if (!this.maxDeque.empty() && this.maxDeque.front() === old) {
+        this.maxDeque.pop_front();
+      }
+    }
+
+    this.buffer.push(x);
+
+    while (!this.minDeque.empty() && this.minDeque.back()! >= x) {
+      this.minDeque.pop_back();
+    }
+    this.minDeque.push_back(x);
+
+    while (!this.maxDeque.empty() && this.maxDeque.back()! <= x) {
+      this.maxDeque.pop_back();
+    }
+    this.maxDeque.push_back(x);
+
+    return {
+      min: this.minDeque.front()!,
+      max: this.maxDeque.front()!,
+    };
+  }
+}
+
+/**
+ * Rolling minimum with position tracking over a sliding window.
+ * Returns both minimum value and its index within the window (0 = oldest).
+ * O(1) amortized time per update.
+ */
+export class RollingArgMin {
+  readonly buffer: CircularBuffer<number>;
+  private minDeque: Deque<{ val: number; pos: number }>;
+  private readonly period: number;
+  private position: number = 0;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    this.minDeque = new Deque(Math.ceil(opts.period * 1.5));
+    this.period = opts.period;
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Minimum value and its index {val, pos}
+   */
+  update(x: number): { val: number; pos: number } {
+    this.buffer.push(x);
+
+    // Remove elements outside window
+    while (
+      !this.minDeque.empty() &&
+      this.position - this.minDeque.front()!.pos >= this.period
+    ) {
+      this.minDeque.pop_front();
+    }
+
+    // Maintain monotonic property
+    while (!this.minDeque.empty() && this.minDeque.back()!.val >= x) {
+      this.minDeque.pop_back();
+    }
+    this.minDeque.push_back({ val: x, pos: this.position });
+
+    this.position++;
+
+    const front = this.minDeque.front()!;
+    return { val: front.val, pos: this.position - front.pos - 1 };
+  }
+}
+
+/**
+ * Rolling maximum with position tracking over a sliding window.
+ * Returns both maximum value and its index within the window (0 = oldest).
+ * O(1) amortized time per update.
+ */
+export class RollingArgMax {
+  readonly buffer: CircularBuffer<number>;
+  private maxDeque: Deque<{ val: number; pos: number }>;
+  private readonly period: number;
+  private position: number = 0;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    this.maxDeque = new Deque(Math.ceil(opts.period * 1.5));
+    this.period = opts.period;
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Maximum value and its index {val, pos}
+   */
+  update(x: number): { val: number; pos: number } {
+    this.buffer.push(x);
+
+    // Remove elements outside window
+    while (
+      !this.maxDeque.empty() &&
+      this.position - this.maxDeque.front()!.pos >= this.period
+    ) {
+      this.maxDeque.pop_front();
+    }
+
+    // Maintain monotonic property
+    while (!this.maxDeque.empty() && this.maxDeque.back()!.val <= x) {
+      this.maxDeque.pop_back();
+    }
+    this.maxDeque.push_back({ val: x, pos: this.position });
+
+    this.position++;
+
+    const front = this.maxDeque.front()!;
+    return { val: front.val, pos: this.position - front.pos - 1 };
+  }
+}
+
+/**
+ * Rolling minimum and maximum with position tracking over a sliding window.
+ * Returns both min/max values and their indices within the window (0 = oldest).
+ * O(1) amortized time per update.
+ */
+export class RollingArgMinMax {
+  readonly buffer: CircularBuffer<number>;
+  private minDeque: Deque<{ val: number; pos: number }>;
+  private maxDeque: Deque<{ val: number; pos: number }>;
+  private readonly period: number;
+  private position: number = 0;
+
+  constructor(opts: { period: number }) {
+    this.buffer = new CircularBuffer<number>(opts.period);
+    // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
+    const dequeCapacity = Math.ceil(opts.period * 1.5);
+    this.minDeque = new Deque(dequeCapacity);
+    this.maxDeque = new Deque(dequeCapacity);
+    this.period = opts.period;
+  }
+
+  /**
+   * Process new data point.
+   * @param x New value
+   * @returns Object with min and max values and positions
+   */
+  update(x: number): {
+    min: { val: number; pos: number };
+    max: { val: number; pos: number };
+  } {
+    this.buffer.push(x);
+
+    // Remove elements outside window
+    while (
+      !this.minDeque.empty() &&
+      this.position - this.minDeque.front()!.pos >= this.period
+    ) {
+      this.minDeque.pop_front();
+    }
+    while (
+      !this.maxDeque.empty() &&
+      this.position - this.maxDeque.front()!.pos >= this.period
+    ) {
+      this.maxDeque.pop_front();
+    }
+
+    // Maintain monotonic property for min
+    while (!this.minDeque.empty() && this.minDeque.back()!.val >= x) {
+      this.minDeque.pop_back();
+    }
+    this.minDeque.push_back({ val: x, pos: this.position });
+
+    // Maintain monotonic property for max
+    while (!this.maxDeque.empty() && this.maxDeque.back()!.val <= x) {
+      this.maxDeque.pop_back();
+    }
+    this.maxDeque.push_back({ val: x, pos: this.position });
+
+    this.position++;
+
+    const minFront = this.minDeque.front()!;
+    const maxFront = this.maxDeque.front()!;
+
+    return {
+      min: { val: minFront.val, pos: this.position - minFront.pos - 1 },
+      max: { val: maxFront.val, pos: this.position - maxFront.pos - 1 },
+    };
+  }
+}
