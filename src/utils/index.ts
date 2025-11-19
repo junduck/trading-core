@@ -80,3 +80,10 @@ export type {
 export { applyFill, applyFills } from "./fill.utils.js";
 
 export type { ApplyFillResult } from "./fill.utils.js";
+
+export {
+  maxDrawDown,
+  maxRelDrawDown,
+  maxDrawUp,
+  maxRelDrawUp,
+} from "./drawdown.js";
