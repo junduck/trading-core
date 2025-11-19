@@ -4,7 +4,6 @@ import { RollingMedian, nth_element } from "./rank.js";
 
 export class MeanAbsDeviation {
   private sma: SMA;
-  // Expose SMA buffer reference for user access
   readonly buffer: CircularBuffer<number>;
 
   constructor(opts: { period: number }) {

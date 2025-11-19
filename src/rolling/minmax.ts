@@ -15,11 +15,6 @@ export class RollingMin {
     this.minDeque = new Deque(Math.ceil(opts.period * 1.5));
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Minimum value in the window
-   */
   update(x: number): number {
     if (this.buffer.full()) {
       const old = this.buffer.front()!;
@@ -53,11 +48,6 @@ export class RollingMax {
     this.maxDeque = new Deque(Math.ceil(opts.period * 1.5));
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Maximum value in the window
-   */
   update(x: number): number {
     if (this.buffer.full()) {
       const old = this.buffer.front()!;
@@ -94,11 +84,6 @@ export class RollingMinMax {
     this.maxDeque = new Deque(dequeCapacity);
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Object with min and max values in the window
-   */
   update(x: number): { min: number; max: number } {
     if (this.buffer.full()) {
       const old = this.buffer.front()!;
@@ -147,11 +132,6 @@ export class RollingArgMin {
     this.period = opts.period;
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Minimum value and its index {val, pos}
-   */
   update(x: number): { val: number; pos: number } {
     this.buffer.push(x);
 
@@ -194,11 +174,6 @@ export class RollingArgMax {
     this.period = opts.period;
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Maximum value and its index {val, pos}
-   */
   update(x: number): { val: number; pos: number } {
     this.buffer.push(x);
 
@@ -244,11 +219,6 @@ export class RollingArgMinMax {
     this.period = opts.period;
   }
 
-  /**
-   * Process new data point.
-   * @param x New value
-   * @returns Object with min and max values and positions
-   */
   update(x: number): {
     min: { val: number; pos: number };
     max: { val: number; pos: number };

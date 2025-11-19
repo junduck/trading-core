@@ -42,6 +42,7 @@ export function nth_element(
 /**
  * Rolling median calculator. O(n) per update using QuickSelect.
  * For even periods, returns the average of the two middle elements.
+ * Returns undefined if window is not full.
  */
 export class RollingMedian {
   readonly buffer: CircularBuffer<number>;
@@ -80,6 +81,7 @@ export class RollingMedian {
 
 /**
  * Rolling quantile calculator. O(n·log(k)) per update where k is number of quantiles.
+ * Returns undefined if window is not full.
  */
 export class RollingQuantile {
   readonly buffer: CircularBuffer<number>;

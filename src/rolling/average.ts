@@ -12,10 +12,6 @@ export class RollingSum {
     this.buffer = new CircularBuffer<number>(opts.period);
   }
 
-  /**
-   * @param x New value
-   * @returns Sum of values in the window
-   */
   update(x: number): number {
     if (!this.buffer.full()) {
       this.buffer.push(x);
@@ -62,6 +58,10 @@ export class EMA {
   private alpha: number;
   private ema?: SmoothedAccum;
 
+  /**
+   * @param opts.period Period to calculate alpha
+   * @param opts.alpha Direct smoothing factor
+   */
   constructor(opts: { period: number } | { alpha: number }) {
     if ("alpha" in opts) {
       this.alpha = opts.alpha;

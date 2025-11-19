@@ -9,6 +9,13 @@ export class CountMinSketch<T = string> {
   private readonly counters: number[][];
   private readonly hash: (key: T) => number;
 
+  /**
+   * @param opts.width Table width (rounded to power of 2)
+   * @param opts.depth Number of hash functions
+   * @param opts.epsilon Error bound (alternative to width)
+   * @param opts.delta Probability bound (alternative to depth)
+   * @param opts.hash Custom hash function
+   */
   constructor(
     opts: (
       | { width: number; depth: number }
@@ -95,6 +102,13 @@ export class BloomFilter<T = string> {
   private readonly bits: Uint32Array;
   private readonly hash: (key: T) => number;
 
+  /**
+   * @param opts.size Bit array size (rounded to power of 2)
+   * @param opts.numHashes Number of hash functions
+   * @param opts.expectedItems Expected number of items (alternative to size)
+   * @param opts.falsePositiveRate Target false positive rate (alternative to numHashes)
+   * @param opts.hash Custom hash function
+   */
   constructor(
     opts: (
       | { size: number; numHashes: number }
