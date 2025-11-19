@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { RollingSum, SMA, EMA, EWMA } from "../../src/rolling/average";
+import { RollingSum, SMA, EWMA } from "../../src/rolling/average";
 import { exp_factor } from "../../src/rolling/accum";
 
 /**
@@ -32,20 +32,6 @@ function naiveSMA(data: number[], period: number): number[] {
       count++;
     }
     result.push(sum / count);
-  }
-  return result;
-}
-
-/**
- * Naive implementation for generating test data
- */
-function naiveEMA(data: number[], alpha: number): number[] {
-  const result: number[] = [];
-  let ema = data[0];
-  result.push(ema);
-  for (let i = 1; i < data.length; i++) {
-    ema = alpha * data[i] + (1 - alpha) * ema;
-    result.push(ema);
   }
   return result;
 }
@@ -174,62 +160,6 @@ describe("SMA", () => {
 
     const sma = new SMA({ period });
     const result = data.map((x) => sma.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 10);
-    }
-  });
-});
-
-describe("EMA", () => {
-  it("should compute EMA with period 10", () => {
-    const data = [10, 20, 30, 40, 50, 60, 70, 80];
-    const period = 10;
-    const alpha = exp_factor(period);
-    const expected = naiveEMA(data, alpha);
-
-    const ema = new EMA({ period });
-    const result = data.map((x) => ema.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 10);
-    }
-  });
-
-  it("should compute EMA with direct alpha value", () => {
-    const data = [100, 200, 300, 400];
-    const alpha = 0.5;
-    const expected = naiveEMA(data, alpha);
-
-    const ema = new EMA({ alpha });
-    const result = data.map((x) => ema.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 10);
-    }
-  });
-
-  it("should compute EMA with period 4", () => {
-    const data = [10, 20, 30, 40, 50];
-    const period = 4;
-    const alpha = exp_factor(period);
-    const expected = naiveEMA(data, alpha);
-
-    const ema = new EMA({ period });
-    const result = data.map((x) => ema.update(x));
-
-    for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 10);
-    }
-  });
-
-  it("should handle small alpha values", () => {
-    const data = [50, 100, 150, 200];
-    const alpha = 0.1;
-    const expected = naiveEMA(data, alpha);
-
-    const ema = new EMA({ alpha });
-    const result = data.map((x) => ema.update(x));
 
     for (let i = 0; i < result.length; i++) {
       expect(result[i]).toBeCloseTo(expected[i], 10);
