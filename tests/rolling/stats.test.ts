@@ -10,7 +10,7 @@ import {
   RollingCorr,
   RollingBeta,
 } from "../../src/rolling/stats";
-import { exp_factor } from "../../src/rolling/accum";
+import { exp_factor } from "../../src/utils/accum";
 
 /**
  * Naive O(n) variance calculation for generating test data

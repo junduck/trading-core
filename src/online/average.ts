@@ -1,4 +1,4 @@
-import { Kahan } from "../rolling/accum.js";
+import { Kahan } from "../utils/accum.js";
 
 /**
  * O(1) cumulative moving average (CMA).
