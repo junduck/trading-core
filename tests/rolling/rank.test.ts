@@ -2,12 +2,16 @@ import { describe, it, expect } from "vitest";
 import { RollingMedian, RollingQuantile } from "../../src/rolling/rank";
 
 /**
- * Naive median calculation
+ * Naive median calculation - returns undefined until buffer is full
  */
-function naiveMedian(data: number[], period: number): number[] {
-  const result: number[] = [];
+function naiveMedian(data: number[], period: number): Array<number | undefined> {
+  const result: Array<number | undefined> = [];
   for (let i = 0; i < data.length; i++) {
-    const start = Math.max(0, i - period + 1);
+    if (i < period - 1) {
+      result.push(undefined);
+      continue;
+    }
+    const start = i - period + 1;
     const window: number[] = [];
     for (let j = start; j <= i; j++) {
       window.push(data[j]);
@@ -34,7 +38,12 @@ describe("RollingMedian", () => {
     const result = data.map((x) => rm.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
+      } else {
+        expect(result[i]).toBeCloseTo(exp, 8);
+      }
     }
   });
 
@@ -47,7 +56,12 @@ describe("RollingMedian", () => {
     const result = data.map((x) => rm.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
+      } else {
+        expect(result[i]).toBeCloseTo(exp, 8);
+      }
     }
   });
 
@@ -60,7 +74,12 @@ describe("RollingMedian", () => {
     const result = data.map((x) => rm.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
+      } else {
+        expect(result[i]).toBeCloseTo(exp, 8);
+      }
     }
   });
 
@@ -73,7 +92,12 @@ describe("RollingMedian", () => {
     const result = data.map((x) => rm.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
+      } else {
+        expect(result[i]).toBeCloseTo(exp, 8);
+      }
     }
   });
 
@@ -86,7 +110,12 @@ describe("RollingMedian", () => {
     const result = data.map((x) => rm.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      expect(result[i]).toBeCloseTo(expected[i], 8);
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
+      } else {
+        expect(result[i]).toBeCloseTo(exp, 8);
+      }
     }
   });
 });
@@ -94,8 +123,8 @@ describe("RollingMedian", () => {
 /**
  * Naive quantile calculation using sort
  */
-function naiveQuantile(data: number[], period: number, quantiles: number[]): Array<number[] | null> {
-  const result: Array<number[] | null> = [];
+function naiveQuantile(data: number[], period: number, quantiles: number[]): Array<number[] | undefined> {
+  const result: Array<number[] | undefined> = [];
   for (let i = 0; i < data.length; i++) {
     const start = Math.max(0, i - period + 1);
     const window: number[] = [];
@@ -104,7 +133,7 @@ function naiveQuantile(data: number[], period: number, quantiles: number[]): Arr
     }
 
     if (window.length < period) {
-      result.push(null);
+      result.push(undefined);
       continue;
     }
 
@@ -123,9 +152,9 @@ function naiveQuantile(data: number[], period: number, quantiles: number[]): Arr
 }
 
 describe("RollingQuantile", () => {
-  it("should compute rolling quantiles [0.25, 0.5, 0.75] with period 10", () => {
-    const data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
-    const period = 10;
+  it("should compute rolling quantiles [0.25, 0.5, 0.75] with period 20", () => {
+    const data = Array.from({ length: 30 }, (_, i) => (i + 1) * 10);
+    const period = 20;
     const quantiles = [0.25, 0.5, 0.75];
     const expected = naiveQuantile(data, period, quantiles);
 
@@ -133,34 +162,33 @@ describe("RollingQuantile", () => {
     const result = data.map((x) => rq.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      if (expected[i] === null) {
-        expect(result[i]).toBeNull();
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
       } else {
-        expect(result[i]).not.toBeNull();
+        expect(result[i]).toBeDefined();
         for (let j = 0; j < quantiles.length; j++) {
-          expect(result[i]![j]).toBeCloseTo(expected[i]![j], 8);
+          expect(result[i]![j]).toBeCloseTo(exp[j], 8);
         }
       }
     }
   });
 
-  it("should return null until buffer is full", () => {
-    const data = [10, 20, 30, 40, 50];
-    const period = 10;
+  it("should return undefined until buffer is full", () => {
+    const data = Array.from({ length: 10 }, (_, i) => (i + 1) * 10);
+    const period = 20;
     const quantiles = [0.5];
 
     const rq = new RollingQuantile({ period, quantiles });
 
-    for (let i = 0; i < 9; i++) {
-      expect(rq.update(data[i])).toBeNull();
+    for (let i = 0; i < 10; i++) {
+      expect(rq.update(data[i])).toBeUndefined();
     }
-
-    expect(rq.update(data[4])).not.toBeNull();
   });
 
   it("should compute single quantile (median)", () => {
-    const data = [10, 20, 30, 40, 50, 60, 70, 80];
-    const period = 4;
+    const data = Array.from({ length: 20 }, (_, i) => (i + 1) * 10);
+    const period = 10;
     const quantiles = [0.5];
     const expected = naiveQuantile(data, period, quantiles);
 
@@ -168,18 +196,19 @@ describe("RollingQuantile", () => {
     const result = data.map((x) => rq.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      if (expected[i] === null) {
-        expect(result[i]).toBeNull();
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
       } else {
-        expect(result[i]).not.toBeNull();
-        expect(result[i]![0]).toBeCloseTo(expected[i]![0], 8);
+        expect(result[i]).toBeDefined();
+        expect(result[i]![0]).toBeCloseTo(exp[0], 8);
       }
     }
   });
 
   it("should handle multiple quantiles", () => {
-    const data = [100, 200, 300, 400, 500, 600, 700, 800];
-    const period = 4;
+    const data = Array.from({ length: 30 }, (_, i) => (i + 1) * 100);
+    const period = 20;
     const quantiles = [0.0, 0.25, 0.5, 0.75, 1.0];
     const expected = naiveQuantile(data, period, quantiles);
 
@@ -187,20 +216,21 @@ describe("RollingQuantile", () => {
     const result = data.map((x) => rq.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      if (expected[i] === null) {
-        expect(result[i]).toBeNull();
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
       } else {
-        expect(result[i]).not.toBeNull();
+        expect(result[i]).toBeDefined();
         for (let j = 0; j < quantiles.length; j++) {
-          expect(result[i]![j]).toBeCloseTo(expected[i]![j], 8);
+          expect(result[i]![j]).toBeCloseTo(exp[j], 8);
         }
       }
     }
   });
 
   it("should handle unsorted data", () => {
-    const data = [50, 10, 80, 30, 70, 20, 90, 40];
-    const period = 4;
+    const data = [50, 10, 80, 30, 70, 20, 90, 40, 60, 100, 5, 95, 15, 85, 25];
+    const period = 10;
     const quantiles = [0.25, 0.75];
     const expected = naiveQuantile(data, period, quantiles);
 
@@ -208,12 +238,13 @@ describe("RollingQuantile", () => {
     const result = data.map((x) => rq.update(x));
 
     for (let i = 0; i < result.length; i++) {
-      if (expected[i] === null) {
-        expect(result[i]).toBeNull();
+      const exp = expected[i];
+      if (exp === undefined) {
+        expect(result[i]).toBeUndefined();
       } else {
-        expect(result[i]).not.toBeNull();
+        expect(result[i]).toBeDefined();
         for (let j = 0; j < quantiles.length; j++) {
-          expect(result[i]![j]).toBeCloseTo(expected[i]![j], 8);
+          expect(result[i]![j]).toBeCloseTo(exp[j], 8);
         }
       }
     }

@@ -4,7 +4,7 @@ import { CircularBuffer } from "../containers/circular-buffer.js";
  * QuickSelect algorithm to find the nth smallest element.
  * Partially sorts array so that element at position n is correct.
  */
-function nth_element(
+export function nth_element(
   arr: number[],
   left: number,
   right: number,
@@ -41,34 +41,40 @@ function nth_element(
 
 /**
  * Rolling median calculator. O(n) per update using QuickSelect.
+ * For even periods, returns the average of the two middle elements.
  */
 export class RollingMedian {
   readonly buffer: CircularBuffer<number>;
   readonly queue: Array<number>;
+  private readonly midx: number;
+  private readonly isEven: boolean;
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
     this.queue = new Array(opts.period);
+    this.midx = Math.floor(opts.period / 2);
+    this.isEven = opts.period % 2 === 0;
   }
 
-  update(x: number): number {
+  update(x: number): number | undefined {
     this.buffer.push(x);
     const n = this.buffer.size();
+
+    if (n < this.buffer.capacity()) {
+      return undefined;
+    }
 
     let i = 0;
     for (const val of this.buffer) {
       this.queue[i++] = val;
     }
 
-    if (n % 2 === 1) {
-      const mid = Math.floor(n / 2);
-      return nth_element(this.queue, 0, n, mid);
-    } else {
-      const mid = n / 2;
-      const a = nth_element(this.queue, 0, n, mid - 1);
-      const b = nth_element(this.queue, 0, n, mid);
+    if (this.isEven) {
+      const a = nth_element(this.queue, 0, n, this.midx - 1);
+      const b = nth_element(this.queue, 0, n, this.midx);
       return (a + b) / 2;
     }
+    return nth_element(this.queue, 0, n, this.midx);
   }
 }
 
@@ -91,12 +97,12 @@ export class RollingQuantile {
     this.sortedIndices.sort((a, b) => a.qidx - b.qidx);
   }
 
-  update(x: number): number[] | null {
+  update(x: number): number[] | undefined {
     this.buffer.push(x);
     const n = this.buffer.size();
 
     if (n < this.buffer.capacity()) {
-      return null;
+      return undefined;
     }
 
     let i = 0;
