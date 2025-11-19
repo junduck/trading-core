@@ -68,7 +68,7 @@ This change aligns the API design where `pu` namespace functions operate on port
 
 ### Changed
 
-- Test suite expanded from 163 to 385 tests
+- Test suite expanded from 163 to 409 tests
 - All statistical functions use Kahan summation for numerical accuracy
 - Consistent API design across online and rolling statistics
 
