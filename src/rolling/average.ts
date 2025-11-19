@@ -55,6 +55,32 @@ export class SMA {
 }
 
 /**
+ * Exponential moving average (EMA) with infinite window.
+ * EMA = alpha * x + (1 - alpha) * EMA_prev
+ */
+export class EMA {
+  private alpha: number;
+  private ema?: SmoothedAccum;
+
+  constructor(opts: { period: number } | { alpha: number }) {
+    if ("alpha" in opts) {
+      this.alpha = opts.alpha;
+    } else {
+      this.alpha = exp_factor(opts.period);
+    }
+  }
+
+  update(x: number): number {
+    if (this.ema === undefined) {
+      this.ema = new SmoothedAccum(x);
+    } else {
+      this.ema.accum(x, this.alpha);
+    }
+    return this.ema.val;
+  }
+}
+
+/**
  * O(1) exponential weighted moving average with fixed window.
  * Combines exponential weighting with sliding window.
  */
