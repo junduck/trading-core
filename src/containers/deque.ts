@@ -21,7 +21,11 @@ export class Deque<T> {
    * @param growthFactor Factor by which to grow when full (default: 2.0)
    * @param rebalanceThreshold Minimum unused space ratio to trigger rebalance instead of expand (default: 0.3)
    */
-  constructor(capacity: number, growthFactor: number = 2.0, rebalanceThreshold: number = 0.3) {
+  constructor(
+    capacity: number,
+    growthFactor: number = 2.0,
+    rebalanceThreshold: number = 0.3
+  ) {
     if (capacity <= 0) {
       throw new Error("Capacity must be greater than 0");
     }
@@ -262,11 +266,19 @@ export class Deque<T> {
   }
 
   /** Iterates over elements from front to back. Optimized for linear buffer access. */
-  *[Symbol.iterator](): Iterator<T> {
+  [Symbol.iterator](): Iterator<T> {
+    const buffer = this.buffer;
     const end = this.head + this.size_;
-    for (let i = this.head; i < end; i++) {
-      yield this.buffer[i]!;
-    }
+    let current = this.head;
+
+    return {
+      next(): IteratorResult<T> {
+        if (current >= end) {
+          return { done: true, value: undefined };
+        }
+        return { done: false, value: buffer[current++]! };
+      },
+    };
   }
 
   /**

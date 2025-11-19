@@ -160,22 +160,27 @@ export class CircularBuffer<T> {
   }
 
   /** Iterator support for for...of loops */
-  *[Symbol.iterator](): Iterator<T> {
-    let current = this.head;
-    const end = this.head + this.size_;
+  [Symbol.iterator](): Iterator<T> {
+    const buffer = this.buffer;
+    const capacity = this.cap_;
+    const head = this.head;
+    const size = this.size_;
+    const tailBoundary = head + size;
 
-    // First segment: head to end of buffer
-    for (; current < end && current < this.cap_; current++) {
-      yield this.buffer[current]!;
-    }
+    let current = head;
 
-    // Second segment: wrap-around to beginning
-    if (current >= this.cap_) {
-      const remaining = end - this.cap_;
-      for (let i = 0; i < remaining; i++) {
-        yield this.buffer[i]!;
-      }
-    }
+    return {
+      next(): IteratorResult<T> {
+        if (current >= tailBoundary) {
+          return { done: true, value: undefined };
+        }
+
+        const value = buffer[current < capacity ? current : current - capacity]!;
+        current++;
+
+        return { done: false, value };
+      },
+    };
   }
 
   /**
