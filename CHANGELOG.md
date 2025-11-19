@@ -5,6 +5,82 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-11-19
+
+### Breaking Changes
+
+**Position Creation API:**
+
+- **`pu.createPosition()` signature changed** - Function moved from portfolio utilities to position utilities with new behavior
+  - **Old API (removed):** `portfolio.positions.set("USD", pu.createPosition(100000))`
+  - **New API:** `pu.createPosition(portfolio, "USD", 100000)` - directly modifies portfolio
+  - **Migration:** Use new signature `pu.createPosition(portfolio, currency, initialCash, time?)`
+  - **Alternative:** Import `createPosition` from top-level to get Position factory: `import { createPosition } from "@junduck/trading-core"` then `portfolio.positions.set("USD", createPosition(100000))`
+
+This change aligns the API design where `pu` namespace functions operate on portfolios rather than return intermediate objects.
+
+### Added
+
+**Data Structures:**
+
+- `CircularBuffer<T>` - Fixed-size circular buffer with Boost-like interface
+- `Deque<T>` - Double-ended queue with O(1) push/pop at both ends
+- `PriorityQueue<T>` - Min-heap based priority queue
+- `RBTree<T>` - Red-Black Tree for sorted container operations
+
+**Online Statistics (Cumulative):**
+
+- `CMA` - O(1) cumulative moving average with Kahan summation
+- `CuVar`, `CuStddev` - O(1) cumulative variance/stddev using Welford's algorithm
+- `CuCov`, `CuCorr`, `CuBeta` - O(1) cumulative covariance/correlation/beta
+- `CuSkew`, `CuKurt` - O(1) cumulative skewness and kurtosis
+- `CuHistogram` - Dynamic histogram with automatic bin management
+
+**Rolling Window Statistics:**
+
+- `RollingSum`, `SMA` - O(1) rolling sum and simple moving average
+- `EMA` - Exponential moving average with infinite window
+- `EWMA` - O(1) exponential weighted moving average with fixed window
+- `RollingVar`, `RollingStddev` - O(1) rolling variance/stddev
+- `RollingVarEW`, `RollingStddevEW` - Exponentially weighted variants
+- `RollingZScore`, `RollingZScoreEW` - Standardized scores
+- `RollingCov`, `RollingCorr`, `RollingBeta` - Rolling covariance/correlation/beta
+- `RollingCovEW`, `RollingCorrEW`, `RollingBetaEW` - Exponentially weighted variants
+- `RollingMin`, `RollingMax`, `RollingMinMax` - O(1) extrema tracking
+- `RollingArgMin`, `RollingArgMax`, `RollingArgMinMax` - Extrema with indices
+- `RollingMedian`, `RollingQuantile` - Order statistics
+- `RollingSkew`, `RollingKurt` - Rolling skewness and kurtosis
+- `RollingHistogram` - Rolling histogram with fixed bins
+
+**Probabilistic Structures:**
+
+- `CountMinSketch` - Space-efficient frequency estimation
+- `BloomFilter` - Probabilistic set membership testing
+
+**Utility Functions:**
+
+- `maxDrawDown()`, `maxRelDrawDown()` - Maximum absolute/relative drawdown
+- `maxDrawUp()`, `maxRelDrawUp()` - Maximum absolute/relative drawup
+- `Kahan` - Kahan summation for numerical stability
+- `SmoothedAccum` - Exponential smoothing accumulator
+- `exp_factor()` - EMA-style smoothing factor (2/(n+1))
+- `wilders_factor()` - Wilder's smoothing factor (1/n)
+
+### Changed
+
+- Test suite expanded from 163 to 385 tests
+- All statistical functions use Kahan summation for numerical accuracy
+- Consistent API design across online and rolling statistics
+
+### Technical Notes
+
+- Most rolling statistics maintain O(1) time complexity per update
+- Rank-based statistics (median, quantile) use O(n) QuickSelect algorithm
+- Circular buffer used for efficient fixed-window operations
+- Welford's online algorithm for numerically stable variance calculations
+- Support for both observation-based and exponentially-weighted statistics
+- Configurable degrees of freedom (ddof) for variance calculations
+
 ## [1.1.1] - 2025-11-14
 
 ### Changed

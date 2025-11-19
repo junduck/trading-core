@@ -1,26 +1,37 @@
 # trading-core
 
-Foundation data structures and utilities for spot market trading bookkeeping and backtesting.
+Foundation data structures and utilities for spot market trading bookkeeping, backtesting, and algorithmic trading.
 
 ## What It Does
 
-This library provides the building blocks for tracking trading positions and calculating portfolio values. It handles:
+This library provides comprehensive building blocks for trading systems in two main areas:
 
-- **Position tracking** - Keep track of long and short positions with lot-level accounting (FIFO/LIFO)
-- **Portfolio management** - Manage positions across multiple currencies
-- **Order validation** - Check if orders are valid before execution
-- **Portfolio valuation** - Calculate current portfolio value and unrealized P&L
-- **Market data** - Represent market prices, quotes, and bars
-- **Corporate actions** - Handle stock splits, dividends, and spinoffs
+### 1. Trading Bookkeeping
+
+- **Position tracking** - Long and short positions with lot-level accounting (FIFO/LIFO)
+- **Portfolio management** - Multi-currency positions with corporate actions support
+- **Order validation** - Pre-execution order checking
+- **Portfolio valuation** - Real-time value and P&L calculations
+- **Market data** - Price snapshots, quotes, and bars
+- **Corporate actions** - Stock splits, dividends, spinoffs, mergers, hard forks, airdrops
+
+### 2. Algorithm Foundations
+
+- **Data structures** - CircularBuffer, Deque, PriorityQueue, RBTree
+- **Online statistics** - O(1) cumulative mean, variance, covariance, correlation, beta, skewness, kurtosis
+- **Rolling statistics** - Sliding window SMA, EMA, EWMA, variance, z-scores (O(1)), min/max (O(1)), median/quantile (O(n))
+- **Probabilistic structures** - CountMinSketch, BloomFilter
+- **Performance metrics** - Drawdown/drawup calculations with Kahan summation for numerical stability
 
 ## What It Does NOT Do
 
-This library focuses only on bookkeeping. It does NOT include:
+This library provides primitives, not complete systems. It does NOT include:
 
 - Strategy engines or signal generation
 - Matching engines or broker simulators
 - Backtesting frameworks or event loops
 - Data fetching or storage
+- Charting or visualization
 
 ## Installation
 
@@ -30,7 +41,7 @@ npm install @junduck/trading-core
 
 ## Quick Start
 
-### Create a Portfolio
+### Bookkeeping: Create a Portfolio
 
 ```typescript
 import { pu } from "@junduck/trading-core";
@@ -39,10 +50,10 @@ import { pu } from "@junduck/trading-core";
 const portfolio = pu.create("my-portfolio", "My Trading Portfolio");
 
 // Initialize USD position with cash
-portfolio.positions.set("USD", pu.createPosition(100000));
+pu.createPosition(portfolio, "USD", 100000);
 ```
 
-### Open a Long Position
+### Bookkeeping: Open a Long Position
 
 ```typescript
 import { pu } from "@junduck/trading-core";
@@ -56,7 +67,7 @@ const asset: Asset = {
 pu.openLong(portfolio, asset, 150, 100, 1);
 ```
 
-### Close a Position
+### Bookkeeping: Close a Position
 
 ```typescript
 import { pu } from "@junduck/trading-core";
@@ -92,7 +103,7 @@ const unrealizedPnL = calculateUnrealizedPnL(position, snapshot);
 console.log(`Unrealized P&L: $${unrealizedPnL}`);
 ```
 
-### Validate an Order
+### Bookkeeping: Validate an Order
 
 ```typescript
 import { validateOrder } from "@junduck/trading-core";
@@ -115,30 +126,125 @@ if (!result.valid) {
 }
 ```
 
+### Algorithms: Rolling Window Statistics
+
+```typescript
+import { SMA, EMA, RollingStddev } from "@junduck/trading-core";
+
+// Simple Moving Average
+const sma = new SMA({ period: 20 });
+sma.update(100); // returns 100
+sma.update(102); // returns 101
+
+// Exponential Moving Average
+const ema = new EMA({ period: 12 });
+ema.update(100);
+ema.update(105);
+
+// Rolling Standard Deviation
+const std = new RollingStddev({ period: 20 });
+const { mean, stddev } = std.update(100);
+```
+
+### Algorithms: Online Statistics
+
+```typescript
+import { CMA, CuVar, CuCorr } from "@junduck/trading-core";
+
+// Cumulative Moving Average
+const cma = new CMA();
+cma.update(100); // returns 100
+cma.update(200); // returns 150
+
+// Cumulative Variance
+const variance = new CuVar({ ddof: 1 });
+const { mean, variance: v } = variance.update(100);
+
+// Cumulative Correlation
+const corr = new CuCorr();
+const { corr: correlation } = corr.update(100, 200);
+```
+
+### Algorithms: Performance Metrics
+
+```typescript
+import { CircularBuffer, maxDrawDown, maxRelDrawDown } from "@junduck/trading-core";
+
+const equity = new CircularBuffer<number>(1000);
+equity.push(100000);
+equity.push(105000);
+equity.push(102000);
+equity.push(108000);
+
+const mdd = maxDrawDown(equity);        // Absolute drawdown
+const relMdd = maxRelDrawDown(equity);  // Percentage drawdown
+```
+
 ## Core Data Structures
 
-### Position
+### Algorithm Foundations
 
-Represents a currency account with:
+**Containers:**
+
+- `CircularBuffer<T>` - Fixed-size circular buffer with O(1) push/pop
+- `Deque<T>` - Double-ended queue
+- `PriorityQueue<T>` - Min-heap based priority queue
+- `RBTree<T>` - Red-Black Tree for sorted operations
+
+**Online Statistics (Cumulative):**
+
+- `CMA` - Cumulative moving average
+- `CuVar`, `CuStddev` - Variance and standard deviation
+- `CuCov`, `CuCorr`, `CuBeta` - Covariance, correlation, beta
+- `CuSkew`, `CuKurt` - Skewness and kurtosis
+- `CuHistogram` - Dynamic histogram
+
+**Rolling Window Statistics:**
+
+- `SMA`, `EMA`, `EWMA` - Moving averages
+- `RollingVar`, `RollingStddev` - Variance and standard deviation
+- `RollingVarEW`, `RollingStddevEW` - Exponentially weighted variants
+- `RollingZScore`, `RollingZScoreEW` - Standardized scores
+- `RollingCov`, `RollingCorr`, `RollingBeta` - Covariance, correlation, beta
+- `RollingMin`, `RollingMax`, `RollingMinMax` - Extrema tracking
+- `RollingArgMin`, `RollingArgMax` - Extrema with indices
+- `RollingMedian`, `RollingQuantile` - Order statistics (O(n) using QuickSelect)
+- `RollingSkew`, `RollingKurt` - Higher moments
+- `RollingHistogram` - Rolling histogram
+
+**Probabilistic Structures:**
+
+- `CountMinSketch` - Space-efficient frequency estimation
+- `BloomFilter` - Probabilistic set membership
+
+**Utilities:**
+
+- `Kahan` - Numerically stable summation
+- `SmoothedAccum` - Exponential smoothing
+- `maxDrawDown()`, `maxRelDrawDown()` - Drawdown metrics
+- `maxDrawUp()`, `maxRelDrawUp()` - Drawup metrics
+- `exp_factor()`, `wilders_factor()` - Smoothing factors
+
+### Bookkeeping Structures
+
+**Position** - Represents a currency account with:
 
 - Cash balance
 - Long positions (Map of symbol → LongPosition)
 - Short positions (Map of symbol → ShortPosition)
 - Realized P&L and commission tracking
 
-### Portfolio
-
-Multi-currency portfolio containing:
+**Portfolio** - Multi-currency portfolio containing:
 
 - Map of currency → Position
 - Portfolio metadata (id, name, timestamps)
 
-### Order & Fill
+**Order & Fill:**
 
 - **Order**: Trading intent (BUY/SELL with OPEN/CLOSE effect)
 - **Fill**: Actual execution record (price, quantity, commission)
 
-### Market Data
+**Market Data:**
 
 - **MarketSnapshot**: Point-in-time market prices
 - **MarketQuote**: Bid/ask quotes
@@ -154,7 +260,7 @@ All portfolio utilities are under the `pu` namespace to avoid naming conflicts w
 **Portfolio Management:**
 
 - `pu.create(id, name)` - Create a new portfolio
-- `pu.createPosition(initialCash?, time?)` - Create a new position with initial cash
+- `pu.createPosition(portfolio, currency, initialCash?, time?)` - Create a position in portfolio
 - `pu.getPosition(portfolio, currency)` - Get position for currency
 - `pu.getCash(portfolio, currency)` - Get cash balance for currency
 - `pu.getCurrencies(portfolio)` - Get all currency codes in portfolio
@@ -184,8 +290,9 @@ All portfolio utilities are under the `pu` namespace to avoid naming conflicts w
 
 ### Position Utils
 
-Position-level trading functions (exported directly):
+Position-level functions (exported directly):
 
+- `createPosition(initialCash?, time?)` - Create a Position object
 - `openLong(pos, symbol, price, quantity, commission?, time?)` - Open or add to long position
 - `closeLong(pos, symbol, price, quantity, commission?, strategy?, time?)` - Close long position
 - `openShort(pos, symbol, price, quantity, commission?, time?)` - Open or add to short position
@@ -222,7 +329,7 @@ import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
 
 // 1. Create portfolio with initial cash
 const portfolio = pu.create("backtest-1", "Momentum Strategy");
-portfolio.positions.set("USD", pu.createPosition(100000));
+pu.createPosition(portfolio, "USD", 100000);
 
 // 2. Define asset and market data
 const aapl: Asset = { symbol: "AAPL", currency: "USD" };

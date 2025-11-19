@@ -21,7 +21,7 @@ console.log("=== Running README Examples ===\n");
 console.log("Example 1: Create a Portfolio");
 
 const portfolio = pu.create("my-portfolio", "My Trading Portfolio");
-portfolio.positions.set("USD", pu.createPosition(100000));
+pu.createPosition(portfolio, "USD", 100000);
 
 console.log(`✓ Created portfolio with $${pu.getCash(portfolio, "USD")} USD\n`);
 
@@ -102,7 +102,7 @@ console.log("Example 7: Complete Trading Flow");
 
 // 1. Create portfolio with initial cash
 const portfolio2 = pu.create("backtest-1", "Momentum Strategy");
-portfolio2.positions.set("USD", pu.createPosition(100000));
+pu.createPosition(portfolio2, "USD", 100000);
 
 // 2. Define asset and market data
 const aapl: Asset = { symbol: "AAPL", currency: "USD" };

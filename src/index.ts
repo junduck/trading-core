@@ -84,3 +84,60 @@ export type {
   OrderValidationResult,
   ApplyFillResult,
 } from "./utils/index.js";
+
+// Export containers
+export { CircularBuffer } from "./containers/circular-buffer.js";
+export { Deque } from "./containers/deque.js";
+export { PriorityQueue } from "./containers/priority-queue.js";
+export { RBTree } from "./containers/rbtree.js";
+
+// Export online statistics
+export { CMA } from "./online/average.js";
+export { CountMinSketch, BloomFilter } from "./online/probs.js";
+export { CuVar, CuStddev, CuCov, CuCorr, CuBeta } from "./online/stats.js";
+export { CuSkew, CuKurt } from "./online/moments.js";
+export { CuHistogram } from "./online/histogram.js";
+
+// Export rolling statistics
+export { RollingSum, SMA, EMA, EWMA } from "./rolling/average.js";
+export {
+  RollingVar,
+  RollingVarEW,
+  RollingStddev,
+  RollingStddevEW,
+  RollingZScore,
+  RollingZScoreEW,
+  RollingCov,
+  RollingCovEW,
+  RollingCorr,
+  RollingCorrEW,
+  RollingBeta,
+  RollingBetaEW,
+} from "./rolling/stats.js";
+export {
+  RollingMin,
+  RollingMax,
+  RollingMinMax,
+  RollingArgMin,
+  RollingArgMax,
+  RollingArgMinMax,
+} from "./rolling/minmax.js";
+export { RollingMedian, RollingQuantile } from "./rolling/rank.js";
+export { RollingSkew, RollingKurt } from "./rolling/moments.js";
+export { RollingHistogram } from "./rolling/histogram.js";
+
+// Export drawdown utilities
+export {
+  maxDrawDown,
+  maxRelDrawDown,
+  maxDrawUp,
+  maxRelDrawUp,
+} from "./utils/drawdown.js";
+
+// Export accumulators
+export {
+  Kahan,
+  SmoothedAccum,
+  exp_factor,
+  wilders_factor,
+} from "./utils/accum.js";

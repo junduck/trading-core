@@ -1,7 +1,7 @@
 {
   "name": "@junduck/trading-core",
-  "version": "1.1.1",
-  "description": "Core data structures and utils for spot market trading",
+  "version": "2.0.0",
+  "description": "Foundation data structures and utilities for spot market trading bookkeeping, backtesting, and algorithmic trading",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -35,7 +35,12 @@
     "spot-market",
     "bookkeeping",
     "finance",
-    "investment"
+    "investment",
+    "algorithm",
+    "statistics",
+    "rolling-window",
+    "technical-analysis",
+    "data-structures"
   ],
   "author": "Jun",
   "license": "MIT",
