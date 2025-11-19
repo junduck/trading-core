@@ -113,18 +113,21 @@ export function getAllSymbols(portfolio: Portfolio): Map<string, string[]> {
 }
 
 /**
- * Creates a new Position data structure with initial cash.
+ * Creates a new position in the portfolio with initial cash.
+ * @param portfolio - The portfolio to modify
+ * @param currency - The currency code for the new position
  * @param initialCash - Initial cash balance (default: 0)
  * @param time - Optional creation timestamp (defaults to current date)
- * @returns A new Position instance
  */
-export function createPosition(initialCash: number = 0, time?: Date): Position {
-  return {
-    cash: initialCash,
-    totalCommission: 0,
-    realisedPnL: 0,
-    modified: time ?? new Date(),
-  };
+export function createPosition(
+  portfolio: Portfolio,
+  currency: string,
+  initialCash: number = 0,
+  time?: Date
+): void {
+  const pos = posUtils.createPosition(initialCash, time);
+  portfolio.positions.set(currency, pos);
+  portfolio.modified = time ?? new Date();
 }
 
 /**

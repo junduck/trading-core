@@ -8,6 +8,21 @@ import type {
 import type { CloseStrategy } from "../types/trade.js";
 
 /**
+ * Creates a new Position data structure with initial cash.
+ * @param initialCash - Initial cash balance (default: 0)
+ * @param time - Optional creation timestamp (defaults to current date)
+ * @returns A new Position instance
+ */
+export function createPosition(initialCash: number = 0, time?: Date): Position {
+  return {
+    cash: initialCash,
+    totalCommission: 0,
+    realisedPnL: 0,
+    modified: time ?? new Date(),
+  };
+}
+
+/**
  * Validates position integrity by checking that lot totals match position totals.
  * @param pos - The position to validate
  * @returns True if position is valid, false otherwise

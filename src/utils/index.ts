@@ -9,7 +9,6 @@ export {
   getCash,
   getCurrencies,
   getAllSymbols,
-  createPosition,
   getOrSetPosition,
   openLong as portfolioOpenLong,
   closeLong as portfolioCloseLong,
@@ -39,6 +38,7 @@ export {
 
 // Position utilities
 export {
+  createPosition,
   validatePosition,
   pushLongPositionLot,
   amendLongPositionLot,
@@ -87,5 +87,7 @@ export {
   maxDrawUp,
   maxRelDrawUp,
 } from "./drawdown.js";
+
+export type { DrawdownResult } from "./drawdown.js";
 
 export { Kahan, SmoothedAccum, exp_factor, wilders_factor } from "./accum.js";
