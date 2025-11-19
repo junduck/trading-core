@@ -87,10 +87,30 @@ export class CircularBuffer<T> {
    * @returns Element or undefined if out of bounds
    */
   at(index: number): T | undefined {
-    if (index < 0 || index >= this.size_) {
+    // Fast path: positive index in range
+    if (index >= 0 && index < this.size_) {
+      const physicalIndex = this.head + index;
+      return this.buffer[
+        physicalIndex >= this.cap_ ? physicalIndex - this.cap_ : physicalIndex
+      ];
+    }
+
+    if (this.size_ === 0) {
       return undefined;
     }
-    const physicalIndex = this.head + index;
+
+    // Slow path: handle out-of-range indices with modulo wrap-around
+    let wrappedIndex: number;
+
+    if (index < 0) {
+      // Handle negative indices using proper modulo
+      wrappedIndex = ((index % this.size_) + this.size_) % this.size_;
+    } else {
+      // Handle indices >= size
+      wrappedIndex = index % this.size_;
+    }
+
+    const physicalIndex = this.head + wrappedIndex;
     return this.buffer[
       physicalIndex >= this.cap_ ? physicalIndex - this.cap_ : physicalIndex
     ];

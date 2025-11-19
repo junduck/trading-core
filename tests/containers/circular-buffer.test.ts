@@ -105,8 +105,29 @@ describe("CircularBuffer", () => {
       expect(buffer.at(0)).toBe(1); // front
       expect(buffer.at(1)).toBe(2);
       expect(buffer.at(2)).toBe(3); // back
-      expect(buffer.at(3)).toBeUndefined(); // out of bounds
-      expect(buffer.at(-1)).toBeUndefined(); // negative index
+      expect(buffer.at(3)).toBe(1); // wraps around to first element
+    });
+
+    it("should support Python-style negative indices", () => {
+      expect(buffer.at(-1)).toBe(3); // last element (back)
+      expect(buffer.at(-2)).toBe(2);
+      expect(buffer.at(-3)).toBe(1); // first element (front)
+      expect(buffer.at(-4)).toBe(3); // wraps around to last element
+      expect(buffer.at(-5)).toBe(2); // wraps around
+      expect(buffer.at(-6)).toBe(1); // wraps around to first
+    });
+
+    it("should support modulo wrap-around for large positive indices", () => {
+      expect(buffer.at(3)).toBe(1); // 3 % 3 = 0, wraps to first element
+      expect(buffer.at(4)).toBe(2); // 4 % 3 = 1, wraps to second element
+      expect(buffer.at(5)).toBe(3); // 5 % 3 = 2, wraps to third element
+      expect(buffer.at(10)).toBe(2); // 10 % 3 = 1, wraps to second element
+      expect(buffer.at(100)).toBe(2); // 100 % 3 = 1, wraps to second element
+    });
+
+    it("should support modulo wrap-around for large negative indices", () => {
+      expect(buffer.at(-10)).toBe(3); // -10 % 3 = 2 (effectively), wraps to third element
+      expect(buffer.at(-100)).toBe(3); // -100 % 3 = 2 (effectively), wraps to third element
     });
 
     it("should get front and back elements correctly", () => {
@@ -134,6 +155,39 @@ describe("CircularBuffer", () => {
       expect(buffer.at(0)).toBe(2);
       expect(buffer.at(4)).toBe(6);
     });
+
+    it("should support negative indices with wrap-around", () => {
+      // Fill buffer to capacity
+      buffer.push_back(4);
+      buffer.push_back(5);
+
+      // Add one more to trigger overwrite
+      buffer.push_back(6);
+
+      // Buffer now contains: [2, 3, 4, 5, 6]
+      expect(buffer.at(-1)).toBe(6); // last element
+      expect(buffer.at(-2)).toBe(5);
+      expect(buffer.at(-3)).toBe(4);
+      expect(buffer.at(-4)).toBe(3);
+      expect(buffer.at(-5)).toBe(2); // first element
+      expect(buffer.at(-6)).toBe(6); // wraps around to last element
+      expect(buffer.at(-10)).toBe(2); // wraps around
+    });
+
+    it("should support modulo wrap-around with circular buffer", () => {
+      // Fill buffer to capacity
+      buffer.push_back(4);
+      buffer.push_back(5);
+
+      // Add one more to trigger overwrite
+      buffer.push_back(6);
+
+      // Buffer now contains: [2, 3, 4, 5, 6]
+      expect(buffer.at(5)).toBe(2); // 5 % 5 = 0, wraps to first element
+      expect(buffer.at(7)).toBe(4); // 7 % 5 = 2, wraps to third element
+      expect(buffer.at(10)).toBe(2); // 10 % 5 = 0, wraps to first element
+      expect(buffer.at(15)).toBe(2); // 15 % 5 = 0, wraps to first element
+    });
   });
 
   describe("Aliases", () => {
@@ -157,6 +211,25 @@ describe("CircularBuffer", () => {
       buffer.push(2);
       expect(buffer.get(0)).toBe(1);
       expect(buffer.get(1)).toBe(2);
+    });
+
+    it("should work with get() alias for negative indices", () => {
+      buffer.push(1);
+      buffer.push(2);
+      buffer.push(3);
+      expect(buffer.get(-1)).toBe(3); // last element
+      expect(buffer.get(-2)).toBe(2);
+      expect(buffer.get(-3)).toBe(1); // first element
+      expect(buffer.get(-4)).toBe(3); // wraps around to last element
+    });
+
+    it("should work with get() alias for modulo wrap-around", () => {
+      buffer.push(1);
+      buffer.push(2);
+      buffer.push(3);
+      expect(buffer.get(5)).toBe(3); // 5 % 3 = 2, wraps to third element
+      expect(buffer.get(10)).toBe(2); // 10 % 3 = 1, wraps to second element
+      expect(buffer.get(-10)).toBe(3); // wraps around
     });
 
     it("should work with peek() alias", () => {
