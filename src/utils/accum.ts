@@ -7,7 +7,7 @@ export class Kahan {
   private carry: number = 0;
 
   /**
-   * Accumlates a value to the sum with error compensation.
+   * Accumulates a value to the sum with error compensation.
    * @param x - Value to add
    * @returns Current compensated sum
    */
