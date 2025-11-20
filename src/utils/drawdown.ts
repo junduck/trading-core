@@ -1,7 +1,4 @@
-interface NumericBuffer {
-  at(index: number): number | undefined;
-  size(): number;
-}
+import type { NumericBuffer } from "../numeric/utils.js";
 
 /** Result of drawdown/drawup calculation */
 export interface DrawdownResult {
@@ -23,7 +20,7 @@ function calculateMovement(
 
   // For relative calculations, skip initial zeros to find first non-zero value
   if (isRelative) {
-    while (initial === 0 && startIndex < buffer.size() - 1) {
+    while (initial === 0 && startIndex < buffer.length - 1) {
       startIndex++;
       initial = buffer.at(startIndex) ?? 0;
     }
@@ -36,7 +33,7 @@ function calculateMovement(
   let resultFrom = startIndex;
   let resultTo = startIndex;
 
-  for (let i = startIndex + 1; i < buffer.size(); i++) {
+  for (let i = startIndex + 1; i < buffer.length; i++) {
     const value = buffer.at(i) ?? 0;
     const updateExtremum = isPeak ? value > extremum : value < extremum;
 

@@ -7,13 +7,6 @@ import {
   DrawdownResult,
 } from "../../src/utils/drawdown";
 
-function createBuffer(data: number[]) {
-  return {
-    at: (i: number) => data[i],
-    size: () => data.length,
-  };
-}
-
 function naiveMaxDrawDown(data: number[]): DrawdownResult {
   if (data.length === 0) return { value: 0, from: 0, to: 0 };
 
@@ -132,24 +125,24 @@ function naiveMaxRelDrawUp(data: number[]): DrawdownResult {
 
 describe("maxDrawDown", () => {
   it("should return zero for empty buffer", () => {
-    const result = maxDrawDown(createBuffer([]));
+    const result = maxDrawDown([]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should return zero for single element", () => {
-    const result = maxDrawDown(createBuffer([100]));
+    const result = maxDrawDown([100]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should return zero for monotonic increasing", () => {
     const data = [10, 20, 30, 40, 50];
-    const result = maxDrawDown(createBuffer(data));
+    const result = maxDrawDown(data);
     expect(result.value).toBe(0);
   });
 
   it("should calculate drawdown for monotonic decreasing", () => {
     const data = [100, 80, 60, 40, 20];
-    const result = maxDrawDown(createBuffer(data));
+    const result = maxDrawDown(data);
     const expected = naiveMaxDrawDown(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(-80);
@@ -159,7 +152,7 @@ describe("maxDrawDown", () => {
 
   it("should find max drawdown in typical sequence", () => {
     const data = [100, 120, 80, 90, 60, 100];
-    const result = maxDrawDown(createBuffer(data));
+    const result = maxDrawDown(data);
     const expected = naiveMaxDrawDown(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(-60);
@@ -169,7 +162,7 @@ describe("maxDrawDown", () => {
 
   it("should handle multiple peaks and troughs", () => {
     const data = [50, 100, 60, 80, 40, 90, 30];
-    const result = maxDrawDown(createBuffer(data));
+    const result = maxDrawDown(data);
     const expected = naiveMaxDrawDown(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(-70);
@@ -179,25 +172,25 @@ describe("maxDrawDown", () => {
 
   it("should handle constant values", () => {
     const data = [50, 50, 50, 50];
-    const result = maxDrawDown(createBuffer(data));
+    const result = maxDrawDown(data);
     expect(result.value).toBe(0);
   });
 });
 
 describe("maxRelDrawDown", () => {
   it("should return zero for empty buffer", () => {
-    const result = maxRelDrawDown(createBuffer([]));
+    const result = maxRelDrawDown([]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should return zero for all zeros", () => {
-    const result = maxRelDrawDown(createBuffer([0, 0, 0]));
+    const result = maxRelDrawDown([0, 0, 0]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should skip leading zeros", () => {
     const data = [0, 0, 100, 50];
-    const result = maxRelDrawDown(createBuffer(data));
+    const result = maxRelDrawDown(data);
     expect(result.value).toBe(-0.5);
     expect(result.from).toBe(2);
     expect(result.to).toBe(3);
@@ -205,7 +198,7 @@ describe("maxRelDrawDown", () => {
 
   it("should calculate relative drawdown", () => {
     const data = [100, 200, 100];
-    const result = maxRelDrawDown(createBuffer(data));
+    const result = maxRelDrawDown(data);
     const expected = naiveMaxRelDrawDown(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(-0.5);
@@ -215,7 +208,7 @@ describe("maxRelDrawDown", () => {
 
   it("should handle 50% drawdown", () => {
     const data = [100, 50];
-    const result = maxRelDrawDown(createBuffer(data));
+    const result = maxRelDrawDown(data);
     expect(result.value).toBe(-0.5);
     expect(result.from).toBe(0);
     expect(result.to).toBe(1);
@@ -223,7 +216,7 @@ describe("maxRelDrawDown", () => {
 
   it("should find max relative drawdown in sequence", () => {
     const data = [100, 200, 150, 300, 100];
-    const result = maxRelDrawDown(createBuffer(data));
+    const result = maxRelDrawDown(data);
     const expected = naiveMaxRelDrawDown(data);
     expect(result).toEqual(expected);
     expect(result.value).toBeCloseTo(-200 / 300);
@@ -234,19 +227,19 @@ describe("maxRelDrawDown", () => {
 
 describe("maxDrawUp", () => {
   it("should return zero for empty buffer", () => {
-    const result = maxDrawUp(createBuffer([]));
+    const result = maxDrawUp([]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should return zero for monotonic decreasing", () => {
     const data = [50, 40, 30, 20, 10];
-    const result = maxDrawUp(createBuffer(data));
+    const result = maxDrawUp(data);
     expect(result.value).toBe(0);
   });
 
   it("should calculate drawup for monotonic increasing", () => {
     const data = [10, 20, 30, 40, 50];
-    const result = maxDrawUp(createBuffer(data));
+    const result = maxDrawUp(data);
     const expected = naiveMaxDrawUp(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(40);
@@ -256,7 +249,7 @@ describe("maxDrawUp", () => {
 
   it("should find max drawup in typical sequence", () => {
     const data = [100, 60, 120, 80, 150];
-    const result = maxDrawUp(createBuffer(data));
+    const result = maxDrawUp(data);
     const expected = naiveMaxDrawUp(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(90);
@@ -266,7 +259,7 @@ describe("maxDrawUp", () => {
 
   it("should handle multiple peaks and troughs", () => {
     const data = [50, 20, 80, 30, 100, 40];
-    const result = maxDrawUp(createBuffer(data));
+    const result = maxDrawUp(data);
     const expected = naiveMaxDrawUp(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(80);
@@ -277,18 +270,18 @@ describe("maxDrawUp", () => {
 
 describe("maxRelDrawUp", () => {
   it("should return zero for empty buffer", () => {
-    const result = maxRelDrawUp(createBuffer([]));
+    const result = maxRelDrawUp([]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should return zero for all zeros", () => {
-    const result = maxRelDrawUp(createBuffer([0, 0, 0]));
+    const result = maxRelDrawUp([0, 0, 0]);
     expect(result).toEqual({ value: 0, from: 0, to: 0 });
   });
 
   it("should skip leading zeros", () => {
     const data = [0, 0, 50, 100];
-    const result = maxRelDrawUp(createBuffer(data));
+    const result = maxRelDrawUp(data);
     expect(result.value).toBe(1);
     expect(result.from).toBe(2);
     expect(result.to).toBe(3);
@@ -296,7 +289,7 @@ describe("maxRelDrawUp", () => {
 
   it("should calculate relative drawup (100% gain)", () => {
     const data = [100, 200];
-    const result = maxRelDrawUp(createBuffer(data));
+    const result = maxRelDrawUp(data);
     expect(result.value).toBe(1);
     expect(result.from).toBe(0);
     expect(result.to).toBe(1);
@@ -304,7 +297,7 @@ describe("maxRelDrawUp", () => {
 
   it("should find max relative drawup in sequence", () => {
     const data = [100, 50, 200, 80, 100];
-    const result = maxRelDrawUp(createBuffer(data));
+    const result = maxRelDrawUp(data);
     const expected = naiveMaxRelDrawUp(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(3);
@@ -314,7 +307,7 @@ describe("maxRelDrawUp", () => {
 
   it("should handle trough to peak calculation", () => {
     const data = [200, 100, 50, 200];
-    const result = maxRelDrawUp(createBuffer(data));
+    const result = maxRelDrawUp(data);
     const expected = naiveMaxRelDrawUp(data);
     expect(result).toEqual(expected);
     expect(result.value).toBe(3);

@@ -250,6 +250,11 @@ export class Deque<T> {
     return this.size_;
   }
 
+  /** Returns current number of elements */
+  get length(): number {
+    return this.size_;
+  }
+
   /** Returns current capacity */
   capacity(): number {
     return this.cap_;

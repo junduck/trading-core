@@ -144,6 +144,11 @@ export class CircularBuffer<T> {
     return this.size_;
   }
 
+  /** Returns current number of elements */
+  get length(): number {
+    return this.size_;
+  }
+
   /** Returns maximum capacity */
   capacity(): number {
     return this.cap_;
@@ -175,7 +180,8 @@ export class CircularBuffer<T> {
           return { done: true, value: undefined };
         }
 
-        const value = buffer[current < capacity ? current : current - capacity]!;
+        const value =
+          buffer[current < capacity ? current : current - capacity]!;
         current++;
 
         return { done: false, value };
