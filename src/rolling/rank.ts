@@ -1,43 +1,5 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
-
-/**
- * QuickSelect algorithm to find the nth smallest element.
- * Partially sorts array so that element at position n is correct.
- */
-export function nth_element(
-  arr: number[],
-  left: number,
-  right: number,
-  n: number
-): number {
-  while (left < right - 1) {
-    const pivot = arr[left + Math.floor(Math.random() * (right - left))]!;
-    let i = left;
-    let j = right - 1;
-
-    while (i <= j) {
-      while (arr[i]! < pivot) i++;
-      while (arr[j]! > pivot) j--;
-      if (i <= j) {
-        const tmp = arr[i]!;
-        arr[i] = arr[j]!;
-        arr[j] = tmp;
-        i++;
-        j--;
-      }
-    }
-
-    if (n <= j) {
-      right = j + 1;
-    } else if (n >= i) {
-      left = i;
-    } else {
-      return arr[n]!;
-    }
-  }
-
-  return arr[left]!;
-}
+import { nth_element } from "../numeric/utils.js";
 
 /**
  * Rolling median calculator. O(n) per update using QuickSelect.
@@ -72,7 +34,11 @@ export class RollingMedian {
 
     if (this.isEven) {
       const a = nth_element(this.queue, 0, n, this.midx - 1);
-      const b = nth_element(this.queue, 0, n, this.midx);
+      // After partitioning at midx-1, minimum of [midx, n) is the element at midx
+      let b = this.queue[this.midx]!;
+      for (let i = this.midx + 1; i < n; i++) {
+        if (this.queue[i]! < b) b = this.queue[i]!;
+      }
       return (a + b) / 2;
     }
     return nth_element(this.queue, 0, n, this.midx);

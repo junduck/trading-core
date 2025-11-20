@@ -1,6 +1,7 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
 import { SMA } from "./average.js";
-import { RollingMedian, nth_element } from "./rank.js";
+import { RollingMedian } from "./rank.js";
+import { nth_element } from "../numeric/utils.js";
 
 export class MeanAbsDeviation {
   private sma: SMA;

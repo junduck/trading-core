@@ -20,6 +20,7 @@
 - **数据结构** - CircularBuffer、Deque、PriorityQueue、RBTree
 - **在线统计** - O(1) 累积均值、方差、协方差、相关性、贝塔、偏度、峰度
 - **滚动统计** - 滑动窗口 SMA、EMA、EWMA、方差、z分数（O(1)）、最值（O(1)）、中位数/分位数（O(n)）
+- **数值工具** - 基于数组的统计（均值、方差、相关性）、序列变换（收益率、滞后/超前、缩尾）、排序（argsort、spearman）
 - **概率结构** - CountMinSketch、BloomFilter
 - **性能指标** - 回撤/反弹计算，使用 Kahan 求和保证数值稳定性
 
@@ -180,6 +181,38 @@ const mdd = maxDrawDown(equity);        // 绝对回撤
 const relMdd = maxRelDrawDown(equity);  // 百分比回撤
 ```
 
+### 算法：数值工具
+
+```typescript
+import {
+  mean, stddev, corr, spearman,
+  returns, logReturns, winsorize,
+  argsort, rank
+} from "@junduck/trading-core";
+
+// 基本统计
+const prices = [100, 102, 98, 105, 103];
+const avg = mean(prices);           // 101.6
+const std = stddev(prices, 1);      // 样本标准差
+
+// 收益率
+const rets = returns(prices);       // [0.02, -0.039, 0.071, -0.019]
+const logRets = logReturns(prices); // 对数收益率
+
+// 相关性
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+const pearson = corr(x, y);         // Pearson 相关系数
+const spear = spearman(x, y);       // Spearman 秩相关系数
+
+// 排序
+const ranks = rank(prices);         // [0, 0.5, 0, 1, 0.75]
+const sorted = argsort(prices);     // [2, 0, 1, 4, 3]
+
+// 数据预处理
+const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
+```
+
 ## 核心数据结构
 
 ### 算法基础
@@ -224,6 +257,17 @@ const relMdd = maxRelDrawDown(equity);  // 百分比回撤
 - `maxDrawDown()`、`maxRelDrawDown()` - 回撤指标
 - `maxDrawUp()`、`maxRelDrawUp()` - 反弹指标
 - `exp_factor()`、`wilders_factor()` - 平滑因子
+
+**数值工具（基于数组）：**
+
+- `sum`、`min`、`max`、`argmin`、`argmax` - 数组聚合
+- `mean`、`variance`、`stddev`、`skew`、`kurt` - 描述性统计
+- `cov`、`corr`、`spearman` - 相关性度量
+- `median`、`quantile` - 顺序统计
+- `cumsum`、`diff`、`pctChange`、`returns`、`logReturns` - 序列变换
+- `norm`、`lag`、`lead`、`coalesce`、`locf`、`winsorize` - 数据预处理
+- `argsort`、`rank` - 排序工具
+- `gcd`、`lcm`、`lerp`、`clamp` - 数学工具
 
 ### 记账结构
 

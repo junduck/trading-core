@@ -20,6 +20,7 @@ This library provides comprehensive building blocks for trading systems in two m
 - **Data structures** - CircularBuffer, Deque, PriorityQueue, RBTree
 - **Online statistics** - O(1) cumulative mean, variance, covariance, correlation, beta, skewness, kurtosis
 - **Rolling statistics** - Sliding window SMA, EMA, EWMA, variance, z-scores (O(1)), min/max (O(1)), median/quantile (O(n))
+- **Numeric utilities** - Array-based stats (mean, variance, correlation), series transforms (returns, lag/lead, winsorize), ranking (argsort, spearman)
 - **Probabilistic structures** - CountMinSketch, BloomFilter
 - **Performance metrics** - Drawdown/drawup calculations with Kahan summation for numerical stability
 
@@ -180,6 +181,38 @@ const mdd = maxDrawDown(equity);        // Absolute drawdown
 const relMdd = maxRelDrawDown(equity);  // Percentage drawdown
 ```
 
+### Algorithms: Numeric Utilities
+
+```typescript
+import {
+  mean, stddev, corr, spearman,
+  returns, logReturns, winsorize,
+  argsort, rank
+} from "@junduck/trading-core";
+
+// Basic statistics
+const prices = [100, 102, 98, 105, 103];
+const avg = mean(prices);           // 101.6
+const std = stddev(prices, 1);      // sample stddev
+
+// Returns
+const rets = returns(prices);       // [0.02, -0.039, 0.071, -0.019]
+const logRets = logReturns(prices); // log returns
+
+// Correlation
+const x = [1, 2, 3, 4, 5];
+const y = [2, 4, 5, 4, 5];
+const pearson = corr(x, y);         // Pearson correlation
+const spear = spearman(x, y);       // Spearman rank correlation
+
+// Ranking
+const ranks = rank(prices);         // [0, 0.5, 0, 1, 0.75]
+const sorted = argsort(prices);     // [2, 0, 1, 4, 3]
+
+// Data preparation
+const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
+```
+
 ## Core Data Structures
 
 ### Algorithm Foundations
@@ -224,6 +257,17 @@ const relMdd = maxRelDrawDown(equity);  // Percentage drawdown
 - `maxDrawDown()`, `maxRelDrawDown()` - Drawdown metrics
 - `maxDrawUp()`, `maxRelDrawUp()` - Drawup metrics
 - `exp_factor()`, `wilders_factor()` - Smoothing factors
+
+**Numeric Utilities (Array-based):**
+
+- `sum`, `min`, `max`, `argmin`, `argmax` - Array aggregations
+- `mean`, `variance`, `stddev`, `skew`, `kurt` - Descriptive statistics
+- `cov`, `corr`, `spearman` - Correlation measures
+- `median`, `quantile` - Order statistics
+- `cumsum`, `diff`, `pctChange`, `returns`, `logReturns` - Series transforms
+- `norm`, `lag`, `lead`, `coalesce`, `locf`, `winsorize` - Data preparation
+- `argsort`, `rank` - Ranking utilities
+- `gcd`, `lcm`, `lerp`, `clamp` - Math utilities
 
 ### Bookkeeping Structures
 

@@ -141,3 +141,42 @@ export {
   exp_factor,
   wilders_factor,
 } from "./utils/accum.js";
+
+// Export numeric utilities
+export type { NumericBuffer } from "./numeric/utils.js";
+export {
+  gcd,
+  lcm,
+  midpoint,
+  lerp,
+  invLerp,
+  remap,
+  clamp,
+} from "./numeric/utils.js";
+export { sum, min, max, argmin, argmax } from "./numeric/array.js";
+export {
+  norm,
+  sign,
+  cumsum,
+  diff,
+  pctChange,
+  returns,
+  logReturns,
+  lag,
+  lead,
+  coalesce,
+  locf,
+  winsorize,
+} from "./numeric/series.js";
+export {
+  mean,
+  variance,
+  stddev,
+  skew,
+  kurt,
+  cov,
+  corr,
+  median,
+  quantile,
+} from "./numeric/stats.js";
+export { argsort, rank, spearman } from "./numeric/rank.js";

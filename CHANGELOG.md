@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-11-20
+
+### Added
+
+**Numeric Utilities (`src/numeric`):**
+
+Array-based numeric and statistical operations for batch processing.
+
+*Array Operations:*
+
+- `sum`, `min`, `max` - Basic aggregations
+- `argmin`, `argmax` - Index of extrema
+
+*Statistical Functions:*
+
+- `mean`, `variance`, `stddev` - Central tendency and dispersion
+- `skew`, `kurt` - Higher moments
+- `cov`, `corr` - Covariance and Pearson correlation
+- `median`, `quantile` - Order statistics using QuickSelect
+
+*Series Transformations:*
+
+- `norm` - Z-score normalization
+- `sign` - Element-wise sign
+- `cumsum`, `diff` - Cumulative sum and first differences
+- `pctChange`, `returns`, `logReturns` - Price returns
+- `lag`, `lead` - Series shifting
+- `coalesce`, `locf` - NaN handling
+- `winsorize` - Extreme value clamping
+
+*Ranking:*
+
+- `argsort` - Stable sort indices
+- `rank` - Fractional ranks in [0, 1]
+- `spearman` - Spearman rank correlation
+
+*Math Utilities:*
+
+- `gcd`, `lcm` - Greatest common divisor and least common multiple
+- `midpoint`, `lerp`, `invLerp`, `remap`, `clamp` - Interpolation utilities
+- `NumericBuffer` - Interface for indexed numeric access
+
+### Technical Notes
+
+- Welford's algorithm for numerically stable variance
+- Kahan summation for cumsum, skew, kurt
+- QuickSelect O(n) algorithm for median/quantile
+- Consistent `ddof=0` default across all functions
+- All functions work on `number[]` arrays
+
 ## [2.0.0] - 2025-11-19
 
 ### Breaking Changes
