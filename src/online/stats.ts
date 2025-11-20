@@ -2,6 +2,7 @@ import { Kahan } from "../utils/accum.js";
 
 /**
  * O(1) cumulative variance using Welford's online algorithm.
+ * @group Online Statistics
  */
 export class CuVar {
   private m: Kahan = new Kahan();
@@ -34,6 +35,7 @@ export class CuVar {
 
 /**
  * O(1) cumulative standard deviation.
+ * @group Online Statistics
  */
 export class CuStddev {
   private readonly variance: CuVar;
@@ -53,6 +55,7 @@ export class CuStddev {
 
 /**
  * O(1) cumulative covariance between two series.
+ * @group Online Statistics
  */
 export class CuCov {
   private mx: Kahan = new Kahan();
@@ -62,10 +65,10 @@ export class CuCov {
   private ddof: number;
 
   /**
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts?: { ddof?: number }) {
-    this.ddof = opts?.ddof ?? 1;
+    this.ddof = opts?.ddof ?? 0;
   }
 
   update(x: number, y: number): { meanX: number; meanY: number; cov: number } {
@@ -90,6 +93,7 @@ export class CuCov {
 
 /**
  * O(1) cumulative correlation between two series.
+ * @group Online Statistics
  */
 export class CuCorr {
   private mx: Kahan = new Kahan();
@@ -101,10 +105,10 @@ export class CuCorr {
   private ddof: number;
 
   /**
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts?: { ddof?: number }) {
-    this.ddof = opts?.ddof ?? 1;
+    this.ddof = opts?.ddof ?? 0;
   }
 
   update(
@@ -142,6 +146,7 @@ export class CuCorr {
 
 /**
  * O(1) cumulative beta coefficient (regression slope).
+ * @group Online Statistics
  */
 export class CuBeta {
   private mx: Kahan = new Kahan();
@@ -152,10 +157,10 @@ export class CuBeta {
   private ddof: number;
 
   /**
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts?: { ddof?: number }) {
-    this.ddof = opts?.ddof ?? 1;
+    this.ddof = opts?.ddof ?? 0;
   }
 
   update(

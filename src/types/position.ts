@@ -1,6 +1,7 @@
 /**
  * Represents a single lot (trade) within a long position.
  * Used for tracking individual purchases with their specific price and commission.
+ * @group Position
  */
 export interface LongPositionLot {
   /** Quantity of the asset in this lot */
@@ -16,6 +17,7 @@ export interface LongPositionLot {
 /**
  * Represents a long position for book-keeping.
  * Aggregates multiple lots to track overall holdings, and profit/loss.
+ * @group Position
  */
 export interface LongPosition {
   /** Total open quantity of this position */
@@ -37,6 +39,7 @@ export interface LongPosition {
 /**
  * Represents a single lot (trade) within a short position.
  * Used for tracking individual short sales with their specific price and commission.
+ * @group Position
  */
 export interface ShortPositionLot {
   /** Quantity of the asset in this lot */
@@ -52,6 +55,7 @@ export interface ShortPositionLot {
 /**
  * Represents a short position for book-keeping.
  * Aggregates multiple lots to track overall short holdings, and profit/loss.
+ * @group Position
  */
 export interface ShortPosition {
   /** Total open quantity of this short position */
@@ -73,6 +77,7 @@ export interface ShortPosition {
 /**
  * Represents a currency account within a portfolio.
  * Groups all assets, cash, and P&L for a specific currency.
+ * @group Position
  */
 export interface Position {
   /** Cash balance in this currency */

@@ -1,6 +1,7 @@
 /**
  * Kahan summation algorithm for numerical stability.
  * Reduces floating-point rounding errors in sequential addition.
+ * @group Numeric Utilities - Accumulator
  */
 export class Kahan {
   val: number = 0;
@@ -23,6 +24,7 @@ export class Kahan {
 /**
  * Smoothed accumulator for weighted observations.
  * Implements val = (1-w)*val + w*obs.
+ * @group Numeric Utilities - Accumulator
  */
 export class SmoothedAccum {
   val: number;
@@ -63,6 +65,7 @@ export class SmoothedAccum {
  * Converts period to exponential smoothing factor (EMA-style).
  * @param period - Smoothing period
  * @returns Smoothing factor: 2/(period+1)
+ * @group Numeric Utilities - Accumulator
  */
 export function exp_factor(period: number): number {
   return 2.0 / (period + 1);
@@ -72,6 +75,7 @@ export function exp_factor(period: number): number {
  * Converts period to Wilder's smoothing factor (RSI/ATR-style).
  * @param period - Smoothing period
  * @returns Smoothing factor: 1/period
+ * @group Numeric Utilities - Accumulator
  */
 export function wilders_factor(period: number): number {
   return 1.0 / period;

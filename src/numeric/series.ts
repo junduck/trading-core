@@ -5,6 +5,7 @@ import { _m2 } from "./stats.js";
 /**
  * Z-score normalization: (x - mean) / stddev.
  * @param ddof - Delta degrees of freedom for standard deviation calculation.
+ * @group Numeric Utilities - Series Transform
  */
 export function norm(x: number[], ddof: number = 0): number[] {
   const n = x.length;
@@ -19,7 +20,10 @@ export function norm(x: number[], ddof: number = 0): number[] {
   return result;
 }
 
-/** Sign of each element: 1 for positive, -1 for negative, 0 for zero. */
+/**
+ * Sign of each element: 1 for positive, -1 for negative, 0 for zero.
+ * @group Numeric Utilities - Series Transform
+ */
 export function sign(x: number[]): number[] {
   const result = new Array<number>(x.length);
   for (let i = 0; i < x.length; i++) {
@@ -28,7 +32,10 @@ export function sign(x: number[]): number[] {
   return result;
 }
 
-/** Cumulative sum. */
+/**
+ * Cumulative sum.
+ * @group Numeric Utilities - Series Transform
+ */
 export function cumsum(x: number[]): number[] {
   const acc = new Kahan();
   const result = new Array<number>(x.length);
@@ -38,7 +45,10 @@ export function cumsum(x: number[]): number[] {
   return result;
 }
 
-/** First differences: result[i] = x[i+1] - x[i]. */
+/**
+ * First differences: result[i] = x[i+1] - x[i].
+ * @group Numeric Utilities - Series Transform
+ */
 export function diff(x: number[]): number[] {
   if (x.length === 0) return [];
   const result = new Array<number>(x.length - 1);
@@ -48,7 +58,10 @@ export function diff(x: number[]): number[] {
   return result;
 }
 
-/** Percentage changes: result[i] = (x[i+1] - x[i]) / x[i]. */
+/**
+ * Percentage changes: result[i] = (x[i+1] - x[i]) / x[i].
+ * @group Numeric Utilities - Series Transform
+ */
 export function pctChange(x: number[]): number[] {
   if (x.length === 0) return [];
   const result = new Array<number>(x.length - 1);
@@ -58,19 +71,28 @@ export function pctChange(x: number[]): number[] {
   return result;
 }
 
-/** Simple returns from prices: (p[i] - p[i-1]) / p[i-1]. */
+/**
+ * Simple returns from prices: (p[i] - p[i-1]) / p[i-1].
+ * @group Numeric Utilities - Series Transform
+ */
 export function returns(prices: number[]): number[] {
   return pctChange(prices);
 }
 
-/** Log returns from prices: log(p[i] / p[i-1]). */
+/**
+ * Log returns from prices: log(p[i] / p[i-1]).
+ * @group Numeric Utilities - Series Transform
+ */
 export function logReturns(prices: number[]): number[] {
   if (prices.length === 0) return [];
   const logPrices = prices.map(Math.log);
   return diff(logPrices);
 }
 
-/** Shift series backward by n periods. First n elements are NaN. */
+/**
+ * Shift series backward by n periods. First n elements are NaN.
+ * @group Numeric Utilities - Series Transform
+ */
 export function lag(x: number[], n: number): number[] {
   if (x.length === 0) return [];
   if (n <= 0) return [...x];
@@ -84,7 +106,10 @@ export function lag(x: number[], n: number): number[] {
   return result;
 }
 
-/** Shift series forward by n periods. Last n elements are NaN. */
+/**
+ * Shift series forward by n periods. Last n elements are NaN.
+ * @group Numeric Utilities - Series Transform
+ */
 export function lead(x: number[], n: number): number[] {
   if (x.length === 0) return [];
   if (n <= 0) return [...x];
@@ -98,7 +123,10 @@ export function lead(x: number[], n: number): number[] {
   return result;
 }
 
-/** Replace NaN values with fill value. */
+/**
+ * Replace NaN values with fill value.
+ * @group Numeric Utilities - Series Transform
+ */
 export function coalesce(x: number[], fill: number): number[] {
   const result = new Array<number>(x.length);
   for (let i = 0; i < x.length; i++) {
@@ -107,7 +135,10 @@ export function coalesce(x: number[], fill: number): number[] {
   return result;
 }
 
-/** Last observation carried forward: fill NaN with last observed value. */
+/**
+ * Last observation carried forward: fill NaN with last observed value.
+ * @group Numeric Utilities - Series Transform
+ */
 export function locf(x: number[]): number[] {
   const result = new Array<number>(x.length);
   let lastValue = NaN;
@@ -122,8 +153,9 @@ export function locf(x: number[]): number[] {
 
 /**
  * Winsorize series by clamping extreme values at specified quantiles.
- * @param lower - Lower quantile in [0, 1], default 0.05
- * @param upper - Upper quantile in [0, 1], default 0.95
+ * @param opts.lower - Lower quantile in [0, 1], default 0.05
+ * @param opts.upper - Upper quantile in [0, 1], default 0.95
+ * @group Numeric Utilities - Series Transform
  */
 export function winsorize(
   x: number[],

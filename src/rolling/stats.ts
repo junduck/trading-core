@@ -3,6 +3,7 @@ import { exp_factor, SmoothedAccum, Kahan } from "../utils/accum.js";
 
 /**
  * O(1) rolling variance using Welford's online algorithm.
+ * @group Rolling Statistics
  */
 export class RollingVar {
   readonly buffer: CircularBuffer<number>;
@@ -55,6 +56,7 @@ export class RollingVar {
 
 /**
  * Exponentially weighted variance with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingVarEW {
   private m?: number;
@@ -88,6 +90,7 @@ export class RollingVarEW {
 
 /**
  * O(1) rolling standard deviation.
+ * @group Rolling Statistics
  */
 export class RollingStddev {
   private readonly variance: RollingVar;
@@ -110,6 +113,7 @@ export class RollingStddev {
 
 /**
  * Exponentially weighted standard deviation with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingStddevEW {
   private readonly variance: RollingVarEW;
@@ -130,6 +134,7 @@ export class RollingStddevEW {
 
 /**
  * O(1) rolling z-score calculator.
+ * @group Rolling Statistics
  */
 export class RollingZScore {
   private stddev: RollingStddev;
@@ -149,6 +154,7 @@ export class RollingZScore {
 
 /**
  * Exponentially weighted z-score with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingZScoreEW {
   private stddev: RollingStddevEW;
@@ -170,6 +176,7 @@ export class RollingZScoreEW {
 
 /**
  * O(1) rolling covariance between two series.
+ * @group Rolling Statistics
  */
 export class RollingCov {
   readonly bufferX: CircularBuffer<number>;
@@ -183,10 +190,10 @@ export class RollingCov {
 
   /**
    * @param opts.period Window size
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts: { period: number; ddof?: number }) {
-    this.ddof = opts.ddof ?? 1;
+    this.ddof = opts.ddof ?? 0;
     if (opts.period <= this.ddof) {
       throw new Error("Period should be larger than DDoF.");
     }
@@ -242,6 +249,7 @@ export class RollingCov {
 
 /**
  * O(1) rolling correlation between two series.
+ * @group Rolling Statistics
  */
 export class RollingCorr {
   readonly bufferX: CircularBuffer<number>;
@@ -257,10 +265,10 @@ export class RollingCorr {
 
   /**
    * @param opts.period Window size
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts: { period: number; ddof?: number }) {
-    this.ddof = opts.ddof ?? 1;
+    this.ddof = opts.ddof ?? 0;
     if (opts.period <= this.ddof) {
       throw new Error("Period should be larger than DDoF.");
     }
@@ -350,6 +358,7 @@ export class RollingCorr {
 
 /**
  * O(1) rolling beta coefficient (regression slope).
+ * @group Rolling Statistics
  */
 export class RollingBeta {
   readonly bufferX: CircularBuffer<number>;
@@ -364,10 +373,10 @@ export class RollingBeta {
 
   /**
    * @param opts.period Window size
-   * @param opts.ddof Delta degrees of freedom (default: 1)
+   * @param opts.ddof Delta degrees of freedom (default: 0)
    */
   constructor(opts: { period: number; ddof?: number }) {
-    this.ddof = opts.ddof ?? 1;
+    this.ddof = opts.ddof ?? 0;
     if (opts.period <= this.ddof) {
       throw new Error("Period should be larger than DDoF.");
     }
@@ -434,6 +443,7 @@ export class RollingBeta {
 
 /**
  * Exponentially weighted covariance with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingCovEW {
   private mx?: number;
@@ -471,6 +481,7 @@ export class RollingCovEW {
 
 /**
  * Exponentially weighted correlation with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingCorrEW {
   private mx?: number;
@@ -522,6 +533,7 @@ export class RollingCorrEW {
 
 /**
  * Exponentially weighted beta coefficient with infinite window.
+ * @group Rolling Statistics
  */
 export class RollingBetaEW {
   private mx?: number;

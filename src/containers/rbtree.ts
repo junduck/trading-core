@@ -17,6 +17,7 @@ class RBNode<T> {
  * Red-Black Tree using standard pointer-based implementation.
  *
  * @template T The type of elements stored in the tree
+ * @group Data Structures
  */
 export class RBTree<T> {
   private root: RBNode<T> | null = null;

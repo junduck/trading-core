@@ -2,6 +2,7 @@
  * Priority queue using binary min-heap.
  * Provide custom comparator for other orderings (e.g., max-heap: (a, b) => b - a).
  * @template T The type of elements stored in the queue
+ * @group Data Structures
  */
 export class PriorityQueue<T> {
   private heap: T[] = [];

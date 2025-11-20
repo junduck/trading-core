@@ -2,6 +2,7 @@
  * Count-Min Sketch for frequency estimation in data streams.
  * O(1) update and query with configurable error bounds.
  * Error is within epsilon * N with probability 1 - delta, where N is total count.
+ * @group Online Statistics
  */
 export class CountMinSketch<T = string> {
   private readonly width: number;
@@ -95,6 +96,7 @@ function defaultHash(key: unknown): number {
  * Bloom filter for membership testing in data streams.
  * O(k) add and test where k is number of hash functions.
  * May have false positives but no false negatives.
+ * @group Online Statistics
  */
 export class BloomFilter<T = string> {
   private readonly size: number;

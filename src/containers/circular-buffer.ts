@@ -2,6 +2,7 @@
  * Fixed-size circular buffer with Boost-like interface.
  * Automatically overwrites oldest elements when full.
  * @template T The type of elements stored in the buffer
+ * @group Data Structures
  */
 export class CircularBuffer<T> {
   private size_: number;

@@ -17,6 +17,7 @@ import {
  * @param ratio - The split ratio (e.g., 2 for a 2-for-1 split)
  * @param time - The transaction time (default: current date)
  * @throws Error if the split ratio is not positive
+ * @group Position
  */
 export function handleSplit(
   pos: Position,
@@ -70,6 +71,7 @@ export function handleSplit(
  * @param time - The transaction time (default: current date)
  * @returns The net cash flow after tax (positive for long, negative for short)
  * @throws Error if the dividend amount is negative or tax rate is not between 0 and 1
+ * @group Position
  */
 export function handleCashDividend(
   pos: Position,
@@ -143,6 +145,7 @@ export function handleCashDividend(
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the spinoff ratio is not positive
+ * @group Position
  */
 export function handleSpinoff(
   pos: Position,
@@ -211,6 +214,7 @@ export function handleSpinoff(
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The net cash flow from the merger
  * @throws Error if the merger ratio is not positive or cash component is negative
+ * @group Position
  */
 export function handleMerger(
   pos: Position,

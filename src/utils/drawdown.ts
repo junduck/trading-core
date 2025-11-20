@@ -1,6 +1,9 @@
 import type { NumericBuffer } from "../numeric/utils.js";
 
-/** Result of drawdown/drawup calculation */
+/**
+ * Result of drawdown/drawup calculation
+ * @group Performance Analysis
+ */
 export interface DrawdownResult {
   /** The drawdown/drawup value */
   value: number;
@@ -59,6 +62,7 @@ function calculateMovement(
  * Calculates the maximum absolute drawdown (peak to trough decline) in a numeric buffer.
  * @param buffer - The numeric buffer to analyze
  * @returns The drawdown result with value and position indices
+ * @group Performance Analysis
  */
 export function maxDrawDown(buffer: NumericBuffer): DrawdownResult {
   return calculateMovement(buffer, true, false);
@@ -68,6 +72,7 @@ export function maxDrawDown(buffer: NumericBuffer): DrawdownResult {
  * Calculates the maximum relative drawdown (peak to trough decline as percentage) in a numeric buffer.
  * @param buffer - The numeric buffer to analyze
  * @returns The drawdown result with value and position indices
+ * @group Performance Analysis
  */
 export function maxRelDrawDown(buffer: NumericBuffer): DrawdownResult {
   return calculateMovement(buffer, true, true);
@@ -77,6 +82,7 @@ export function maxRelDrawDown(buffer: NumericBuffer): DrawdownResult {
  * Calculates the maximum absolute drawup (trough to peak increase) in a numeric buffer.
  * @param buffer - The numeric buffer to analyze
  * @returns The drawup result with value and position indices
+ * @group Performance Analysis
  */
 export function maxDrawUp(buffer: NumericBuffer): DrawdownResult {
   return calculateMovement(buffer, false, false);
@@ -86,6 +92,7 @@ export function maxDrawUp(buffer: NumericBuffer): DrawdownResult {
  * Calculates the maximum relative drawup (trough to peak increase as percentage) in a numeric buffer.
  * @param buffer - The numeric buffer to analyze
  * @returns The drawup result with value and position indices
+ * @group Performance Analysis
  */
 export function maxRelDrawUp(buffer: NumericBuffer): DrawdownResult {
   return calculateMovement(buffer, false, true);

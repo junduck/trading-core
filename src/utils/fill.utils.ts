@@ -10,6 +10,7 @@ import {
 
 /**
  * Result of applying fill(s) to a position.
+ * @group Position
  */
 export interface ApplyFillResult {
   /** The fills that were applied */
@@ -27,6 +28,7 @@ export interface ApplyFillResult {
  * @param fill - The fill to apply
  * @param closeStrategy - Lot closing strategy for closing positions (default: "FIFO")
  * @returns Result with fill, cash flow, and realized PnL
+ * @group Position
  */
 export function applyFill(
   position: Position,
@@ -103,6 +105,7 @@ export function applyFill(
  * @param closeStrategy - Lot closing strategy for closing positions (default: "FIFO")
  * @returns Cumulative result with all fills and totals
  * @throws Error if any fill cannot be applied
+ * @group Position
  */
 export function applyFills(
   position: Position,

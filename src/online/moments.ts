@@ -3,6 +3,7 @@ import { center_moment } from "../utils/misc.js";
 
 /**
  * O(1) cumulative moments up to 3rd or 4th order.
+ * @group Online Statistics
  */
 class CuMoments {
   private readonly cma1: CMA;
@@ -57,6 +58,7 @@ class CuMoments {
 
 /**
  * O(1) cumulative skewness.
+ * @group Online Statistics
  */
 export class CuSkew {
   private readonly moments: CuMoments;
@@ -74,6 +76,7 @@ export class CuSkew {
 
 /**
  * O(1) cumulative kurtosis.
+ * @group Online Statistics
  */
 export class CuKurt {
   private readonly moments: CuMoments;

@@ -1,6 +1,7 @@
 /**
  * Represents a tradable asset in a SPOT market.
  * Contains metadata and trading specifications for the asset.
+ * @group Market Data
  */
 export interface Asset {
   /** Unique identifier for the asset (e.g., "BTCUSDT", "AAPL") */

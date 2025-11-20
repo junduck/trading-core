@@ -4,6 +4,7 @@ import { Deque } from "../containers/deque.js";
 /**
  * Rolling minimum over a sliding window using monotonic deque.
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingMin {
   readonly buffer: CircularBuffer<number>;
@@ -37,6 +38,7 @@ export class RollingMin {
 /**
  * Rolling maximum over a sliding window using monotonic deque.
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingMax {
   readonly buffer: CircularBuffer<number>;
@@ -70,6 +72,7 @@ export class RollingMax {
 /**
  * Rolling minimum and maximum over a sliding window.
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingMinMax {
   readonly buffer: CircularBuffer<number>;
@@ -118,6 +121,7 @@ export class RollingMinMax {
  * Rolling minimum with position tracking over a sliding window.
  * Returns both minimum value and its index within the window (0 = oldest).
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingArgMin {
   readonly buffer: CircularBuffer<number>;
@@ -160,6 +164,7 @@ export class RollingArgMin {
  * Rolling maximum with position tracking over a sliding window.
  * Returns both maximum value and its index within the window (0 = oldest).
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingArgMax {
   readonly buffer: CircularBuffer<number>;
@@ -202,6 +207,7 @@ export class RollingArgMax {
  * Rolling minimum and maximum with position tracking over a sliding window.
  * Returns both min/max values and their indices within the window (0 = oldest).
  * O(1) amortized time per update.
+ * @group Rolling Statistics
  */
 export class RollingArgMinMax {
   readonly buffer: CircularBuffer<number>;

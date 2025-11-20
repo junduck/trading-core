@@ -1,0 +1,36 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "includeVersion": true,
+  "skipErrorChecking": false,
+  "categorizeByGroup": true,
+  "groupOrder": [
+    "Portfolio",
+    "Position",
+    "Market Data",
+    "Order Management",
+    "Data Structures",
+    "Performance Analysis",
+    "Online Statistics",
+    "Rolling Statistics",
+    "Numeric Utilities",
+    "Numeric Utilities - Statistics",
+    "Numeric Utilities - Series Transform",
+    "Numeric Utilities - Array Reducers",
+    "Numeric Utilities - Accumulator",
+    "*"
+  ],
+  "searchCategoryBoosts": {
+    "Portfolio": 1.5,
+    "Position": 1.5,
+    "Online Statistics": 1.3,
+    "Rolling Statistics": 1.3
+  }
+}

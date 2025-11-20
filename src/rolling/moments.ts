@@ -58,6 +58,7 @@ class RollingMoments {
 
 /**
  * O(1) rolling skewness.
+ * @group Rolling Statistics
  */
 export class RollingSkew {
   private readonly moments: RollingMoments;
@@ -75,6 +76,7 @@ export class RollingSkew {
 
 /**
  * O(1) rolling kurtosis.
+ * @group Rolling Statistics
  */
 export class RollingKurt {
   private readonly moments: RollingMoments;

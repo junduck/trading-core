@@ -3,6 +3,7 @@ import { corr } from "./stats.js";
 /**
  * Returns indices that would sort the array in ascending order.
  * Uses stable sort.
+ * @group Numeric Utilities - Statistics
  */
 export function argsort(x: number[]): number[] {
   const n = x.length;
@@ -18,6 +19,7 @@ export function argsort(x: number[]): number[] {
  * Returns fractional ranks in [0, 1] range.
  * Smallest value gets 0, largest gets 1.
  * Tied values receive the average of their ranks.
+ * @group Numeric Utilities - Statistics
  */
 export function rank(x: number[]): number[] {
   const n = x.length;
@@ -48,6 +50,7 @@ export function rank(x: number[]): number[] {
 /**
  * Spearman rank correlation coefficient.
  * Measures monotonic relationship between two variables.
+ * @group Numeric Utilities - Statistics
  */
 export function spearman(x: number[], y: number[]): number {
   if (x.length !== y.length) return NaN;

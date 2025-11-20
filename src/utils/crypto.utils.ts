@@ -19,6 +19,7 @@ import {
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the hard fork ratio is not positive
+ * @group Position
  */
 export function handleHardFork(
   pos: Position,
@@ -86,6 +87,7 @@ export function handleHardFork(
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if both holderSymbol and fixedAmount are null, or amountPerToken is negative
+ * @group Position
  */
 export function handleAirdrop(
   pos: Position,
@@ -155,6 +157,7 @@ export function handleAirdrop(
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @throws Error if the swap ratio is not positive
+ * @group Position
  */
 export function handleTokenSwap(
   pos: Position,
@@ -227,6 +230,7 @@ export function handleTokenSwap(
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The total quantity of rewards received
  * @throws Error if the reward amount is negative
+ * @group Position
  */
 export function handleStakingReward(
   pos: Position,

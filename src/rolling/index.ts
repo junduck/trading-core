@@ -24,3 +24,4 @@ export {
 export { RollingMedian, RollingQuantile } from "./rank.js";
 export { RollingSkew, RollingKurt } from "./moments.js";
 export { RollingHistogram } from "./histogram.js";
+export { MeanAbsDeviation, MedianAbsDeviation, IQR } from "./deviation.js";

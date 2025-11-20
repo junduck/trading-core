@@ -1,10 +1,12 @@
 /**
  * Type of order execution for SPOT markets
+ * @group Order Management
  */
 export type OrderType = "MARKET" | "LIMIT" | "STOP" | "STOP_LIMIT";
 
 /**
  * Current status of the order
+ * @group Order Management
  */
 export type OrderStatus =
   | "OPEN" // Order placed but not filled yet
@@ -17,6 +19,7 @@ export type OrderStatus =
  * Order action combining side and position effect.
  * Type-safe combinations ensure BUY can only open long or close short,
  * and SELL can only close long or open short.
+ * @group Order Management
  */
 export type OrderAction =
   | { side: "BUY"; effect: "OPEN_LONG" }
@@ -24,16 +27,23 @@ export type OrderAction =
   | { side: "SELL"; effect: "CLOSE_LONG" }
   | { side: "SELL"; effect: "OPEN_SHORT" };
 
-/** Helper type for order side */
+/**
+ * Helper type for order side
+ * @group Order Management
+ */
 export type OrderSide = OrderAction["side"];
 
-/** Helper type for position effect */
+/**
+ *  Helper type for position effect
+ * @group Order Management
+ */
 export type PositionEffect = OrderAction["effect"];
 
 /**
  * Order represents the intent to trade.
  * Contains immutable order parameters that don't change during execution.
  * Uses OrderAction to ensure type-safe side/effect combinations.
+ * @group Order Management
  */
 export type Order = OrderAction & {
   /** Unique identifier for this order */
@@ -62,6 +72,7 @@ export type Order = OrderAction & {
  * OrderState extends Order with execution state.
  * Tracks the current state of order execution (GTC - Good Till Cancelled).
  * Can be partially filled over multiple Fill records.
+ * @group Order Management
  */
 export type OrderState = Order & {
   /** Quantity filled so far */
@@ -81,6 +92,7 @@ export type OrderState = Order & {
  * Fill represents an actual execution of an order.
  * Multiple fills can occur for a single order (partial fills).
  * Uses OrderAction to ensure type-safe side/effect combinations.
+ * @group Order Management
  */
 export type Fill = OrderAction & {
   /** Unique identifier for this fill (for audit trail) */

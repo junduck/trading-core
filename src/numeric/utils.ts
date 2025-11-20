@@ -1,3 +1,8 @@
+/**
+ * Represents an indexable, sized numeric container
+ * @group Data Structures
+ * @group Numeric Utilities
+ */
 export interface NumericBuffer {
   at(index: number): number | undefined;
   length: number;
@@ -44,7 +49,10 @@ export function nth_element(
   return arr[left]!;
 }
 
-/** Greatest common divisor using Euclidean algorithm. */
+/**
+ * Greatest common divisor using Euclidean algorithm.
+ * @group Numeric Utilities
+ */
 export function gcd(m: number, n: number): number {
   m = Math.abs(m);
   n = Math.abs(n);
@@ -56,13 +64,19 @@ export function gcd(m: number, n: number): number {
   return m;
 }
 
-/** Least common multiple. */
+/**
+ * Least common multiple.
+ * @group Numeric Utilities
+ */
 export function lcm(m: number, n: number): number {
   if (m === 0 || n === 0) return 0;
   return Math.abs(m * n) / gcd(m, n);
 }
 
-/** Midpoint index, avoiding overflow. */
+/**
+ * Midpoint index, avoiding overflow.
+ * @group Numeric Utilities
+ */
 export function midpoint(idxa: number, idxb?: number): number {
   if (idxb === undefined) {
     return Math.floor(idxa / 2);
@@ -71,17 +85,26 @@ export function midpoint(idxa: number, idxb?: number): number {
   }
 }
 
-/** Linear interpolation between a and b. */
+/**
+ *  Linear interpolation between a and b.
+ * @group Numeric Utilities
+ */
 export function lerp(a: number, b: number, t: number): number {
   return a + t * (b - a);
 }
 
-/** Inverse linear interpolation: find t such that lerp(a, b, t) = v. */
+/**
+ * Inverse linear interpolation: find t such that lerp(a, b, t) = v.
+ * @group Numeric Utilities
+ */
 export function invLerp(a: number, b: number, v: number): number {
   return (v - a) / (b - a);
 }
 
-/** Remap value from [inMin, inMax] to [outMin, outMax]. */
+/**
+ * Remap value from [inMin, inMax] to [outMin, outMax].
+ * @group Numeric Utilities
+ */
 export function remap(
   v: number,
   inMin: number,
@@ -92,7 +115,10 @@ export function remap(
   return lerp(outMin, outMax, invLerp(inMin, inMax, v));
 }
 
-/** Clamp value to [min, max]. */
+/**
+ *  Clamp value to [min, max].
+ * @group Numeric Utilities
+ */
 export function clamp(value: number, min: number, max: number): number {
   return value < min ? min : value > max ? max : value;
 }

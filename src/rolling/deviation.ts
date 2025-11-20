@@ -3,6 +3,11 @@ import { SMA } from "./average.js";
 import { RollingMedian } from "./rank.js";
 import { nth_element } from "../numeric/utils.js";
 
+/**
+ * Rolling Mean Absolute Deviation.
+ * MeadAD = mean(|x_i - mean(x)|)
+ * @group Rolling Statistics
+ */
 export class MeanAbsDeviation {
   private sma: SMA;
   readonly buffer: CircularBuffer<number>;
@@ -29,7 +34,7 @@ export class MeanAbsDeviation {
 /**
  * Rolling Median Absolute Deviation (MAD).
  * MAD = median(|x_i - median(x)|)
- *
+ * @group Rolling Statistics
  */
 export class MedianAbsDeviation {
   private median: RollingMedian;
@@ -76,6 +81,7 @@ export class MedianAbsDeviation {
 /**
  * Rolling Interquartile Range (IQR).
  * IQR = Q3 - Q1 (75th percentile - 25th percentile)
+ * @group Rolling Statistics
  */
 export class IQR {
   readonly buffer: CircularBuffer<number>;

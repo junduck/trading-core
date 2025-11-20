@@ -2,6 +2,7 @@ import { Kahan } from "../utils/accum.js";
 
 /**
  * O(1) cumulative moving average (CMA).
+ * @group Online Statistics
  */
 export class CMA {
   private cma: Kahan = new Kahan();

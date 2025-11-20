@@ -310,6 +310,7 @@ function validateStopOrderDirection(
  * @param position - Current position in the currency
  * @param snapshot - Current market prices (optional, but recommended)
  * @returns Validation result with structured error if invalid
+ * @group Order Management
  */
 export function validateOrder(
   order: Order,

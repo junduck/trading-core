@@ -3,6 +3,7 @@ import type { Asset } from "./asset.js";
 /**
  * Defines the set of all available assets in the trading universe.
  * Used in backtesting to specify which assets are available for trading.
+ * @group Market Data
  */
 export interface Universe {
   /** Set of asset symbols available for trading */
@@ -69,6 +70,7 @@ export interface Universe {
 /**
  * Represents a snapshot of market prices at a specific point in time.
  * Used for portfolio valuation and backtesting.
+ * @group Market Data
  */
 export interface MarketSnapshot {
   /** Map of asset symbols to their current prices */
@@ -78,6 +80,10 @@ export interface MarketSnapshot {
   timestamp: Date;
 }
 
+/**
+ * Represent a market quote data for a specific time.
+ * @group Market Data
+ */
 export interface MarketQuote {
   /** Symbol of the asset this quote refers to */
   symbol: string;
@@ -110,7 +116,10 @@ export interface MarketQuote {
   preClose?: number;
 }
 
-/** Standard time intervals for market bar data */
+/**
+ * Standard time intervals for market bar data
+ * @group Market Data
+ */
 export type MarketBarInterval =
   | "1m"
   | "5m"
@@ -126,6 +135,7 @@ export type MarketBarInterval =
 /**
  * OHLCV (Open-High-Low-Close-Volume) bar data for a specific time interval.
  * Represents aggregated trading data over a period.
+ * @group Market Data
  */
 export interface MarketBar {
   /** Symbol of the asset */

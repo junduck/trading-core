@@ -12,6 +12,7 @@ import type { CloseStrategy } from "../types/trade.js";
  * @param initialCash - Initial cash balance (default: 0)
  * @param time - Optional creation timestamp (defaults to current date)
  * @returns A new Position instance
+ * @group Position
  */
 export function createPosition(initialCash: number = 0, time?: Date): Position {
   return {
@@ -26,6 +27,7 @@ export function createPosition(initialCash: number = 0, time?: Date): Position {
  * Validates position integrity by checking that lot totals match position totals.
  * @param pos - The position to validate
  * @returns True if position is valid, false otherwise
+ * @group Position
  */
 export function validatePosition(pos: Position): boolean {
   // validate long positions
@@ -55,6 +57,7 @@ export function validatePosition(pos: Position): boolean {
  * @param symbol - The asset symbol
  * @param newLot - The new LongPositionLot
  * @param time - The transaction time
+ * @group Position
  */
 export function pushLongPositionLot(
   to: Position,
@@ -87,6 +90,7 @@ export function pushLongPositionLot(
  * @param symbol - The asset symbol
  * @param newLot - The new LongPositionLot to merge
  * @param time - The transaction time
+ * @group Position
  */
 export function amendLongPositionLot(
   to: Position,
@@ -121,6 +125,7 @@ export function amendLongPositionLot(
  * @param symbol - The asset symbol
  * @param newLot - The new ShortPositionLot
  * @param time - The transaction time
+ * @group Position
  */
 export function pushShortPositionLot(
   to: Position,
@@ -153,6 +158,7 @@ export function pushShortPositionLot(
  * @param symbol - The asset symbol
  * @param newLot - The new ShortPositionLot to merge
  * @param time - The transaction time
+ * @group Position
  */
 export function amendShortPositionLot(
   to: Position,
@@ -191,6 +197,7 @@ export function amendShortPositionLot(
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The cash flow (negative value representing cost)
+ * @group Position
  */
 export function openLong(
   pos: Position,
@@ -242,6 +249,7 @@ export function openLong(
  * @param time - The transaction time (default: current date)
  * @returns The realised profit or loss
  * @throws Error if no long position exists for the asset
+ * @group Position
  */
 export function closeLong(
   pos: Position,
@@ -323,6 +331,7 @@ export function closeLong(
  * @param time - The transaction time (default: current date)
  * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @returns The cash proceeds from the short sale
+ * @group Position
  */
 export function openShort(
   pos: Position,
@@ -374,6 +383,7 @@ export function openShort(
  * @param time - The transaction time (default: current date)
  * @returns The realised profit or loss
  * @throws Error if no short position exists for the asset
+ * @group Position
  */
 export function closeShort(
   pos: Position,
@@ -445,12 +455,18 @@ export function closeShort(
   return realisedPnL;
 }
 
-/** Calculate average cost per unit for a long position */
+/**
+ * Calculate average cost per unit for a long position
+ * @group Position
+ */
 export function getAverageCost(position: LongPosition): number {
   return position.quantity > 0 ? position.totalCost / position.quantity : 0;
 }
 
-/** Calculate average proceeds per unit for a short position */
+/**
+ * Calculate average proceeds per unit for a short position
+ * @group Position
+ */
 export function getAverageProceeds(position: ShortPosition): number {
   return position.quantity > 0 ? position.totalProceeds / position.quantity : 0;
 }

@@ -3,6 +3,7 @@ import type { Position } from "./position.js";
 /**
  * Represents a trading portfolio for tracking assets and positions in SPOT markets.
  * Pure data structure containing cash balances, positions, and profit/loss tracking.
+ * @group Portfolio
  */
 export interface Portfolio {
   /** Unique identifier for the portfolio */

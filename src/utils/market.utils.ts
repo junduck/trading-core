@@ -14,6 +14,7 @@ import type { Position } from "../types/position.js";
  * @param assets - Map of symbol to Asset
  * @param timestamp - Optional timestamp when this universe is valid
  * @returns A Universe object with all filtering methods implemented
+ * @group Market Data
  */
 export function createUniverse(
   assets: Map<string, Asset>,
@@ -86,6 +87,7 @@ export function createUniverse(
  * @param position - Position to appraise
  * @param snapshot - Market snapshot with current prices
  * @returns Total position value
+ * @group Market Data
  */
 export function appraisePosition(
   position: Position,
@@ -119,6 +121,7 @@ export function appraisePosition(
  * @param portfolio - Portfolio to appraise
  * @param snapshot - Market snapshot with current prices
  * @returns Map of currency to total portfolio value
+ * @group Market Data
  */
 export function appraisePortfolio(
   portfolio: Portfolio,
@@ -141,6 +144,7 @@ export function appraisePortfolio(
  * @param position - Position to calculate unrealized P&L for
  * @param snapshot - Market snapshot with current prices
  * @returns Total unrealized P&L across all positions
+ * @group Market Data
  */
 export function calculateUnrealizedPnL(
   position: Position,
@@ -171,6 +175,7 @@ export function calculateUnrealizedPnL(
 /**
  * Alias for {@link calculateUnrealizedPnL} using British/AU spelling.
  * Provided for consistency with interface field naming (`realisedPnL`).
+ * @group Market Data
  */
 export const calculateUnrealisedPnL = calculateUnrealizedPnL;
 
@@ -183,6 +188,7 @@ export const calculateUnrealisedPnL = calculateUnrealizedPnL;
  * @param asset - The asset to check
  * @param timestamp - The timestamp to check validity against
  * @returns true if the asset is valid at the given timestamp
+ * @group Market Data
  */
 export function isAssetValidAt(asset: Asset, timestamp: Date): boolean {
   const validFromCheck = !asset.validFrom || timestamp >= asset.validFrom;
@@ -198,6 +204,7 @@ export function isAssetValidAt(asset: Asset, timestamp: Date): boolean {
  * @param snapshot - The MarketSnapshot to update
  * @param quote - The MarketQuote containing the new price data
  * @returns The updated MarketSnapshot
+ * @group Market Data
  */
 export function updateSnapshotQuote(
   snapshot: MarketSnapshot,
@@ -222,6 +229,7 @@ export function updateSnapshotQuote(
  * @param snapshot - The MarketSnapshot to update
  * @param bar - The MarketBar containing the new price data
  * @returns The updated MarketSnapshot
+ * @group Market Data
  */
 export function updateSnapshotBar(
   snapshot: MarketSnapshot,

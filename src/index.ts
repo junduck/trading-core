@@ -1,39 +1,41 @@
-// Export all types
+// Portfolio
+export type { Portfolio } from "./types/portfolio.js";
+
+export {
+  create,
+  hasAsset,
+  getPosition,
+  getCash,
+  getCurrencies,
+  getAllSymbols,
+  getOrSetPosition,
+  openLong as portfolioOpenLong,
+  closeLong as portfolioCloseLong,
+  openShort as portfolioOpenShort,
+  closeShort as portfolioCloseShort,
+  handleSplit as portfolioHandleSplit,
+  handleCashDividend as portfolioHandleCashDividend,
+  handleSpinoff as portfolioHandleSpinoff,
+  handleMerger as portfolioHandleMerger,
+  handleHardFork as portfolioHandleHardFork,
+  handleAirdrop as portfolioHandleAirdrop,
+  handleTokenSwap as portfolioHandleTokenSwap,
+  handleStakingReward as portfolioHandleStakingReward,
+} from "./utils/portfolio.utils.js";
+
+// Position
 export type {
-  Asset,
-  Portfolio,
   LongPositionLot,
   LongPosition,
   ShortPositionLot,
   ShortPosition,
   Position,
-  CloseStrategy,
-  Universe,
-  MarketSnapshot,
-  MarketQuote,
-  MarketBarInterval,
-  MarketBar,
-  OrderType,
-  OrderStatus,
-  OrderAction,
-  OrderSide,
-  PositionEffect,
-  Order,
-  OrderState,
-  Fill,
-} from "./types/index.js";
+} from "./types/position.js";
 
-// Export all utility functions and types
+export type { CloseStrategy } from "./types/trade.js";
+
 export {
-  pu,
-  createUniverse,
-  appraisePosition,
-  appraisePortfolio,
-  calculateUnrealizedPnL,
-  calculateUnrealisedPnL,
-  isAssetValidAt,
-  updateSnapshotQuote,
-  updateSnapshotBar,
+  createPosition,
   validatePosition,
   pushLongPositionLot,
   amendLongPositionLot,
@@ -45,61 +47,84 @@ export {
   closeShort,
   getAverageCost,
   getAverageProceeds,
+} from "./utils/position.utils.js";
+
+export {
   handleSplit,
   handleCashDividend,
   handleSpinoff,
   handleMerger,
+} from "./utils/stock.utils.js";
+
+export {
   handleHardFork,
   handleAirdrop,
   handleTokenSwap,
   handleStakingReward,
-  validateOrder,
-  applyFill,
-  applyFills,
-  create,
-  hasAsset,
-  getPosition,
-  getCash,
-  getCurrencies,
-  getAllSymbols,
-  createPosition,
-  getOrSetPosition,
-  portfolioOpenLong,
-  portfolioCloseLong,
-  portfolioOpenShort,
-  portfolioCloseShort,
-  portfolioHandleSplit,
-  portfolioHandleCashDividend,
-  portfolioHandleSpinoff,
-  portfolioHandleMerger,
-  portfolioHandleHardFork,
-  portfolioHandleAirdrop,
-  portfolioHandleTokenSwap,
-  portfolioHandleStakingReward,
-} from "./utils/index.js";
+} from "./utils/crypto.utils.js";
 
-// Export types from utils
+export { applyFill, applyFills } from "./utils/fill.utils.js";
+
+export type { ApplyFillResult } from "./utils/fill.utils.js";
+
+// Market Data
+export type { Asset } from "./types/asset.js";
+
+export type {
+  Universe,
+  MarketSnapshot,
+  MarketQuote,
+  MarketBarInterval,
+  MarketBar,
+} from "./types/market.js";
+
+export {
+  createUniverse,
+  appraisePosition,
+  appraisePortfolio,
+  calculateUnrealizedPnL,
+  calculateUnrealisedPnL,
+  isAssetValidAt,
+  updateSnapshotQuote,
+  updateSnapshotBar,
+} from "./utils/market.utils.js";
+
+// Order Management
+export type {
+  OrderType,
+  OrderStatus,
+  OrderAction,
+  OrderSide,
+  PositionEffect,
+  Order,
+  OrderState,
+  Fill,
+} from "./types/order.js";
+
+export { validateOrder } from "./utils/order.utils.js";
+
 export type {
   OrderValidationError,
   OrderValidationResult,
-  ApplyFillResult,
-} from "./utils/index.js";
+} from "./utils/order.utils.js";
 
-// Export containers
+// Data Structures
 export { CircularBuffer } from "./containers/circular-buffer.js";
 export { Deque } from "./containers/deque.js";
 export { PriorityQueue } from "./containers/priority-queue.js";
 export { RBTree } from "./containers/rbtree.js";
 
-// Export online statistics
+export type { NumericBuffer } from "./numeric/utils.js";
+
+// Online Statistics
 export { CMA } from "./online/average.js";
 export { CountMinSketch, BloomFilter } from "./online/probs.js";
 export { CuVar, CuStddev, CuCov, CuCorr, CuBeta } from "./online/stats.js";
 export { CuSkew, CuKurt } from "./online/moments.js";
 export { CuHistogram } from "./online/histogram.js";
-
-// Export rolling statistics
 export { RollingSum, SMA, EMA, EWMA } from "./rolling/average.js";
+
+// Rolling Statistics
 export {
   RollingVar,
   RollingVarEW,
@@ -114,6 +139,7 @@ export {
   RollingBeta,
   RollingBetaEW,
 } from "./rolling/stats.js";
+
 export {
   RollingMin,
   RollingMax,
@@ -122,11 +148,18 @@ export {
   RollingArgMax,
   RollingArgMinMax,
 } from "./rolling/minmax.js";
+
+export {
+  MeanAbsDeviation,
+  MedianAbsDeviation,
+  IQR,
+} from "./rolling/deviation.js";
+
 export { RollingMedian, RollingQuantile } from "./rolling/rank.js";
 export { RollingSkew, RollingKurt } from "./rolling/moments.js";
 export { RollingHistogram } from "./rolling/histogram.js";
 
-// Export drawdown utilities
+// Performance Analysis
 export {
   maxDrawDown,
   maxRelDrawDown,
@@ -134,7 +167,9 @@ export {
   maxRelDrawUp,
 } from "./utils/drawdown.js";
 
-// Export accumulators
+export type { DrawdownResult } from "./utils/drawdown.js";
+
+// Numeric Utilities - Accumulator
 export {
   Kahan,
   SmoothedAccum,
@@ -142,8 +177,7 @@ export {
   wilders_factor,
 } from "./utils/accum.js";
 
-// Export numeric utilities
-export type { NumericBuffer } from "./numeric/utils.js";
+// Numeric Utilities
 export {
   gcd,
   lcm,
@@ -153,7 +187,11 @@ export {
   remap,
   clamp,
 } from "./numeric/utils.js";
+
+// Numeric Utilities - Array Reducers
 export { sum, min, max, argmin, argmax } from "./numeric/array.js";
+
+// Numeric Utilities - Series Transform
 export {
   norm,
   sign,
@@ -168,6 +206,8 @@ export {
   locf,
   winsorize,
 } from "./numeric/series.js";
+
+// Numeric Utilities - Statistics
 export {
   mean,
   variance,
@@ -179,4 +219,5 @@ export {
   median,
   quantile,
 } from "./numeric/stats.js";
+
 export { argsort, rank, spearman } from "./numeric/rank.js";

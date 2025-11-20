@@ -13,6 +13,7 @@ import * as cryptoUtils from "./crypto.utils.js";
  * @param positions - Optional initial positions map
  * @param modified - Optional modification timestamp (defaults to current date)
  * @returns A new Portfolio instance
+ * @group Portfolio
  */
 export function create(
   id: string,
@@ -34,6 +35,7 @@ export function create(
  * @param portfolio - The portfolio to check
  * @param asset - The asset to look for
  * @returns True if the asset has a long or short position
+ * @group Portfolio
  */
 export function hasAsset(portfolio: Portfolio, asset: Asset): boolean {
   const pos = portfolio.positions.get(asset.currency);
@@ -49,6 +51,7 @@ export function hasAsset(portfolio: Portfolio, asset: Asset): boolean {
  * @param portfolio - The portfolio to query
  * @param currency - The currency code to look up
  * @returns The Position for that currency, or undefined if not found
+ * @group Portfolio
  */
 export function getPosition(
   portfolio: Portfolio,
@@ -62,6 +65,7 @@ export function getPosition(
  * @param portfolio - The portfolio to query
  * @param currency - The currency code to look up
  * @returns The cash balance, or 0 if currency not found
+ * @group Portfolio
  */
 export function getCash(portfolio: Portfolio, currency: string): number {
   return portfolio.positions.get(currency)?.cash ?? 0;
@@ -71,6 +75,7 @@ export function getCash(portfolio: Portfolio, currency: string): number {
  * Gets all currencies in the portfolio.
  * @param portfolio - The portfolio to query
  * @returns Array of currency codes
+ * @group Portfolio
  */
 export function getCurrencies(portfolio: Portfolio): string[] {
   return Array.from(portfolio.positions.keys());
@@ -80,6 +85,7 @@ export function getCurrencies(portfolio: Portfolio): string[] {
  * Gets all symbols in the portfolio organized by currency.
  * @param portfolio - The portfolio to query
  * @returns Map of currency code to array of symbols with positions
+ * @group Portfolio
  */
 export function getAllSymbols(portfolio: Portfolio): Map<string, string[]> {
   const result = new Map<string, string[]>();
@@ -118,6 +124,7 @@ export function getAllSymbols(portfolio: Portfolio): Map<string, string[]> {
  * @param currency - The currency code for the new position
  * @param initialCash - Initial cash balance (default: 0)
  * @param time - Optional creation timestamp (defaults to current date)
+ * @group Portfolio
  */
 export function createPosition(
   portfolio: Portfolio,
@@ -136,6 +143,7 @@ export function createPosition(
  * @param currency - The currency code for the position
  * @param time - Optional timestamp for new position creation (defaults to current date)
  * @returns The existing or newly created Position
+ * @group Portfolio
  */
 export function getOrSetPosition(
   portfolio: Portfolio,
@@ -155,7 +163,10 @@ export function getOrSetPosition(
   return pos;
 }
 
-/** Opens a long position by purchasing an asset. Mutates portfolio. */
+/**
+ * Opens a long position by purchasing an asset. Mutates portfolio.
+ * @group Portfolio
+ */
 export function openLong(
   portfolio: Portfolio,
   asset: Asset,
@@ -181,7 +192,10 @@ export function openLong(
   return cashFlow;
 }
 
-/** Closes a long position by selling an asset. Mutates portfolio. */
+/**
+ * Closes a long position by selling an asset. Mutates portfolio.
+ * @group Portfolio
+ */
 export function closeLong(
   portfolio: Portfolio,
   asset: Asset,
@@ -210,7 +224,10 @@ export function closeLong(
   return pnl;
 }
 
-/** Opens a short position by borrowing and selling an asset. Mutates portfolio. */
+/**
+ * Opens a short position by borrowing and selling an asset. Mutates portfolio.
+ * @group Portfolio
+ */
 export function openShort(
   portfolio: Portfolio,
   asset: Asset,
@@ -236,7 +253,10 @@ export function openShort(
   return proceeds;
 }
 
-/** Closes a short position by buying back the asset. Mutates portfolio. */
+/**
+ * Closes a short position by buying back the asset. Mutates portfolio.
+ * @group Portfolio
+ */
 export function closeShort(
   portfolio: Portfolio,
   asset: Asset,
@@ -265,7 +285,10 @@ export function closeShort(
   return pnl;
 }
 
-/** Handles a stock split by adjusting position quantities and costs. Mutates portfolio. */
+/**
+ * Handles a stock split by adjusting position quantities and costs. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleSplit(
   portfolio: Portfolio,
   asset: Asset,
@@ -280,7 +303,10 @@ export function handleSplit(
   portfolio.modified = actTime;
 }
 
-/** Handles a cash dividend payment. Mutates portfolio. */
+/**
+ * Handles a cash dividend payment. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleCashDividend(
   portfolio: Portfolio,
   asset: Asset,
@@ -303,7 +329,10 @@ export function handleCashDividend(
   return cashFlow;
 }
 
-/** Handles a corporate spinoff. Mutates portfolio. */
+/**
+ * Handles a corporate spinoff. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleSpinoff(
   portfolio: Portfolio,
   asset: Asset,
@@ -319,7 +348,10 @@ export function handleSpinoff(
   portfolio.modified = actTime;
 }
 
-/** Handles a corporate merger. Mutates portfolio. */
+/**
+ * Handles a corporate merger. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleMerger(
   portfolio: Portfolio,
   asset: Asset,
@@ -344,7 +376,10 @@ export function handleMerger(
   return cashFlow;
 }
 
-/** Handles a hard fork. Mutates portfolio. */
+/**
+ * Handles a hard fork. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleHardFork(
   portfolio: Portfolio,
   asset: Asset,
@@ -360,7 +395,10 @@ export function handleHardFork(
   portfolio.modified = actTime;
 }
 
-/** Handles an airdrop. Mutates portfolio. */
+/**w
+ * Handles an airdrop. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleAirdrop(
   portfolio: Portfolio,
   currency: string,
@@ -395,7 +433,10 @@ export function handleAirdrop(
   portfolio.modified = actTime;
 }
 
-/** Handles a token swap/migration. Mutates portfolio. */
+/**
+ * Handles a token swap/migration. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleTokenSwap(
   portfolio: Portfolio,
   asset: Asset,
@@ -411,7 +452,10 @@ export function handleTokenSwap(
   portfolio.modified = actTime;
 }
 
-/** Handles staking rewards. Mutates portfolio. */
+/**
+ * Handles staking rewards. Mutates portfolio.
+ * @group Portfolio
+ */
 export function handleStakingReward(
   portfolio: Portfolio,
   asset: Asset,

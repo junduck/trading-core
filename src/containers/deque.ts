@@ -5,6 +5,7 @@
  * When capacity is reached, the deque rebalances if skewed or expands if truly full.
  *
  * @template T The type of elements stored in the deque
+ * @group Data Structures
  */
 export class Deque<T> {
   private size_: number;

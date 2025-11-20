@@ -1,6 +1,7 @@
 /**
  * Cumulative histogram over entire data stream.
  * Maintains frequency distribution across fixed bins.
+ * @group Online Statistics
  */
 export class CuHistogram {
   private readonly edges: readonly number[];

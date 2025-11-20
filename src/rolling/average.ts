@@ -3,6 +3,7 @@ import { exp_factor, SmoothedAccum, Kahan } from "../utils/accum.js";
 
 /**
  * O(1) moving sum using circular buffer and Kahan summation.
+ * @group Rolling Statistics
  */
 export class RollingSum {
   readonly buffer: CircularBuffer<number>;
@@ -26,6 +27,7 @@ export class RollingSum {
 
 /**
  * O(1) simple moving average (SMA) using circular buffer.
+ * @group Rolling Statistics
  */
 export class SMA {
   readonly buffer: CircularBuffer<number>;
@@ -53,6 +55,7 @@ export class SMA {
 /**
  * Exponential moving average (EMA) with infinite window.
  * EMA = alpha * x + (1 - alpha) * EMA_prev
+ * @group Rolling Statistics
  */
 export class EMA {
   private alpha: number;
@@ -83,6 +86,7 @@ export class EMA {
 /**
  * O(1) exponential weighted moving average with fixed window.
  * Combines exponential weighting with sliding window.
+ * @group Rolling Statistics
  */
 export class EWMA {
   readonly buffer: CircularBuffer<number>;

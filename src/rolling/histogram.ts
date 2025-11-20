@@ -3,6 +3,7 @@ import { CircularBuffer } from "../containers/circular-buffer.js";
 /**
  * Rolling histogram over a sliding window.
  * Maintains frequency distribution across fixed bins.
+ * @group Rolling Statistics
  */
 export class RollingHistogram {
   readonly buffer: CircularBuffer<number>;

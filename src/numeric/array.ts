@@ -1,4 +1,7 @@
-/** Sum of array elements. */
+/**
+ * Sum of array elements.
+ * @group Numeric Utilities - Array Reducers
+ */
 export function sum(x: number[]): number {
   let s = 0;
   for (let i = 0; i < x.length; i++) {
@@ -7,7 +10,10 @@ export function sum(x: number[]): number {
   return s;
 }
 
-/** Minimum value in array. */
+/**
+ * Minimum value in array.
+ * @group Numeric Utilities - Array Reducers
+ */
 export function min(x: number[]): number {
   if (x.length === 0) return NaN;
   let m = x[0]!;
@@ -17,7 +23,10 @@ export function min(x: number[]): number {
   return m;
 }
 
-/** Maximum value in array. */
+/**
+ * Maximum value in array.
+ * @group Numeric Utilities - Array Reducers
+ */
 export function max(x: number[]): number {
   if (x.length === 0) return NaN;
   let m = x[0]!;
@@ -27,7 +36,10 @@ export function max(x: number[]): number {
   return m;
 }
 
-/** Index of minimum value. Returns -1 for empty array. */
+/**
+ * Index of minimum value. Returns -1 for empty array.
+ * @group Numeric Utilities - Array Reducers
+ */
 export function argmin(x: number[]): number {
   if (x.length === 0) return -1;
   let idx = 0;
@@ -41,7 +53,10 @@ export function argmin(x: number[]): number {
   return idx;
 }
 
-/** Index of maximum value. Returns -1 for empty array. */
+/**
+ * Index of maximum value. Returns -1 for empty array.
+ * @group Numeric Utilities - Array Reducers
+ */
 export function argmax(x: number[]): number {
   if (x.length === 0) return -1;
   let idx = 0;

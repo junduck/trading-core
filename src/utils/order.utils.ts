@@ -1,6 +1,7 @@
 /**
  * Structured validation errors for order validation failures.
  * Each error type contains relevant fields to describe the failure.
+ * @group Order Management
  */
 export type OrderValidationError =
   | {
@@ -51,6 +52,7 @@ export type OrderValidationError =
 
 /**
  * Validation result for order checks
+ * @group Order Management
  */
 export interface OrderValidationResult {
   /** Whether the order is valid */
