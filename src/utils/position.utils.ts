@@ -65,6 +65,9 @@ export function pushLongPositionLot(
   newLot: LongPositionLot,
   time: Date
 ) {
+  // Initialize long positions map if needed
+  to.long ??= new Map();
+
   let pos = to.long!.get(symbol);
   if (!pos) {
     pos = {
@@ -98,6 +101,9 @@ export function amendLongPositionLot(
   newLot: LongPositionLot,
   time: Date
 ) {
+  // Initialize long positions map if needed
+  to.long ??= new Map();
+
   let pos = to.long!.get(symbol);
   if (!pos) {
     pos = {
@@ -133,6 +139,9 @@ export function pushShortPositionLot(
   newLot: ShortPositionLot,
   time: Date
 ) {
+  // Initialize short positions map if needed
+  to.short ??= new Map();
+
   let pos = to.short!.get(symbol);
   if (!pos) {
     pos = {
@@ -166,6 +175,9 @@ export function amendShortPositionLot(
   newLot: ShortPositionLot,
   time: Date
 ) {
+  // Initialize short positions map if needed
+  to.short ??= new Map();
+
   let pos = to.short!.get(symbol);
   if (!pos) {
     pos = {
@@ -221,9 +233,6 @@ export function openLong(
     price,
     totalCost: cost,
   };
-
-  // Initialize long positions map if needed
-  pos.long ??= new Map();
 
   // Add to position
   if (disableLot) {
@@ -355,9 +364,6 @@ export function openShort(
     price,
     totalProceeds: proceeds,
   };
-
-  // Initialize short positions map if needed
-  pos.short ??= new Map();
 
   // Add to position
   if (disableLot) {
