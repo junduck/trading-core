@@ -135,9 +135,6 @@ export function handleAirdrop(
     totalCost: 0,
   };
 
-  // Initialize if needed
-  pos.long ??= new Map();
-
   // Add to position
   if (disableLot) {
     amendLongPositionLot(pos, airdropSymbol, newLot, actTime);
