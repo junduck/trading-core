@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2025-11-21
+
+### Changed
+
+- **Position Utilities:** Moved position map initialization (`long`/`short`) from `openLong()`/`openShort()` to individual lot operation functions (`pushLongPositionLot`, `amendLongPositionLot`, `pushShortPositionLot`, `amendShortPositionLot`) for safer API usage when calling lot operations directly
+- Updated JSDoc with group annotations for better documentation organization
+
+### Fixed
+
+- Corrected `CuCov` test case to use `ddof: 1` for proper covariance calculation validation
+
 ## [2.1.1] - 2025-11-20
 
 ### Added
