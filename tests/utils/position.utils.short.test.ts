@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { openShort, closeShort } from "../../src/utils/position.utils.js";
-import type { Position } from "../../src/types/position.js";
+import {
+  openShort,
+  closeShort,
+  createPosition,
+  pushShortPositionLot,
+  amendShortPositionLot,
+} from "../../src/utils/position.utils.js";
+import type { Position, ShortPositionLot } from "../../src/types/position.js";
 import { round } from "./position-test-helper.js";
 
 function createTestPosition(cash: number = 100_000): Position {
@@ -270,6 +276,160 @@ describe("Position Utils - Short Position Operations", () => {
       expect(shortPosition!.lots[0].quantity).toBe(15);
       expect(shortPosition!.lots[0].price).toBe(120); // Updated to latest price
       expect(shortPosition!.lots[0].totalProceeds).toBe(1_380);
+    });
+  });
+
+  describe("pushShortPositionLot - Direct Lot Operations", () => {
+    it("should push first lot to empty position without affecting cash", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const lot: ShortPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalProceeds: 1_000,
+      };
+
+      pushShortPositionLot(pos, "AAPL", lot, time);
+
+      // Cash should not change when pushing lots directly
+      expect(pos.cash).toBe(10_000);
+
+      // Verify position was created
+      const shortPosition = pos.short?.get("AAPL");
+      expect(shortPosition).toBeDefined();
+      expect(shortPosition!.quantity).toBe(10);
+      expect(shortPosition!.totalProceeds).toBe(1_000);
+      expect(shortPosition!.realisedPnL).toBe(0);
+      expect(shortPosition!.modified).toBe(time);
+
+      // Verify lot
+      expect(shortPosition!.lots).toHaveLength(1);
+      expect(shortPosition!.lots[0]).toBe(lot);
+    });
+
+    it("should push multiple lots and accumulate position totals", () => {
+      const pos = createPosition(10_000);
+      const time1 = new Date("2024-01-01");
+      const time2 = new Date("2024-01-02");
+
+      const lot1: ShortPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalProceeds: 1_000,
+      };
+
+      const lot2: ShortPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalProceeds: 4_000,
+      };
+
+      pushShortPositionLot(pos, "AAPL", lot1, time1);
+      pushShortPositionLot(pos, "AAPL", lot2, time2);
+
+      // Cash should remain unchanged
+      expect(pos.cash).toBe(10_000);
+
+      // Verify position totals
+      const shortPosition = pos.short?.get("AAPL");
+      expect(shortPosition).toBeDefined();
+      expect(shortPosition!.quantity).toBe(30);
+      expect(shortPosition!.totalProceeds).toBe(5_000);
+      expect(shortPosition!.modified).toBe(time2);
+
+      // Verify lots array
+      expect(shortPosition!.lots).toHaveLength(2);
+      expect(shortPosition!.lots[0]).toBe(lot1);
+      expect(shortPosition!.lots[1]).toBe(lot2);
+    });
+
+    it("should handle multiple symbols independently", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const applLot: ShortPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalProceeds: 1_000,
+      };
+
+      const msftLot: ShortPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalProceeds: 4_000,
+      };
+
+      pushShortPositionLot(pos, "AAPL", applLot, time);
+      pushShortPositionLot(pos, "MSFT", msftLot, time);
+
+      // Verify both positions exist
+      expect(pos.short?.size).toBe(2);
+
+      const appl = pos.short?.get("AAPL");
+      expect(appl!.quantity).toBe(10);
+      expect(appl!.totalProceeds).toBe(1_000);
+
+      const msft = pos.short?.get("MSFT");
+      expect(msft!.quantity).toBe(20);
+      expect(msft!.totalProceeds).toBe(4_000);
+    });
+  });
+
+  describe("amendShortPositionLot - Direct Lot Operations", () => {
+    it("should create first lot to empty position without affecting cash", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const lot: ShortPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalProceeds: 1_000,
+      };
+
+      amendShortPositionLot(pos, "AAPL", lot, time);
+
+      expect(pos.cash).toBe(10_000);
+
+      const shortPosition = pos.short?.get("AAPL");
+      expect(shortPosition).toBeDefined();
+      expect(shortPosition!.quantity).toBe(10);
+      expect(shortPosition!.totalProceeds).toBe(1_000);
+      expect(shortPosition!.lots).toHaveLength(1);
+      expect(shortPosition!.lots[0].price).toBe(100);
+    });
+
+    it("should merge into single lot when called multiple times", () => {
+      const pos = createPosition(10_000);
+      const time1 = new Date("2024-01-01");
+      const time2 = new Date("2024-01-02");
+
+      const lot1: ShortPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalProceeds: 1_000,
+      };
+
+      const lot2: ShortPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalProceeds: 4_000,
+      };
+
+      amendShortPositionLot(pos, "AAPL", lot1, time1);
+      amendShortPositionLot(pos, "AAPL", lot2, time2);
+
+      expect(pos.cash).toBe(10_000);
+
+      const shortPosition = pos.short?.get("AAPL");
+      expect(shortPosition!.quantity).toBe(30);
+      expect(shortPosition!.totalProceeds).toBe(5_000);
+
+      // Only one lot exists (merged)
+      expect(shortPosition!.lots).toHaveLength(1);
+      expect(shortPosition!.lots[0].quantity).toBe(30);
+      expect(shortPosition!.lots[0].price).toBe(200);
+      expect(shortPosition!.lots[0].totalProceeds).toBe(5_000);
     });
   });
 });

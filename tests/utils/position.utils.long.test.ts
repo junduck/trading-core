@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { openLong, closeLong } from "../../src/utils/position.utils.js";
-import type { Position } from "../../src/types/position.js";
+import {
+  openLong,
+  closeLong,
+  createPosition,
+  pushLongPositionLot,
+  amendLongPositionLot,
+} from "../../src/utils/position.utils.js";
+import type { Position, LongPositionLot } from "../../src/types/position.js";
 import { round } from "./position-test-helper.js";
 
 function createTestPosition(cash: number = 100_000): Position {
@@ -270,6 +276,160 @@ describe("Position Utils - Long Position Operations", () => {
       expect(longPosition!.lots[0].quantity).toBe(15);
       expect(longPosition!.lots[0].price).toBe(120); // Updated to latest price
       expect(longPosition!.lots[0].totalCost).toBe(1_820);
+    });
+  });
+
+  describe("pushLongPositionLot - Direct Lot Operations", () => {
+    it("should push first lot to empty position without affecting cash", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const lot: LongPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalCost: 1_000,
+      };
+
+      pushLongPositionLot(pos, "AAPL", lot, time);
+
+      // Cash should not change when pushing lots directly
+      expect(pos.cash).toBe(10_000);
+
+      // Verify position was created
+      const longPosition = pos.long?.get("AAPL");
+      expect(longPosition).toBeDefined();
+      expect(longPosition!.quantity).toBe(10);
+      expect(longPosition!.totalCost).toBe(1_000);
+      expect(longPosition!.realisedPnL).toBe(0);
+      expect(longPosition!.modified).toBe(time);
+
+      // Verify lot
+      expect(longPosition!.lots).toHaveLength(1);
+      expect(longPosition!.lots[0]).toBe(lot);
+    });
+
+    it("should push multiple lots and accumulate position totals", () => {
+      const pos = createPosition(10_000);
+      const time1 = new Date("2024-01-01");
+      const time2 = new Date("2024-01-02");
+
+      const lot1: LongPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalCost: 1_000,
+      };
+
+      const lot2: LongPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalCost: 4_000,
+      };
+
+      pushLongPositionLot(pos, "AAPL", lot1, time1);
+      pushLongPositionLot(pos, "AAPL", lot2, time2);
+
+      // Cash should remain unchanged
+      expect(pos.cash).toBe(10_000);
+
+      // Verify position totals
+      const longPosition = pos.long?.get("AAPL");
+      expect(longPosition).toBeDefined();
+      expect(longPosition!.quantity).toBe(30);
+      expect(longPosition!.totalCost).toBe(5_000);
+      expect(longPosition!.modified).toBe(time2);
+
+      // Verify lots array
+      expect(longPosition!.lots).toHaveLength(2);
+      expect(longPosition!.lots[0]).toBe(lot1);
+      expect(longPosition!.lots[1]).toBe(lot2);
+    });
+
+    it("should handle multiple symbols independently", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const applLot: LongPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalCost: 1_000,
+      };
+
+      const msftLot: LongPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalCost: 4_000,
+      };
+
+      pushLongPositionLot(pos, "AAPL", applLot, time);
+      pushLongPositionLot(pos, "MSFT", msftLot, time);
+
+      // Verify both positions exist
+      expect(pos.long?.size).toBe(2);
+
+      const appl = pos.long?.get("AAPL");
+      expect(appl!.quantity).toBe(10);
+      expect(appl!.totalCost).toBe(1_000);
+
+      const msft = pos.long?.get("MSFT");
+      expect(msft!.quantity).toBe(20);
+      expect(msft!.totalCost).toBe(4_000);
+    });
+  });
+
+  describe("amendLongPositionLot - Direct Lot Operations", () => {
+    it("should create first lot to empty position without affecting cash", () => {
+      const pos = createPosition(10_000);
+      const time = new Date();
+
+      const lot: LongPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalCost: 1_000,
+      };
+
+      amendLongPositionLot(pos, "AAPL", lot, time);
+
+      expect(pos.cash).toBe(10_000);
+
+      const longPosition = pos.long?.get("AAPL");
+      expect(longPosition).toBeDefined();
+      expect(longPosition!.quantity).toBe(10);
+      expect(longPosition!.totalCost).toBe(1_000);
+      expect(longPosition!.lots).toHaveLength(1);
+      expect(longPosition!.lots[0].price).toBe(100);
+    });
+
+    it("should merge into single lot when called multiple times", () => {
+      const pos = createPosition(10_000);
+      const time1 = new Date("2024-01-01");
+      const time2 = new Date("2024-01-02");
+
+      const lot1: LongPositionLot = {
+        quantity: 10,
+        price: 100,
+        totalCost: 1_000,
+      };
+
+      const lot2: LongPositionLot = {
+        quantity: 20,
+        price: 200,
+        totalCost: 4_000,
+      };
+
+      amendLongPositionLot(pos, "AAPL", lot1, time1);
+      amendLongPositionLot(pos, "AAPL", lot2, time2);
+
+      expect(pos.cash).toBe(10_000);
+
+      const longPosition = pos.long?.get("AAPL");
+      expect(longPosition!.quantity).toBe(30);
+      expect(longPosition!.totalCost).toBe(5_000);
+
+      // Only one lot exists (merged)
+      expect(longPosition!.lots).toHaveLength(1);
+      expect(longPosition!.lots[0].quantity).toBe(30);
+      expect(longPosition!.lots[0].price).toBe(200);
+      expect(longPosition!.lots[0].totalCost).toBe(5_000);
     });
   });
 });
