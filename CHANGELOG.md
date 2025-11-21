@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-11-22
+
+### Added
+
+**Position Query Utilities:**
+
+- `q` - Opinionated query helpers for convenient position access
+  - `q.qty(pos, symbol)`, `q.cost(pos, symbol)` - Shortcuts for long position queries
+  - `q.longQty()`, `q.shortQty()` - Get position quantities with 0 default
+  - `q.longCost()`, `q.shortProceeds()` - Get cost/proceeds with 0 default
+  - `q.longPnL()`, `q.shortPnL()` - Get realised PnL with 0 default
+  - `q.hasLong()`, `q.hasShort()` - Check position existence with false default
+  - Provides simplified accessors that flatten nested structure and return sensible defaults
+  - Eliminates need for verbose optional chaining: `q.longQty(pos, "AAPL")` vs `pos.long?.get("AAPL")?.quantity ?? 0`
+
+**Testing:**
+
+- Tests for position query helpers
+- Tests for position lot actions
+
+### Changed
+
+- `handleAirdrop()`: Removed unnecessary branch check for cleaner code
+
 ## [2.1.2] - 2025-11-21
 
 ### Changed
