@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { CuVar, CuStddev, CuCov, CuCorr, CuBeta } from "../../src/online/stats.js";
+import {
+  CuVar,
+  CuStddev,
+  CuCov,
+  CuCorr,
+  CuBeta,
+} from "../../src/online/stats.js";
 
 describe("CuVar", () => {
   it("computes cumulative mean and variance", () => {
@@ -55,7 +61,7 @@ describe("CuStddev", () => {
 
 describe("CuCov", () => {
   it("computes cumulative covariance", () => {
-    const cc = new CuCov();
+    const cc = new CuCov({ ddof: 1 });
 
     // x = [1, 2, 3], y = [2, 4, 6] -> perfect correlation, cov = 2
     cc.update(1, 2);
