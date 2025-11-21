@@ -476,3 +476,112 @@ export function getAverageCost(position: LongPosition): number {
 export function getAverageProceeds(position: ShortPosition): number {
   return position.quantity > 0 ? position.totalProceeds / position.quantity : 0;
 }
+
+/**
+ * Opinionated query helpers for convenient position access.
+ *
+ * Provides simplified accessors that flatten the nested structure and return sensible defaults.
+ * All numeric queries return 0 if the position doesn't exist, boolean queries return false.
+ *
+ * @example
+ * ```ts
+ * // Equivalent to: pos.long?.get("AAPL")?.quantity ?? 0
+ * q.longQty(pos, "AAPL")
+ *
+ * // Short-hand for long positions (common case)
+ * q.qty(pos, "AAPL")  // same as q.longQty()
+ * q.cost(pos, "AAPL") // same as q.longCost()
+ *
+ * // Equivalent to: pos.short?.has("TSLA") ?? false
+ * q.hasShort(pos, "TSLA")
+ * ```
+ * @group Position Query
+ */
+export const q = {
+  /**
+   * Get LONG position quantity
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Quantity, or 0 if position doesn't exist
+   */
+  qty: (pos: Position, symbol: string) => pos.long?.get(symbol)?.quantity ?? 0,
+
+  /**
+   * Get LONG position total cost
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Total cost, or 0 if position doesn't exist
+   */
+  cost: (pos: Position, symbol: string) =>
+    pos.long?.get(symbol)?.totalCost ?? 0,
+
+  /**
+   * Get long position quantity
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Quantity, or 0 if position doesn't exist
+   */
+  longQty: (pos: Position, symbol: string) =>
+    pos.long?.get(symbol)?.quantity ?? 0,
+
+  /**
+   * Get short position quantity
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Quantity, or 0 if position doesn't exist
+   */
+  shortQty: (pos: Position, symbol: string) =>
+    pos.short?.get(symbol)?.quantity ?? 0,
+
+  /**
+   * Get long position total cost
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Total cost, or 0 if position doesn't exist
+   */
+  longCost: (pos: Position, symbol: string) =>
+    pos.long?.get(symbol)?.totalCost ?? 0,
+
+  /**
+   * Get short position total proceeds
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Total proceeds, or 0 if position doesn't exist
+   */
+  shortProceeds: (pos: Position, symbol: string) =>
+    pos.short?.get(symbol)?.totalProceeds ?? 0,
+
+  /**
+   * Get long position realised PnL
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Realised PnL, or 0 if position doesn't exist
+   */
+  longPnL: (pos: Position, symbol: string) =>
+    pos.long?.get(symbol)?.realisedPnL ?? 0,
+
+  /**
+   * Get short position realised PnL
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns Realised PnL, or 0 if position doesn't exist
+   */
+  shortPnL: (pos: Position, symbol: string) =>
+    pos.short?.get(symbol)?.realisedPnL ?? 0,
+
+  /**
+   * Check if long position exists
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns true if position exists, false otherwise
+   */
+  hasLong: (pos: Position, symbol: string) => pos.long?.has(symbol) ?? false,
+
+  /**
+   * Check if short position exists
+   * @param pos - Position to query
+   * @param symbol - Asset symbol
+   * @returns true if position exists, false otherwise
+   */
+  hasShort: (pos: Position, symbol: string) => pos.short?.has(symbol) ?? false,
+};

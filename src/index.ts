@@ -47,6 +47,7 @@ export {
   closeShort,
   getAverageCost,
   getAverageProceeds,
+  q,
 } from "./utils/position.utils.js";
 
 export {

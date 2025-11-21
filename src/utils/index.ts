@@ -50,6 +50,7 @@ export {
   closeShort,
   getAverageCost,
   getAverageProceeds,
+  q,
 } from "./position.utils.js";
 
 // Stock utilities
