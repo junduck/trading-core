@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: SMA
 
-Defined in: [rolling/average.ts:32](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L32)
+Defined in: [rolling/average.ts:32](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L32)
 
 O(1) simple moving average (SMA) using circular buffer.
 
@@ -16,7 +16,7 @@ O(1) simple moving average (SMA) using circular buffer.
 
 > **new SMA**(`opts`): `SMA`
 
-Defined in: [rolling/average.ts:37](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L37)
+Defined in: [rolling/average.ts:37](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L37)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [rolling/average.ts:37](https://github.com/junduck/trading-core/blob
 
 > **update**(`x`): `number`
 
-Defined in: [rolling/average.ts:42](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L42)
+Defined in: [rolling/average.ts:42](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L42)
 
 #### Parameters
 
@@ -54,4 +54,4 @@ Defined in: [rolling/average.ts:42](https://github.com/junduck/trading-core/blob
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/average.ts:33](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L33)
+Defined in: [rolling/average.ts:33](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L33)

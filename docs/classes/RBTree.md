@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RBTree\<T\>
 
-Defined in: [containers/rbtree.ts:22](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L22)
+Defined in: [containers/rbtree.ts:22](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L22)
 
 Red-Black Tree using standard pointer-based implementation.
 
@@ -24,7 +24,7 @@ The type of elements stored in the tree
 
 > **new RBTree**\<`T`\>(`compare?`): `RBTree`\<`T`\>
 
-Defined in: [containers/rbtree.ts:31](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L31)
+Defined in: [containers/rbtree.ts:31](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L31)
 
 Creates a Red-Black Tree.
 
@@ -46,7 +46,7 @@ Comparator function (default: numeric comparison)
 
 > **\[iterator\]**(): `Iterator`\<`T`\>
 
-Defined in: [containers/rbtree.ts:412](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L412)
+Defined in: [containers/rbtree.ts:412](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L412)
 
 In-order iterator support
 
@@ -60,7 +60,7 @@ In-order iterator support
 
 > **clear**(): `void`
 
-Defined in: [containers/rbtree.ts:406](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L406)
+Defined in: [containers/rbtree.ts:406](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L406)
 
 Removes all elements
 
@@ -74,7 +74,7 @@ Removes all elements
 
 > **delete**(`key`): `boolean`
 
-Defined in: [containers/rbtree.ts:287](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L287)
+Defined in: [containers/rbtree.ts:287](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L287)
 
 Deletes a key from the tree.
 
@@ -98,7 +98,7 @@ true if key was found and deleted, false otherwise
 
 > **empty**(): `boolean`
 
-Defined in: [containers/rbtree.ts:401](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L401)
+Defined in: [containers/rbtree.ts:401](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L401)
 
 Checks if tree is empty
 
@@ -112,7 +112,7 @@ Checks if tree is empty
 
 > **has**(`key`): `boolean`
 
-Defined in: [containers/rbtree.ts:369](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L369)
+Defined in: [containers/rbtree.ts:369](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L369)
 
 Checks if a key exists in the tree.
 
@@ -136,7 +136,7 @@ true if key exists, false otherwise
 
 > **insert**(`key`): `void`
 
-Defined in: [containers/rbtree.ts:137](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L137)
+Defined in: [containers/rbtree.ts:137](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L137)
 
 Inserts a key into the tree.
 
@@ -158,7 +158,7 @@ Key to insert
 
 > **max**(): `T` \| `undefined`
 
-Defined in: [containers/rbtree.ts:386](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L386)
+Defined in: [containers/rbtree.ts:386](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L386)
 
 Returns the maximum key in the tree.
 
@@ -174,7 +174,7 @@ Maximum key or undefined if empty
 
 > **min**(): `T` \| `undefined`
 
-Defined in: [containers/rbtree.ts:377](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L377)
+Defined in: [containers/rbtree.ts:377](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L377)
 
 Returns the minimum key in the tree.
 
@@ -190,7 +190,7 @@ Minimum key or undefined if empty
 
 > **search**(`key`): `T` \| `undefined`
 
-Defined in: [containers/rbtree.ts:359](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L359)
+Defined in: [containers/rbtree.ts:359](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L359)
 
 Searches for a key in the tree.
 
@@ -214,7 +214,7 @@ The key if found, undefined otherwise
 
 > **size**(): `number`
 
-Defined in: [containers/rbtree.ts:396](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L396)
+Defined in: [containers/rbtree.ts:396](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L396)
 
 Returns current number of elements
 
@@ -228,7 +228,7 @@ Returns current number of elements
 
 > **toArray**(): `T`[]
 
-Defined in: [containers/rbtree.ts:427](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/rbtree.ts#L427)
+Defined in: [containers/rbtree.ts:427](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/rbtree.ts#L427)
 
 Converts tree to sorted array.
 

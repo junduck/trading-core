@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **applyFill**(`position`, `fill`, `closeStrategy`): [`ApplyFillResult`](../interfaces/ApplyFillResult.md)
 
-Defined in: [utils/fill.utils.ts:33](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/utils/fill.utils.ts#L33)
+Defined in: [utils/fill.utils.ts:33](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/fill.utils.ts#L33)
 
 Applies a single fill to update a position.
 Routes to appropriate position utility based on fill effect.

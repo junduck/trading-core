@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CuHistogram
 
-Defined in: [online/histogram.ts:6](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L6)
+Defined in: [online/histogram.ts:6](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L6)
 
 Cumulative histogram over entire data stream.
 Maintains frequency distribution across fixed bins.
@@ -17,7 +17,7 @@ Maintains frequency distribution across fixed bins.
 
 > **new CuHistogram**(`opts`): `CuHistogram`
 
-Defined in: [online/histogram.ts:20](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L20)
+Defined in: [online/histogram.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L20)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ Example: edges = [0, 10, 20] creates 4 bins:
 
 > **getCDF**(): `number`[]
 
-Defined in: [online/histogram.ts:73](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L73)
+Defined in: [online/histogram.ts:73](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L73)
 
 Get cumulative distribution.
 
@@ -61,7 +61,7 @@ Cumulative sum of probabilities
 
 > **getCount**(`binIndex`): `number`
 
-Defined in: [online/histogram.ts:41](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L41)
+Defined in: [online/histogram.ts:41](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L41)
 
 Get count for a specific bin.
 
@@ -83,7 +83,7 @@ Get count for a specific bin.
 
 > **getCounts**(): readonly `number`[]
 
-Defined in: [online/histogram.ts:46](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L46)
+Defined in: [online/histogram.ts:46](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L46)
 
 Get all bin counts
 
@@ -97,7 +97,7 @@ readonly `number`[]
 
 > **getEdges**(): readonly `number`[]
 
-Defined in: [online/histogram.ts:51](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L51)
+Defined in: [online/histogram.ts:51](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L51)
 
 Get bin edges
 
@@ -111,7 +111,7 @@ readonly `number`[]
 
 > **getProbabilities**(): `number`[]
 
-Defined in: [online/histogram.ts:64](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L64)
+Defined in: [online/histogram.ts:64](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L64)
 
 Get normalized frequencies (probabilities).
 
@@ -127,7 +127,7 @@ counts[i] / total_count
 
 > **getTotal**(): `number`
 
-Defined in: [online/histogram.ts:56](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L56)
+Defined in: [online/histogram.ts:56](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L56)
 
 Get total count of all observations
 
@@ -141,7 +141,7 @@ Get total count of all observations
 
 > **update**(`x`): readonly `number`[]
 
-Defined in: [online/histogram.ts:30](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/histogram.ts#L30)
+Defined in: [online/histogram.ts:30](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/histogram.ts#L30)
 
 Process new data point.
 

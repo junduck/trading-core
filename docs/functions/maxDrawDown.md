@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **maxDrawDown**(`buffer`): [`DrawdownResult`](../interfaces/DrawdownResult.md)
 
-Defined in: [utils/drawdown.ts:67](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/utils/drawdown.ts#L67)
+Defined in: [utils/drawdown.ts:67](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/drawdown.ts#L67)
 
 Calculates the maximum absolute drawdown (peak to trough decline) in a numeric buffer.
 

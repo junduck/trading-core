@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingStddevEW
 
-Defined in: [rolling/stats.ts:118](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L118)
+Defined in: [rolling/stats.ts:118](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L118)
 
 Exponentially weighted standard deviation with infinite window.
 
@@ -16,7 +16,7 @@ Exponentially weighted standard deviation with infinite window.
 
 > **new RollingStddevEW**(`opts`): `RollingStddevEW`
 
-Defined in: [rolling/stats.ts:125](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L125)
+Defined in: [rolling/stats.ts:125](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L125)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Direct smoothing factor
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:129](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L129)
+Defined in: [rolling/stats.ts:129](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L129)
 
 #### Parameters
 

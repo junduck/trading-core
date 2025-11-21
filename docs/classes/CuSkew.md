@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CuSkew
 
-Defined in: [online/moments.ts:63](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/moments.ts#L63)
+Defined in: [online/moments.ts:63](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/moments.ts#L63)
 
 O(1) cumulative skewness.
 
@@ -16,7 +16,7 @@ O(1) cumulative skewness.
 
 > **new CuSkew**(): `CuSkew`
 
-Defined in: [online/moments.ts:66](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/moments.ts#L66)
+Defined in: [online/moments.ts:66](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/moments.ts#L66)
 
 #### Returns
 
@@ -28,7 +28,7 @@ Defined in: [online/moments.ts:66](https://github.com/junduck/trading-core/blob/
 
 > **update**(`x`): `object`
 
-Defined in: [online/moments.ts:70](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/moments.ts#L70)
+Defined in: [online/moments.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/moments.ts#L70)
 
 #### Parameters
 

@@ -1,8 +1,8 @@
-**@junduck/trading-core v2.1.1**
+**@junduck/trading-core v2.2.0**
 
 ***
 
-# @junduck/trading-core v2.1.1
+# @junduck/trading-core v2.2.0
 
 ## Portfolio
 
@@ -58,6 +58,10 @@
 - [pushLongPositionLot](functions/pushLongPositionLot.md)
 - [pushShortPositionLot](functions/pushShortPositionLot.md)
 - [validatePosition](functions/validatePosition.md)
+
+## Position Query
+
+- [q](variables/q.md)
 
 ## Market Data
 

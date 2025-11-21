@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **updateSnapshotQuote**(`snapshot`, `quote`): [`MarketSnapshot`](../interfaces/MarketSnapshot.md)
 
-Defined in: [utils/market.utils.ts:209](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/utils/market.utils.ts#L209)
+Defined in: [utils/market.utils.ts:209](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/market.utils.ts#L209)
 
 Updates a MarketSnapshot with a new MarketQuote using LOCF (Last Observation Carried Forward).
 The function updates the price for the symbol in the snapshot and ensures the timestamp

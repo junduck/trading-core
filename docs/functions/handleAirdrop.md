@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **handleAirdrop**(`pos`, `holderSymbol`, `airdropSymbol`, `amountPerToken`, `fixedAmount`, `time?`, `disableLot?`): `void`
 
-Defined in: [utils/crypto.utils.ts:92](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/utils/crypto.utils.ts#L92)
+Defined in: [utils/crypto.utils.ts:92](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/crypto.utils.ts#L92)
 
 Handles an airdrop by creating positions in the airdropped token.
 

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CuCov
 
-Defined in: [online/stats.ts:60](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/stats.ts#L60)
+Defined in: [online/stats.ts:60](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L60)
 
 O(1) cumulative covariance between two series.
 
@@ -16,7 +16,7 @@ O(1) cumulative covariance between two series.
 
 > **new CuCov**(`opts?`): `CuCov`
 
-Defined in: [online/stats.ts:70](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/stats.ts#L70)
+Defined in: [online/stats.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L70)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Delta degrees of freedom (default: 0)
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [online/stats.ts:74](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/stats.ts#L74)
+Defined in: [online/stats.ts:74](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L74)
 
 #### Parameters
 

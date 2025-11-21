@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingCov
 
-Defined in: [rolling/stats.ts:181](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L181)
+Defined in: [rolling/stats.ts:181](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L181)
 
 O(1) rolling covariance between two series.
 
@@ -16,7 +16,7 @@ O(1) rolling covariance between two series.
 
 > **new RollingCov**(`opts`): `RollingCov`
 
-Defined in: [rolling/stats.ts:195](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L195)
+Defined in: [rolling/stats.ts:195](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L195)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Window size
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [rolling/stats.ts:206](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L206)
+Defined in: [rolling/stats.ts:206](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L206)
 
 #### Parameters
 
@@ -78,7 +78,7 @@ Defined in: [rolling/stats.ts:206](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **bufferX**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:182](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L182)
+Defined in: [rolling/stats.ts:182](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L182)
 
 ***
 
@@ -86,4 +86,4 @@ Defined in: [rolling/stats.ts:182](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **bufferY**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:183](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L183)
+Defined in: [rolling/stats.ts:183](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L183)

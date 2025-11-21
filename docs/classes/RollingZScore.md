@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingZScore
 
-Defined in: [rolling/stats.ts:139](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L139)
+Defined in: [rolling/stats.ts:139](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L139)
 
 O(1) rolling z-score calculator.
 
@@ -16,7 +16,7 @@ O(1) rolling z-score calculator.
 
 > **new RollingZScore**(`opts`): `RollingZScore`
 
-Defined in: [rolling/stats.ts:143](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L143)
+Defined in: [rolling/stats.ts:143](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L143)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [rolling/stats.ts:143](https://github.com/junduck/trading-core/blob/
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:148](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L148)
+Defined in: [rolling/stats.ts:148](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L148)
 
 #### Parameters
 
@@ -66,4 +66,4 @@ Defined in: [rolling/stats.ts:148](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:141](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L141)
+Defined in: [rolling/stats.ts:141](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L141)

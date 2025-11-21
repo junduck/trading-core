@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: MeanAbsDeviation
 
-Defined in: [rolling/deviation.ts:11](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L11)
+Defined in: [rolling/deviation.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L11)
 
 Rolling Mean Absolute Deviation.
 MeadAD = mean(|x_i - mean(x)|)
@@ -17,7 +17,7 @@ MeadAD = mean(|x_i - mean(x)|)
 
 > **new MeanAbsDeviation**(`opts`): `MeanAbsDeviation`
 
-Defined in: [rolling/deviation.ts:15](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L15)
+Defined in: [rolling/deviation.ts:15](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L15)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [rolling/deviation.ts:15](https://github.com/junduck/trading-core/bl
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/deviation.ts:20](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L20)
+Defined in: [rolling/deviation.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L20)
 
 #### Parameters
 
@@ -63,4 +63,4 @@ Defined in: [rolling/deviation.ts:20](https://github.com/junduck/trading-core/bl
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/deviation.ts:13](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L13)
+Defined in: [rolling/deviation.ts:13](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L13)

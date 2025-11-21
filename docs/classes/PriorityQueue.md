@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: PriorityQueue\<T\>
 
-Defined in: [containers/priority-queue.ts:7](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L7)
+Defined in: [containers/priority-queue.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L7)
 
 Priority queue using binary min-heap.
 Provide custom comparator for other orderings (e.g., max-heap: (a, b) => b - a).
@@ -25,7 +25,7 @@ The type of elements stored in the queue
 
 > **new PriorityQueue**\<`T`\>(`compare?`): `PriorityQueue`\<`T`\>
 
-Defined in: [containers/priority-queue.ts:15](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L15)
+Defined in: [containers/priority-queue.ts:15](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L15)
 
 Creates a priority queue.
 
@@ -47,7 +47,7 @@ Comparator function (default: min-heap for numbers)
 
 > **\[iterator\]**(): `Iterator`\<`T`\>
 
-Defined in: [containers/priority-queue.ts:118](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L118)
+Defined in: [containers/priority-queue.ts:118](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L118)
 
 Iterator support. Yields elements in heap order, not sorted order.
 
@@ -61,7 +61,7 @@ Iterator support. Yields elements in heap order, not sorted order.
 
 > **clear**(): `void`
 
-Defined in: [containers/priority-queue.ts:113](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L113)
+Defined in: [containers/priority-queue.ts:113](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L113)
 
 Removes all elements
 
@@ -75,7 +75,7 @@ Removes all elements
 
 > **empty**(): `boolean`
 
-Defined in: [containers/priority-queue.ts:108](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L108)
+Defined in: [containers/priority-queue.ts:108](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L108)
 
 Checks if queue is empty
 
@@ -89,7 +89,7 @@ Checks if queue is empty
 
 > **peek**(): `T` \| `undefined`
 
-Defined in: [containers/priority-queue.ts:93](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L93)
+Defined in: [containers/priority-queue.ts:93](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L93)
 
 Gets the top element without removing.
 
@@ -105,7 +105,7 @@ Top element or undefined if empty
 
 > **pop**(): `T` \| `undefined`
 
-Defined in: [containers/priority-queue.ts:79](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L79)
+Defined in: [containers/priority-queue.ts:79](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L79)
 
 Removes and returns the top element.
 
@@ -121,7 +121,7 @@ Top element or undefined if empty
 
 > **push**(`item`): `void`
 
-Defined in: [containers/priority-queue.ts:70](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L70)
+Defined in: [containers/priority-queue.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L70)
 
 Adds element to the queue.
 
@@ -143,7 +143,7 @@ Element to add
 
 > **size**(): `number`
 
-Defined in: [containers/priority-queue.ts:103](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L103)
+Defined in: [containers/priority-queue.ts:103](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L103)
 
 Returns current number of elements
 
@@ -157,7 +157,7 @@ Returns current number of elements
 
 > **toArray**(): `T`[]
 
-Defined in: [containers/priority-queue.ts:128](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L128)
+Defined in: [containers/priority-queue.ts:128](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L128)
 
 Converts queue to array in heap order (not sorted).
 
@@ -173,7 +173,7 @@ Array containing all elements
 
 > **top**(): `T` \| `undefined`
 
-Defined in: [containers/priority-queue.ts:98](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/priority-queue.ts#L98)
+Defined in: [containers/priority-queue.ts:98](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/priority-queue.ts#L98)
 
 Alias for peek()
 

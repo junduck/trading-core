@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingVar
 
-Defined in: [rolling/stats.ts:8](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L8)
+Defined in: [rolling/stats.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L8)
 
 O(1) rolling variance using Welford's online algorithm.
 
@@ -16,7 +16,7 @@ O(1) rolling variance using Welford's online algorithm.
 
 > **new RollingVar**(`opts`): `RollingVar`
 
-Defined in: [rolling/stats.ts:20](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L20)
+Defined in: [rolling/stats.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L20)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Window size
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:30](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L30)
+Defined in: [rolling/stats.ts:30](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L30)
 
 #### Parameters
 
@@ -70,4 +70,4 @@ Defined in: [rolling/stats.ts:30](https://github.com/junduck/trading-core/blob/0
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:9](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/stats.ts#L9)
+Defined in: [rolling/stats.ts:9](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L9)

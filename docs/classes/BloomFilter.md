@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: BloomFilter\<T\>
 
-Defined in: [online/probs.ts:101](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/probs.ts#L101)
+Defined in: [online/probs.ts:101](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L101)
 
 Bloom filter for membership testing in data streams.
 O(k) add and test where k is number of hash functions.
@@ -24,7 +24,7 @@ May have false positives but no false negatives.
 
 > **new BloomFilter**\<`T`\>(`opts`): `BloomFilter`\<`T`\>
 
-Defined in: [online/probs.ts:114](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/probs.ts#L114)
+Defined in: [online/probs.ts:114](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L114)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [online/probs.ts:114](https://github.com/junduck/trading-core/blob/0
 
 > **add**(`key`): `void`
 
-Defined in: [online/probs.ts:138](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/probs.ts#L138)
+Defined in: [online/probs.ts:138](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L138)
 
 Add a key to the filter.
 
@@ -62,7 +62,7 @@ Add a key to the filter.
 
 > **has**(`key`): `boolean`
 
-Defined in: [online/probs.ts:150](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/probs.ts#L150)
+Defined in: [online/probs.ts:150](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L150)
 
 Test if a key may be in the filter.
 

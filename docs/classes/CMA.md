@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CMA
 
-Defined in: [online/average.ts:7](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/average.ts#L7)
+Defined in: [online/average.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/average.ts#L7)
 
 O(1) cumulative moving average (CMA).
 
@@ -26,7 +26,7 @@ O(1) cumulative moving average (CMA).
 
 > **update**(`x`): `number`
 
-Defined in: [online/average.ts:11](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/online/average.ts#L11)
+Defined in: [online/average.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/average.ts#L11)
 
 #### Parameters
 

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: LongPositionLot
 
-Defined in: [types/position.ts:6](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/types/position.ts#L6)
+Defined in: [types/position.ts:6](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/position.ts#L6)
 
 Represents a single lot (trade) within a long position.
 Used for tracking individual purchases with their specific price and commission.
@@ -17,7 +17,7 @@ Used for tracking individual purchases with their specific price and commission.
 
 > **price**: `number`
 
-Defined in: [types/position.ts:11](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/types/position.ts#L11)
+Defined in: [types/position.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/position.ts#L11)
 
 Purchase price per unit at which this lot was acquired
 
@@ -27,7 +27,7 @@ Purchase price per unit at which this lot was acquired
 
 > **quantity**: `number`
 
-Defined in: [types/position.ts:8](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/types/position.ts#L8)
+Defined in: [types/position.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/position.ts#L8)
 
 Quantity of the asset in this lot
 
@@ -37,6 +37,6 @@ Quantity of the asset in this lot
 
 > **totalCost**: `number`
 
-Defined in: [types/position.ts:14](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/types/position.ts#L14)
+Defined in: [types/position.ts:14](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/position.ts#L14)
 
 Total cost for this lot including commission (cost = price * quantity + commission). This is deducted proportionally when closing positions.

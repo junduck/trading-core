@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingMax
 
-Defined in: [rolling/minmax.ts:43](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/minmax.ts#L43)
+Defined in: [rolling/minmax.ts:43](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L43)
 
 Rolling maximum over a sliding window using monotonic deque.
 O(1) amortized time per update.
@@ -17,7 +17,7 @@ O(1) amortized time per update.
 
 > **new RollingMax**(`opts`): `RollingMax`
 
-Defined in: [rolling/minmax.ts:47](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/minmax.ts#L47)
+Defined in: [rolling/minmax.ts:47](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L47)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [rolling/minmax.ts:47](https://github.com/junduck/trading-core/blob/
 
 > **update**(`x`): `number`
 
-Defined in: [rolling/minmax.ts:53](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/minmax.ts#L53)
+Defined in: [rolling/minmax.ts:53](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L53)
 
 #### Parameters
 
@@ -55,4 +55,4 @@ Defined in: [rolling/minmax.ts:53](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/minmax.ts:44](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/minmax.ts#L44)
+Defined in: [rolling/minmax.ts:44](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L44)

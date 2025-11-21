@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: EMA
 
-Defined in: [rolling/average.ts:60](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L60)
+Defined in: [rolling/average.ts:60](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L60)
 
 Exponential moving average (EMA) with infinite window.
 EMA = alpha * x + (1 - alpha) * EMA_prev
@@ -17,7 +17,7 @@ EMA = alpha * x + (1 - alpha) * EMA_prev
 
 > **new EMA**(`opts`): `EMA`
 
-Defined in: [rolling/average.ts:68](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L68)
+Defined in: [rolling/average.ts:68](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L68)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Direct smoothing factor
 
 > **update**(`x`): `number`
 
-Defined in: [rolling/average.ts:76](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L76)
+Defined in: [rolling/average.ts:76](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L76)
 
 #### Parameters
 

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingSum
 
-Defined in: [rolling/average.ts:8](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L8)
+Defined in: [rolling/average.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L8)
 
 O(1) moving sum using circular buffer and Kahan summation.
 
@@ -16,7 +16,7 @@ O(1) moving sum using circular buffer and Kahan summation.
 
 > **new RollingSum**(`opts`): `RollingSum`
 
-Defined in: [rolling/average.ts:12](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L12)
+Defined in: [rolling/average.ts:12](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L12)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [rolling/average.ts:12](https://github.com/junduck/trading-core/blob
 
 > **update**(`x`): `number`
 
-Defined in: [rolling/average.ts:16](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L16)
+Defined in: [rolling/average.ts:16](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L16)
 
 #### Parameters
 
@@ -54,4 +54,4 @@ Defined in: [rolling/average.ts:16](https://github.com/junduck/trading-core/blob
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/average.ts:9](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/average.ts#L9)
+Defined in: [rolling/average.ts:9](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L9)

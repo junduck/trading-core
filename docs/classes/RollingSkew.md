@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingSkew
 
-Defined in: [rolling/moments.ts:63](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/moments.ts#L63)
+Defined in: [rolling/moments.ts:63](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/moments.ts#L63)
 
 O(1) rolling skewness.
 
@@ -16,7 +16,7 @@ O(1) rolling skewness.
 
 > **new RollingSkew**(`opts`): `RollingSkew`
 
-Defined in: [rolling/moments.ts:66](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/moments.ts#L66)
+Defined in: [rolling/moments.ts:66](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/moments.ts#L66)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [rolling/moments.ts:66](https://github.com/junduck/trading-core/blob
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/moments.ts:70](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/moments.ts#L70)
+Defined in: [rolling/moments.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/moments.ts#L70)
 
 #### Parameters
 

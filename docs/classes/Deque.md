@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: Deque\<T\>
 
-Defined in: [containers/deque.ts:10](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L10)
+Defined in: [containers/deque.ts:10](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L10)
 
 Double-ended queue with dynamic capacity.
 
@@ -29,7 +29,7 @@ The type of elements stored in the deque
 
 > **get** **length**(): `number`
 
-Defined in: [containers/deque.ts:255](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L255)
+Defined in: [containers/deque.ts:255](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L255)
 
 Returns current number of elements
 
@@ -43,7 +43,7 @@ Returns current number of elements
 
 > **new Deque**\<`T`\>(`capacity`, `growthFactor`, `rebalanceThreshold`): `Deque`\<`T`\>
 
-Defined in: [containers/deque.ts:25](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L25)
+Defined in: [containers/deque.ts:25](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L25)
 
 Creates a deque with initial capacity.
 
@@ -77,7 +77,7 @@ Minimum unused space ratio to trigger rebalance instead of expand (default: 0.3)
 
 > **\[iterator\]**(): `Iterator`\<`T`\>
 
-Defined in: [containers/deque.ts:275](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L275)
+Defined in: [containers/deque.ts:275](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L275)
 
 Iterates over elements from front to back. Optimized for linear buffer access.
 
@@ -91,7 +91,7 @@ Iterates over elements from front to back. Optimized for linear buffer access.
 
 > **at**(`index`): `T` \| `undefined`
 
-Defined in: [containers/deque.ts:231](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L231)
+Defined in: [containers/deque.ts:231](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L231)
 
 Accesses element at index.
 
@@ -115,7 +115,7 @@ Element or undefined if out of bounds
 
 > **back**(): `T` \| `undefined`
 
-Defined in: [containers/deque.ts:218](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L218)
+Defined in: [containers/deque.ts:218](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L218)
 
 Gets back element without removing.
 
@@ -131,7 +131,7 @@ Back element or undefined if empty
 
 > **capacity**(): `number`
 
-Defined in: [containers/deque.ts:260](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L260)
+Defined in: [containers/deque.ts:260](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L260)
 
 Returns current capacity
 
@@ -145,7 +145,7 @@ Returns current capacity
 
 > **clear**(): `void`
 
-Defined in: [containers/deque.ts:240](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L240)
+Defined in: [containers/deque.ts:240](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L240)
 
 Removes all elements
 
@@ -159,7 +159,7 @@ Removes all elements
 
 > **empty**(): `boolean`
 
-Defined in: [containers/deque.ts:270](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L270)
+Defined in: [containers/deque.ts:270](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L270)
 
 Checks if deque is empty
 
@@ -173,7 +173,7 @@ Checks if deque is empty
 
 > **front**(): `T` \| `undefined`
 
-Defined in: [containers/deque.ts:207](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L207)
+Defined in: [containers/deque.ts:207](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L207)
 
 Gets front element without removing.
 
@@ -189,7 +189,7 @@ Front element or undefined if empty
 
 > **full**(): `boolean`
 
-Defined in: [containers/deque.ts:265](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L265)
+Defined in: [containers/deque.ts:265](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L265)
 
 Checks if deque is full
 
@@ -203,7 +203,7 @@ Checks if deque is full
 
 > **pop\_back**(): `T` \| `undefined`
 
-Defined in: [containers/deque.ts:186](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L186)
+Defined in: [containers/deque.ts:186](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L186)
 
 Removes and returns back element.
 
@@ -219,7 +219,7 @@ Back element or undefined if empty
 
 > **pop\_front**(): `T` \| `undefined`
 
-Defined in: [containers/deque.ts:165](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L165)
+Defined in: [containers/deque.ts:165](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L165)
 
 Removes and returns front element.
 
@@ -235,7 +235,7 @@ Front element or undefined if empty
 
 > **push\_back**(`item`): `void`
 
-Defined in: [containers/deque.ts:146](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L146)
+Defined in: [containers/deque.ts:146](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L146)
 
 Adds element to back.
 
@@ -257,7 +257,7 @@ Element to add
 
 > **push\_front**(`item`): `void`
 
-Defined in: [containers/deque.ts:127](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L127)
+Defined in: [containers/deque.ts:127](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L127)
 
 Adds element to front.
 
@@ -279,7 +279,7 @@ Element to add
 
 > **size**(): `number`
 
-Defined in: [containers/deque.ts:250](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L250)
+Defined in: [containers/deque.ts:250](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L250)
 
 Returns current number of elements
 
@@ -293,7 +293,7 @@ Returns current number of elements
 
 > **toArray**(): `T`[]
 
-Defined in: [containers/deque.ts:294](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/containers/deque.ts#L294)
+Defined in: [containers/deque.ts:294](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/deque.ts#L294)
 
 Converts deque to array.
 

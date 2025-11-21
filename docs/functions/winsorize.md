@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **winsorize**(`x`, `opts?`): `number`[]
 
-Defined in: [numeric/series.ts:160](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/numeric/series.ts#L160)
+Defined in: [numeric/series.ts:160](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/numeric/series.ts#L160)
 
 Winsorize series by clamping extreme values at specified quantiles.
 

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: RollingHistogram
 
-Defined in: [rolling/histogram.ts:8](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L8)
+Defined in: [rolling/histogram.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L8)
 
 Rolling histogram over a sliding window.
 Maintains frequency distribution across fixed bins.
@@ -17,7 +17,7 @@ Maintains frequency distribution across fixed bins.
 
 > **new RollingHistogram**(`opts`): `RollingHistogram`
 
-Defined in: [rolling/histogram.ts:23](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L23)
+Defined in: [rolling/histogram.ts:23](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L23)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Window size
 
 > **getCDF**(): `number`[]
 
-Defined in: [rolling/histogram.ts:80](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L80)
+Defined in: [rolling/histogram.ts:80](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L80)
 
 Get cumulative distribution.
 
@@ -67,7 +67,7 @@ Cumulative sum of probabilities
 
 > **getCount**(`binIndex`): `number`
 
-Defined in: [rolling/histogram.ts:52](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L52)
+Defined in: [rolling/histogram.ts:52](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L52)
 
 Get count for a specific bin.
 
@@ -89,7 +89,7 @@ Get count for a specific bin.
 
 > **getCounts**(): readonly `number`[]
 
-Defined in: [rolling/histogram.ts:57](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L57)
+Defined in: [rolling/histogram.ts:57](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L57)
 
 Get all bin counts
 
@@ -103,7 +103,7 @@ readonly `number`[]
 
 > **getEdges**(): readonly `number`[]
 
-Defined in: [rolling/histogram.ts:62](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L62)
+Defined in: [rolling/histogram.ts:62](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L62)
 
 Get bin edges
 
@@ -117,7 +117,7 @@ readonly `number`[]
 
 > **getProbabilities**(): `number`[]
 
-Defined in: [rolling/histogram.ts:70](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L70)
+Defined in: [rolling/histogram.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L70)
 
 Get normalized frequencies (probabilities).
 
@@ -133,7 +133,7 @@ counts[i] / window_size
 
 > **update**(`x`): readonly `number`[]
 
-Defined in: [rolling/histogram.ts:34](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L34)
+Defined in: [rolling/histogram.ts:34](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L34)
 
 Process new data point.
 
@@ -157,4 +157,4 @@ Reference to internal counts array
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/histogram.ts:9](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/histogram.ts#L9)
+Defined in: [rolling/histogram.ts:9](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/histogram.ts#L9)

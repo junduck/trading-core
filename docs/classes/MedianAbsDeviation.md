@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: MedianAbsDeviation
 
-Defined in: [rolling/deviation.ts:39](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L39)
+Defined in: [rolling/deviation.ts:39](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L39)
 
 Rolling Median Absolute Deviation (MAD).
 MAD = median(|x_i - median(x)|)
@@ -17,7 +17,7 @@ MAD = median(|x_i - median(x)|)
 
 > **new MedianAbsDeviation**(`opts`): `MedianAbsDeviation`
 
-Defined in: [rolling/deviation.ts:46](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L46)
+Defined in: [rolling/deviation.ts:46](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L46)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [rolling/deviation.ts:46](https://github.com/junduck/trading-core/bl
 
 > **update**(`x`): \{ `mad`: `number`; `median`: `number`; \} \| `undefined`
 
-Defined in: [rolling/deviation.ts:54](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L54)
+Defined in: [rolling/deviation.ts:54](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L54)
 
 #### Parameters
 
@@ -55,4 +55,4 @@ Defined in: [rolling/deviation.ts:54](https://github.com/junduck/trading-core/bl
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/deviation.ts:41](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/rolling/deviation.ts#L41)
+Defined in: [rolling/deviation.ts:41](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L41)

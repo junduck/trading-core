@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.1.1**](../README.md)
+[**@junduck/trading-core v2.2.0**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **amendShortPositionLot**(`to`, `symbol`, `newLot`, `time`): `void`
 
-Defined in: [utils/position.utils.ts:163](https://github.com/junduck/trading-core/blob/0e6e25f7ffcf5daf51ca8559125252eb16a37960/src/utils/position.utils.ts#L163)
+Defined in: [utils/position.utils.ts:172](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/position.utils.ts#L172)
 
 Amend a ShortPositionLot by merging into a single lot (for providers without lot-level accounting).
 Creates a new position if none exists, otherwise merges the new lot into the existing single lot.
