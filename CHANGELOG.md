@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2025-11-25
+
+### Added
+
+**Order Constructors:**
+
+- `buyOrder()` - Convenient constructor for BUY orders to open long positions
+- `sellOrder()` - Convenient constructor for SELL orders to close long positions
+- `shortOrder()` - Convenient constructor for SELL orders to open short positions
+- `coverOrder()` - Convenient constructor for BUY orders to close short positions (cover)
+  - Order type automatically determined by price parameters:
+    - No price/stopPrice → MARKET order
+    - `price` only → LIMIT order
+    - `stopPrice` only → STOP order
+  - Simplifies order creation with clear intent-based naming
+
+**Fill Processing:**
+
+- `processFill()` - New function to process a single fill and return its effect
+- `FillEffect` interface - Simplified interface for fill effects
+  - Contains `fill`, `cashFlow`, and `realisedPnL` fields
+  - Cleaner alternative to `ApplyFillResult`
+
+### Documentation
+
+**Position Utilities:**
+
+- Enhanced JSDoc for `openLong()`, `closeLong()`, `openShort()`, `closeShort()` to clarify permissive behavior
+  - Documents that these are low-level primitives that operate permissively on position state
+  - Clarifies that validation and business logic enforcement is the caller's responsibility
+  - Examples: won't prevent opening short while holding long, won't validate cash/margin availability
+- Enhanced JSDoc for `processFill()` to document permissive delegation to position primitives
+
+### Deprecated
+
+- `applyFill()` - Use `processFill()` instead (will be removed in v3.0)
+- `applyFills()` - Use `processFill()` with map/reduce instead (will be removed in v3.0)
+- `ApplyFillResult` interface - Use `FillEffect` instead (will be removed in v3.0)
+
 ## [2.2.0] - 2025-11-22
 
 ### Added
