@@ -201,6 +201,16 @@ export function amendShortPositionLot(
 
 /**
  * Opens a long position by purchasing an asset.
+ *
+ * @remarks
+ * This is a low-level primitive that operates permissively on position state without enforcing
+ * business logic or validation. It executes the requested operation as instructed:
+ * - Does not prevent opening long while holding short in the same symbol
+ * - Does not validate sufficient cash availability
+ * - Does not enforce trading strategy rules or constraints
+ *
+ * Validation and business logic enforcement is the caller's responsibility.
+ *
  * @param pos - The position to modify
  * @param symbol - The asset symbol
  * @param price - The price per unit
@@ -249,6 +259,16 @@ export function openLong(
 
 /**
  * Closes a long position by selling an asset.
+ *
+ * @remarks
+ * This is a low-level primitive that operates permissively on position state without enforcing
+ * business logic or validation. It executes the requested operation as instructed:
+ * - Does not validate if the quantity exceeds available holdings (will process the requested amount)
+ * - Does not enforce trading strategy rules or constraints
+ * - Only throws error if no long position exists at all
+ *
+ * Validation and business logic enforcement is the caller's responsibility.
+ *
  * @param pos - The position to modify
  * @param symbol - The asset symbol
  * @param price - The price per unit
@@ -332,6 +352,16 @@ export function closeLong(
 
 /**
  * Opens a short position by borrowing and selling an asset.
+ *
+ * @remarks
+ * This is a low-level primitive that operates permissively on position state without enforcing
+ * business logic or validation. It executes the requested operation as instructed:
+ * - Does not prevent opening short while holding long in the same symbol (spot market contradiction)
+ * - Does not validate margin requirements or borrowing availability
+ * - Does not enforce trading strategy rules or constraints
+ *
+ * Validation and business logic enforcement is the caller's responsibility.
+ *
  * @param pos - The position to modify
  * @param symbol - The asset symbol
  * @param price - The price per unit
@@ -380,6 +410,16 @@ export function openShort(
 
 /**
  * Closes a short position by buying back the asset.
+ *
+ * @remarks
+ * This is a low-level primitive that operates permissively on position state without enforcing
+ * business logic or validation. It executes the requested operation as instructed:
+ * - Does not validate if the quantity exceeds available short holdings (will process the requested amount)
+ * - Does not enforce trading strategy rules or constraints
+ * - Only throws error if no short position exists at all
+ *
+ * Validation and business logic enforcement is the caller's responsibility.
+ *
  * @param pos - The position to modify
  * @param symbol - The asset symbol
  * @param price - The price per unit

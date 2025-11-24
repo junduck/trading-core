@@ -38,6 +38,17 @@ export interface ApplyFillResult {
 /**
  * Processes a single fill to update a position and returns its effect.
  * Routes to appropriate position utility based on fill effect.
+ *
+ * @remarks
+ * This function delegates to low-level position primitives that operate permissively without
+ * enforcing business logic or validation. It will:
+ * - Route fills to openLong, closeLong, openShort, or closeShort based on fill.effect
+ * - Not prevent contradictory operations (e.g., opening short while holding long)
+ * - Not validate sufficient cash, margin, or asset availability
+ * - Not enforce trading strategy rules or constraints
+ *
+ * Validation and business logic enforcement is the caller's responsibility.
+ *
  * @param position - The position to modify
  * @param fill - The fill to process
  * @param closeStrategy - Lot closing strategy for closing positions (default: "FIFO")
