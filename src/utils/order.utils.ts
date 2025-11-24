@@ -1,65 +1,145 @@
-/**
- * Structured validation errors for order validation failures.
- * Each error type contains relevant fields to describe the failure.
- * @group Order Management
- */
-export type OrderValidationError =
-  | {
-      type: "INSUFFICIENT_CASH";
-      required: number;
-      available: number;
-    }
-  | {
-      type: "INSUFFICIENT_POSITION";
-      symbol: string;
-      positionType: "LONG" | "SHORT";
-      required: number;
-      available: number;
-    }
-  | {
-      type: "POSITION_NOT_FOUND";
-      symbol: string;
-      positionType: "LONG" | "SHORT";
-    }
-  | {
-      type: "INVALID_PRICE";
-      value?: number;
-    }
-  | {
-      type: "INVALID_QUANTITY";
-      value: number;
-    }
-  | {
-      type: "INVALID_STOP_PRICE";
-      value?: number;
-    }
-  | {
-      type: "MISSING_PRICE";
-    }
-  | {
-      type: "MISSING_STOP_PRICE";
-    }
-  | {
-      type: "MARKET_DATA_MISSING";
-      symbol: string;
-    }
-  | {
-      type: "INVALID_STOP_DIRECTION";
-      stopPrice: number;
-      currentPrice: number;
-      expectedDirection: "ABOVE" | "BELOW";
-    };
+import type { Order } from "../types/order.js";
+
+type OrderPrice =
+  | { price?: never; stopPrice?: never }
+  | { price: number; stopPrice?: never }
+  | { price?: never; stopPrice: number };
+
+type OrderOpts = OrderPrice & {
+  id?: string;
+  symbol: string;
+  quant: number;
+  create?: Date;
+};
 
 /**
- * Validation result for order checks
+ * Creates a BUY order to open a long position.
+ * Order type is determined by price parameters:
+ * - No price/stopPrice → MARKET
+ * - price only → LIMIT
+ * - stopPrice only → STOP
  * @group Order Management
  */
-export interface OrderValidationResult {
-  /** Whether the order is valid */
-  valid: boolean;
-  /** Structured error if invalid */
-  error?: OrderValidationError;
+export function buyOrder(opts: OrderOpts): Order {
+  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+
+  let type: Order["type"];
+  if (price === undefined && stopPrice === undefined) {
+    type = "MARKET";
+  } else if (price !== undefined) {
+    type = "LIMIT";
+  } else {
+    type = "STOP";
+  }
+
+  return {
+    id,
+    symbol,
+    side: "BUY",
+    effect: "OPEN_LONG",
+    type,
+    quantity: quant,
+    ...(price !== undefined && { price }),
+    ...(stopPrice !== undefined && { stopPrice }),
+    created: create,
+  };
 }
 
-// Re-export the main validation function
-export { validateOrder } from "./order.validation.js";
+/**
+ * Creates a SELL order to close a long position.
+ * Order type is determined by price parameters:
+ * - No price/stopPrice → MARKET
+ * - price only → LIMIT
+ * - stopPrice only → STOP
+ * @group Order Management
+ */
+export function sellOrder(opts: OrderOpts): Order {
+  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+
+  let type: Order["type"];
+  if (price === undefined && stopPrice === undefined) {
+    type = "MARKET";
+  } else if (price !== undefined) {
+    type = "LIMIT";
+  } else {
+    type = "STOP";
+  }
+
+  return {
+    id,
+    symbol,
+    side: "SELL",
+    effect: "CLOSE_LONG",
+    type,
+    quantity: quant,
+    ...(price !== undefined && { price }),
+    ...(stopPrice !== undefined && { stopPrice }),
+    created: create,
+  };
+}
+
+/**
+ * Creates a SELL order to open a short position.
+ * Order type is determined by price parameters:
+ * - No price/stopPrice → MARKET
+ * - price only → LIMIT
+ * - stopPrice only → STOP
+ * @group Order Management
+ */
+export function shortOrder(opts: OrderOpts): Order {
+  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+
+  let type: Order["type"];
+  if (price === undefined && stopPrice === undefined) {
+    type = "MARKET";
+  } else if (price !== undefined) {
+    type = "LIMIT";
+  } else {
+    type = "STOP";
+  }
+
+  return {
+    id,
+    symbol,
+    side: "SELL",
+    effect: "OPEN_SHORT",
+    type,
+    quantity: quant,
+    ...(price !== undefined && { price }),
+    ...(stopPrice !== undefined && { stopPrice }),
+    created: create,
+  };
+}
+
+/**
+ * Creates a BUY order to close a short position (cover).
+ * Order type is determined by price parameters:
+ * - No price/stopPrice → MARKET
+ * - price only → LIMIT
+ * - stopPrice only → STOP
+ * @group Order Management
+ */
+export function coverOrder(opts: OrderOpts): Order {
+  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+
+  let type: Order["type"];
+  if (price === undefined && stopPrice === undefined) {
+    type = "MARKET";
+  } else if (price !== undefined) {
+    type = "LIMIT";
+  } else {
+    type = "STOP";
+  }
+
+  return {
+    id,
+    symbol,
+    side: "BUY",
+    effect: "CLOSE_SHORT",
+    type,
+    quantity: quant,
+    ...(price !== undefined && { price }),
+    ...(stopPrice !== undefined && { stopPrice }),
+    created: create,
+  };
+}

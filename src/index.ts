@@ -102,11 +102,18 @@ export type {
   Fill,
 } from "./types/order.js";
 
-export { validateOrder } from "./utils/order.utils.js";
+export { validateOrder } from "./utils/order.validation.js";
 
 export type {
   OrderValidationError,
   OrderValidationResult,
+} from "./utils/order.validation.js";
+
+export {
+  buyOrder,
+  sellOrder,
+  shortOrder,
+  coverOrder,
 } from "./utils/order.utils.js";
 
 // Data Structures

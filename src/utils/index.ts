@@ -69,18 +69,26 @@ export {
   handleStakingReward,
 } from "./crypto.utils.js";
 
-// Order utilities
-export { validateOrder } from "./order.utils.js";
-
+// Order validation
 export type {
   OrderValidationError,
   OrderValidationResult,
+} from "./order.validation.js";
+
+export { validateOrder } from "./order.validation.js";
+
+// Order factories
+export {
+  buyOrder,
+  sellOrder,
+  shortOrder,
+  coverOrder,
 } from "./order.utils.js";
 
 // Fill utilities
-export { applyFill, applyFills } from "./fill.utils.js";
+export { processFill, applyFill, applyFills } from "./fill.utils.js";
 
-export type { ApplyFillResult } from "./fill.utils.js";
+export type { FillEffect, ApplyFillResult } from "./fill.utils.js";
 
 export {
   maxDrawDown,

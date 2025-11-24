@@ -1,7 +1,69 @@
 import type { Order } from "../types/order.js";
 import type { Position } from "../types/position.js";
 import type { MarketSnapshot } from "../types/market.js";
-import type { OrderValidationResult } from "./order.utils.js";
+
+/**
+ * Structured validation errors for order validation failures.
+ * Each error type contains relevant fields to describe the failure.
+ * @group Order Management
+ */
+export type OrderValidationError =
+  | {
+      type: "INSUFFICIENT_CASH";
+      required: number;
+      available: number;
+    }
+  | {
+      type: "INSUFFICIENT_POSITION";
+      symbol: string;
+      positionType: "LONG" | "SHORT";
+      required: number;
+      available: number;
+    }
+  | {
+      type: "POSITION_NOT_FOUND";
+      symbol: string;
+      positionType: "LONG" | "SHORT";
+    }
+  | {
+      type: "INVALID_PRICE";
+      value?: number;
+    }
+  | {
+      type: "INVALID_QUANTITY";
+      value: number;
+    }
+  | {
+      type: "INVALID_STOP_PRICE";
+      value?: number;
+    }
+  | {
+      type: "MISSING_PRICE";
+    }
+  | {
+      type: "MISSING_STOP_PRICE";
+    }
+  | {
+      type: "MARKET_DATA_MISSING";
+      symbol: string;
+    }
+  | {
+      type: "INVALID_STOP_DIRECTION";
+      stopPrice: number;
+      currentPrice: number;
+      expectedDirection: "ABOVE" | "BELOW";
+    };
+
+/**
+ * Validation result for order checks
+ * @group Order Management
+ */
+export interface OrderValidationResult {
+  /** Whether the order is valid */
+  valid: boolean;
+  /** Structured error if invalid */
+  error?: OrderValidationError;
+}
 
 /**
  * Validates that price field exists and is positive.
