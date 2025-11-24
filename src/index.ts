@@ -64,9 +64,9 @@ export {
   handleStakingReward,
 } from "./utils/crypto.utils.js";
 
-export { applyFill, applyFills } from "./utils/fill.utils.js";
+export { processFill, applyFill, applyFills } from "./utils/fill.utils.js";
 
-export type { ApplyFillResult } from "./utils/fill.utils.js";
+export type { FillEffect, ApplyFillResult } from "./utils/fill.utils.js";
 
 // Market Data
 export type { Asset } from "./types/asset.js";

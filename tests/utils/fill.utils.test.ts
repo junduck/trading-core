@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { applyFill, applyFills } from "../../src/utils/fill.utils.js";
+import {
+  processFill,
+  applyFill,
+  applyFills,
+} from "../../src/utils/fill.utils.js";
 import type { Position } from "../../src/types/position.js";
 import type { Fill } from "../../src/types/order.js";
 
@@ -38,6 +42,56 @@ function createFill(
     created: timestamp,
   } as Fill;
 }
+
+describe("Fill Utils - processFill", () => {
+  let position: Position;
+  const testTime = new Date("2025-01-01T00:00:00Z");
+
+  beforeEach(() => {
+    position = createTestPosition(100_000);
+  });
+
+  it("should process single fill and return FillEffect", () => {
+    const fill = createFill(
+      "fill-1",
+      "order-1",
+      "AAPL",
+      "BUY",
+      "OPEN_LONG",
+      100,
+      10,
+      100,
+      testTime
+    );
+
+    const effect = processFill(position, fill);
+
+    expect(effect.fill).toBe(fill);
+    expect(effect.cashFlow).toBe(-1100);
+    expect(effect.realisedPnL).toBe(0);
+  });
+
+  it("should process multiple fills with map", () => {
+    const fills = [
+      createFill("f-1", "o-1", "AAPL", "BUY", "OPEN_LONG", 100, 10, 100, testTime),
+      createFill("f-2", "o-2", "AAPL", "BUY", "OPEN_LONG", 110, 10, 110, testTime),
+      createFill("f-3", "o-3", "AAPL", "SELL", "CLOSE_LONG", 115, 10, 115, testTime),
+    ];
+
+    const effects = fills.map((fill) => processFill(position, fill));
+
+    expect(effects).toHaveLength(3);
+    expect(effects[0].cashFlow).toBe(-1100);
+    expect(effects[1].cashFlow).toBe(-1210);
+    expect(effects[2].cashFlow).toBe(1035);
+    expect(effects[2].realisedPnL).toBe(-65);
+
+    const totalCashFlow = effects.reduce((sum, e) => sum + e.cashFlow, 0);
+    const totalPnL = effects.reduce((sum, e) => sum + e.realisedPnL, 0);
+    expect(totalCashFlow).toBe(-1275);
+    expect(totalPnL).toBe(-65);
+  });
+});
 
 describe("Fill Utils - applyFill", () => {
   let position: Position;

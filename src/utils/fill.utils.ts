@@ -9,8 +9,22 @@ import {
 } from "./position.utils.js";
 
 /**
+ * Effect of processing a single fill on a position.
+ * @group Position
+ */
+export interface FillEffect {
+  /** The fill that was processed */
+  fill: Fill;
+  /** Cash flow from the fill (negative for buying, positive for selling) */
+  cashFlow: number;
+  /** Realized PnL from the fill (0 for opening positions, actual PnL for closing) */
+  realisedPnL: number;
+}
+
+/**
  * Result of applying fill(s) to a position.
  * @group Position
+ * @deprecated Use FillEffect with processFill instead. This interface will be removed in v3.0.
  */
 export interface ApplyFillResult {
   /** The fills that were applied */
@@ -22,19 +36,19 @@ export interface ApplyFillResult {
 }
 
 /**
- * Applies a single fill to update a position.
+ * Processes a single fill to update a position and returns its effect.
  * Routes to appropriate position utility based on fill effect.
  * @param position - The position to modify
- * @param fill - The fill to apply
+ * @param fill - The fill to process
  * @param closeStrategy - Lot closing strategy for closing positions (default: "FIFO")
- * @returns Result with fill, cash flow, and realized PnL
+ * @returns Effect of the fill including cash flow and realized PnL
  * @group Position
  */
-export function applyFill(
+export function processFill(
   position: Position,
   fill: Fill,
   closeStrategy: CloseStrategy = "FIFO"
-): ApplyFillResult {
+): FillEffect {
   let cashFlow: number;
   let realisedPnL: number;
 
@@ -91,9 +105,32 @@ export function applyFill(
   }
 
   return {
-    fills: [fill],
+    fill,
     cashFlow,
     realisedPnL,
+  };
+}
+
+/**
+ * Applies a single fill to update a position.
+ * Routes to appropriate position utility based on fill effect.
+ * @param position - The position to modify
+ * @param fill - The fill to apply
+ * @param closeStrategy - Lot closing strategy for closing positions (default: "FIFO")
+ * @returns Result with fill, cash flow, and realized PnL
+ * @group Position
+ * @deprecated Use processFill instead. This function will be removed in v3.0.
+ */
+export function applyFill(
+  position: Position,
+  fill: Fill,
+  closeStrategy: CloseStrategy = "FIFO"
+): ApplyFillResult {
+  const impact = processFill(position, fill, closeStrategy);
+  return {
+    fills: [fill],
+    cashFlow: impact.cashFlow,
+    realisedPnL: impact.realisedPnL,
   };
 }
 
@@ -106,6 +143,7 @@ export function applyFill(
  * @returns Cumulative result with all fills and totals
  * @throws Error if any fill cannot be applied
  * @group Position
+ * @deprecated Use processFill with map/reduce instead. This function will be removed in v3.0.
  */
 export function applyFills(
   position: Position,
@@ -117,10 +155,10 @@ export function applyFills(
   let totalRealisedPnL = 0;
 
   for (const fill of fills) {
-    const result = applyFill(position, fill, closeStrategy);
+    const impact = processFill(position, fill, closeStrategy);
     appliedFills.push(fill);
-    totalCashFlow += result.cashFlow;
-    totalRealisedPnL += result.realisedPnL;
+    totalCashFlow += impact.cashFlow;
+    totalRealisedPnL += impact.realisedPnL;
   }
 
   return {
