@@ -117,6 +117,7 @@ export type {
 } from "./utils/order.validation.js";
 
 export {
+  type OrderOpts,
   buyOrder,
   sellOrder,
   shortOrder,

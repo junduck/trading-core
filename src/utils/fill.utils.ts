@@ -13,28 +13,33 @@ import {
   closeShort,
 } from "./position.utils.js";
 
-type FillOpts = {
-  state: OrderState;
-  id?: string;
-  quant: number;
-  price: number;
-  commission?: number;
-  create?: Date;
-};
-
 /**
  * Fills an order (fully or partially) and returns the fill receipt.
  * @param opts - Fill options including state to update and fill details
  * @returns Fill receipt for the matched quantity
  * @group Order Management
  */
-export function fillOrder(opts: FillOpts): Fill {
-  const { state, id, quant, price, commission = 0, create } = opts;
+export function fillOrder(opts: {
+  state: OrderState;
+  id?: string;
+  quant: number;
+  price: number;
+  commission?: number;
+  created?: Date;
+}): Fill {
+  const {
+    state,
+    id,
+    quant,
+    price,
+    commission = 0,
+    created = new Date(),
+  } = opts;
 
   state.filledQuantity += quant;
   state.remainingQuantity -= quant;
   state.status = state.remainingQuantity <= 0 ? "FILLED" : "PARTIAL";
-  state.modified = create || new Date();
+  state.modified = created;
 
   return {
     ...({ side: state.side, effect: state.effect } as OrderAction),
@@ -44,7 +49,7 @@ export function fillOrder(opts: FillOpts): Fill {
     quantity: quant,
     price,
     commission,
-    created: create || new Date(),
+    created,
   };
 }
 

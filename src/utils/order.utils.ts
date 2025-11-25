@@ -5,11 +5,11 @@ type OrderPrice =
   | { price: number; stopPrice?: never }
   | { price?: never; stopPrice: number };
 
-type OrderOpts = OrderPrice & {
+export type OrderOpts = OrderPrice & {
   id?: string;
   symbol: string;
   quant: number;
-  create?: Date;
+  created?: Date;
 };
 
 /**
@@ -27,7 +27,7 @@ export function buyOrder(opts: OrderOpts): Order {
     quant,
     price,
     stopPrice,
-    create = new Date(),
+    created = new Date(),
   } = opts;
 
   let type: Order["type"];
@@ -48,7 +48,7 @@ export function buyOrder(opts: OrderOpts): Order {
     quantity: quant,
     ...(price !== undefined && { price }),
     ...(stopPrice !== undefined && { stopPrice }),
-    created: create,
+    created,
   };
 }
 
@@ -67,7 +67,7 @@ export function sellOrder(opts: OrderOpts): Order {
     quant,
     price,
     stopPrice,
-    create = new Date(),
+    created = new Date(),
   } = opts;
 
   let type: Order["type"];
@@ -88,7 +88,7 @@ export function sellOrder(opts: OrderOpts): Order {
     quantity: quant,
     ...(price !== undefined && { price }),
     ...(stopPrice !== undefined && { stopPrice }),
-    created: create,
+    created,
   };
 }
 
@@ -107,7 +107,7 @@ export function shortOrder(opts: OrderOpts): Order {
     quant,
     price,
     stopPrice,
-    create = new Date(),
+    created = new Date(),
   } = opts;
 
   let type: Order["type"];
@@ -128,7 +128,7 @@ export function shortOrder(opts: OrderOpts): Order {
     quantity: quant,
     ...(price !== undefined && { price }),
     ...(stopPrice !== undefined && { stopPrice }),
-    created: create,
+    created,
   };
 }
 
@@ -147,7 +147,7 @@ export function coverOrder(opts: OrderOpts): Order {
     quant,
     price,
     stopPrice,
-    create = new Date(),
+    created = new Date(),
   } = opts;
 
   let type: Order["type"];
@@ -168,7 +168,7 @@ export function coverOrder(opts: OrderOpts): Order {
     quantity: quant,
     ...(price !== undefined && { price }),
     ...(stopPrice !== undefined && { stopPrice }),
-    created: create,
+    created,
   };
 }
 
