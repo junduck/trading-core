@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2025-11-25
+
+### Added
+
+**Order Lifecycle Management:**
+
+- `acceptOrder()` - Accept a submitted order and update its state
+- `rejectOrder()` - Reject a submitted order with reason and update its state
+- `fillOrder()` - Process order fills and update order state with fill tracking
+  - Full order lifecycle now completed: submit → accept/reject → fill
+  - Proper state transitions with timestamp tracking
+  - Comprehensive fill tracking in order state
+
+### Documentation
+
+- Simplified and reorganized README with cleaner structure
+
 ## [2.3.0] - 2025-11-25
 
 ### Added
