@@ -1,5 +1,5 @@
 import type { Position } from "../types/position.js";
-import type { Fill } from "../types/order.js";
+import type { Fill, OrderAction, OrderState } from "../types/order.js";
 import type { CloseStrategy } from "../types/trade.js";
 import {
   openLong,
@@ -7,6 +7,41 @@ import {
   openShort,
   closeShort,
 } from "./position.utils.js";
+
+type FillOpts = {
+  state: OrderState;
+  id?: string;
+  quant: number;
+  price: number;
+  commission?: number;
+  create?: Date;
+};
+
+/**
+ * Fills an order (fully or partially) and returns the fill receipt.
+ * @param opts - Fill options including state to update and fill details
+ * @returns Fill receipt for the matched quantity
+ * @group Order Management
+ */
+export function fillOrder(opts: FillOpts): Fill {
+  const { state, id, quant, price, commission = 0, create } = opts;
+
+  state.filledQuantity += quant;
+  state.remainingQuantity -= quant;
+  state.status = state.remainingQuantity <= 0 ? "FILLED" : "PARTIAL";
+  state.modified = create || new Date();
+
+  return {
+    ...({ side: state.side, effect: state.effect } as OrderAction),
+    id: id || "",
+    orderId: state.id,
+    symbol: state.symbol,
+    quantity: quant,
+    price,
+    commission,
+    created: create || new Date(),
+  };
+}
 
 /**
  * Effect of processing a single fill on a position.
