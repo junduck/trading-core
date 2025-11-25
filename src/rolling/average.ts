@@ -1,5 +1,5 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
-import { exp_factor, SmoothedAccum, Kahan } from "../utils/accum.js";
+import { exp_factor, SmoothedAccum, Kahan } from "../numeric/accum.js";
 
 /**
  * O(1) moving sum using circular buffer and Kahan summation.

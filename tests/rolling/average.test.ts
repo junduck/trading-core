@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { RollingSum, SMA, EMA, EWMA } from "../../src/rolling/average";
-import { exp_factor } from "../../src/utils/accum";
+import { RollingSum, SMA, EMA, EWMA } from "../../src/rolling/average.js";
+import { exp_factor } from "../../src/numeric/accum.js";
 
 /**
  * Naive O(n) implementation for generating test data

@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Position } from "../../src/types/position.js";
 import { createTestPosition, round } from "./position-test-helper.js";
+
+import { openLong, openShort } from "../../src/utils/position.utils.js";
 import {
-  openLong,
-  openShort,
-  handleSplit,
   handleCashDividend,
-  handleSpinoff,
   handleMerger,
-} from "../../src/utils/index.js";
+  handleSpinoff,
+  handleSplit,
+} from "../../src/utils/stock.utils.js";
 
 describe("Stock Utils - Corporate Actions", () => {
   let position: Position;

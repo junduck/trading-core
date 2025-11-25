@@ -1,4 +1,4 @@
-import type { NumericBuffer } from "../numeric/utils.js";
+import type { NumericBuffer } from "./utils.js";
 
 /**
  * Result of drawdown/drawup calculation

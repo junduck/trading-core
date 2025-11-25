@@ -9,8 +9,8 @@ import {
   RollingCov,
   RollingCorr,
   RollingBeta,
-} from "../../src/rolling/stats";
-import { exp_factor } from "../../src/utils/accum";
+} from "../../src/rolling/stats.js";
+import { exp_factor } from "../../src/numeric/accum.js";
 
 /**
  * Naive O(n) variance calculation for generating test data

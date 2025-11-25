@@ -1,5 +1,5 @@
 import { CMA } from "./average.js";
-import { center_moment } from "../utils/misc.js";
+import { center_moment } from "../numeric/utils.js";
 
 /**
  * O(1) cumulative moments up to 3rd or 4th order.

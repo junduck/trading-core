@@ -116,3 +116,16 @@ export type Fill = OrderAction & {
   /** When this fill occurred */
   created: Date;
 };
+
+/**
+ * Effect of processing a single fill on a position.
+ * @group Order Management
+ */
+export interface FillEffect {
+  /** The fill that was processed */
+  fill: Fill;
+  /** Cash flow from the fill (negative for buying, positive for selling) */
+  cashFlow: number;
+  /** Realized PnL from the fill (0 for opening positions, actual PnL for closing) */
+  realisedPnL: number;
+}

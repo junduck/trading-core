@@ -1,5 +1,10 @@
 import type { Position } from "../types/position.js";
-import type { Fill, OrderAction, OrderState } from "../types/order.js";
+import type {
+  Fill,
+  FillEffect,
+  OrderAction,
+  OrderState,
+} from "../types/order.js";
 import type { CloseStrategy } from "../types/trade.js";
 import {
   openLong,
@@ -41,19 +46,6 @@ export function fillOrder(opts: FillOpts): Fill {
     commission,
     created: create || new Date(),
   };
-}
-
-/**
- * Effect of processing a single fill on a position.
- * @group Position
- */
-export interface FillEffect {
-  /** The fill that was processed */
-  fill: Fill;
-  /** Cash flow from the fill (negative for buying, positive for selling) */
-  cashFlow: number;
-  /** Realized PnL from the fill (0 for opening positions, actual PnL for closing) */
-  realisedPnL: number;
 }
 
 /**

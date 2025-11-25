@@ -1,4 +1,4 @@
-import { Kahan } from "../utils/accum.js";
+import { Kahan } from "./accum.js";
 import { quantile } from "./stats.js";
 import { _m2 } from "./stats.js";
 

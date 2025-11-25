@@ -5,7 +5,7 @@ import {
   maxDrawUp,
   maxRelDrawUp,
   DrawdownResult,
-} from "../../src/utils/drawdown";
+} from "../../src/numeric/drawdown.js";
 
 function naiveMaxDrawDown(data: number[]): DrawdownResult {
   if (data.length === 0) return { value: 0, from: 0, to: 0 };

@@ -1,4 +1,4 @@
-import { Kahan } from "../utils/accum.js";
+import { Kahan } from "../numeric/accum.js";
 
 /**
  * O(1) cumulative variance using Welford's online algorithm.

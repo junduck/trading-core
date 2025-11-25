@@ -1,4 +1,4 @@
-import { Kahan } from "../utils/accum.js";
+import { Kahan } from "./accum.js";
 import { lerp, nth_element } from "./utils.js";
 
 /**

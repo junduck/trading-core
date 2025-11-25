@@ -1,14 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import type { Position } from "../../src/types/position.js";
 import { createTestPosition, round } from "./position-test-helper.js";
+import { openLong, openShort } from "../../src/utils/position.utils.js";
 import {
-  openLong,
-  openShort,
   handleHardFork,
   handleAirdrop,
   handleTokenSwap,
   handleStakingReward,
-} from "../../src/utils/index.js";
+} from "../../src/utils/crypto.utils.js";
 
 describe("Crypto Utils", () => {
   let position: Position;
