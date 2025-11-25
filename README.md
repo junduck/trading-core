@@ -10,7 +10,7 @@ This library provides comprehensive building blocks for trading systems in two m
 
 - **Position tracking** - Long and short positions with lot-level accounting (FIFO/LIFO)
 - **Portfolio management** - Multi-currency positions with corporate actions support
-- **Order validation** - Pre-execution order checking
+- **Order management** - Full order lifecycle tracking
 - **Portfolio valuation** - Real-time value and P&L calculations
 - **Market data** - Price snapshots, quotes, and bars
 - **Corporate actions** - Stock splits, dividends, spinoffs, mergers, hard forks, airdrops
@@ -42,178 +42,204 @@ npm install @junduck/trading-core
 
 ## Quick Start
 
-### Bookkeeping: Create a Portfolio
+This library supports two approaches for managing positions, depending on your needs:
 
-```typescript
-import { pu } from "@junduck/trading-core";
+### Bookkeeping Style 1: Direct Position Manipulation
 
-// Create portfolio
-const portfolio = pu.create("my-portfolio", "My Trading Portfolio");
+For simpler workflows where you already have execution prices and quantities. Ideal for backtesting, importing trades, and simple portfolio tracking.
 
-// Initialize USD position with cash
-pu.createPosition(portfolio, "USD", 100000);
+```text
+createPosition() → Position(initial cash)
+   |
+   |-- openLong/closeLong/openShort/closeShort() → Position updated
+   |
+   |-- market conditions update
+   |
+   |-- appraisePosition/appraisePortfolio() → Portfolio value
 ```
 
-### Bookkeeping: Open a Long Position
-
 ```typescript
-import { pu } from "@junduck/trading-core";
-import type { Asset } from "@junduck/trading-core";
+import { createPosition, openLong, closeLong, appraisePosition } from "@junduck/trading-core";
 
-const asset: Asset = {
-  symbol: "AAPL",
-  currency: "USD"
-};
+const position = createPosition(100_000);
+openLong(position, "BTC", 50_000, 10, 10);
+closeLong(position, "BTC", 55_000, 5, 10, "FIFO");
 
-pu.openLong(portfolio, asset, 150, 100, 1);
+// Market update
+const snapshot = { price: new Map([["BTC", 52_000]]), timestamp: new Date() };
+const value = appraisePosition(position, snapshot);
 ```
 
-### Bookkeeping: Close a Position
+### Bookkeeping Style 2: Order Abstraction
 
-```typescript
-import { pu } from "@junduck/trading-core";
+For realistic trading with order lifecycle management. Ideal for order book simulation, partial fills, and order state tracking.
 
-pu.closeLong(portfolio, asset, 160, 50, 1, "FIFO");
+```text
+Order (intent)
+   |
+   |-- validateOrder() --> invalid → rejectOrder() → OrderState(REJECT)
+   |
+   |-- validateOrder() --> valid → acceptOrder() → OrderState(OPEN)
+                                         |
+                                         |-- fillOrder() → Fill + OrderState(PARTIAL/FILLED)
+                                         |        |
+                                         |        v
+                                         |   processFill() → Position updated
+                                         |
+                                         |-- cancelOrder() → OrderState(CANCELLED)
 ```
 
-### Calculate Portfolio Value
-
 ```typescript
-import { appraisePortfolio } from "@junduck/trading-core";
-import type { MarketSnapshot } from "@junduck/trading-core";
+import { buyOrder, acceptOrder, fillOrder, processFill } from "@junduck/trading-core";
 
-const snapshot: MarketSnapshot = {
-  timestamp: new Date(),
-  price: new Map([
-    ["AAPL", 155],
-    ["TSLA", 200]
-  ])
-};
+const order = buyOrder({ symbol: "BTC", quant: 10, price: 50_000 });
+const orderState = acceptOrder(order);
 
-const values = appraisePortfolio(portfolio, snapshot);
-console.log(`USD Portfolio Value: $${values.get("USD")}`);
+const fill = fillOrder({ state: orderState, quant: 5, price: 50_000, commission: 10 });
+const effect = processFill(position, fill);  // Updates position
+
+// Partial fill: orderState.status === "PARTIAL"
+cancelOrder(orderState);  // Cancel remaining
 ```
 
-### Calculate Unrealized P&L
+**When to use each:**
 
-```typescript
-import { calculateUnrealizedPnL } from "@junduck/trading-core";
+- **Direct manipulation**: Backtesting with complete data, importing historical trades, simple scenarios
+- **Order abstraction**: Order book simulation, partial fills, realistic order lifecycle, complex systems
 
-const position = portfolio.positions.get("USD")!;
-const unrealizedPnL = calculateUnrealizedPnL(position, snapshot);
-console.log(`Unrealized P&L: $${unrealizedPnL}`);
+Both styles update the same `Position` structure and can be mixed as needed.
+
+### Online Statistics: O(1) Real-Time Calculations
+
+For streaming data scenarios, use online statistics that update incrementally with O(1) complexity:
+
+```text
+Create instance → new data arrives → update(x) → returns new value + internal state updated
 ```
 
-### Bookkeeping: Validate an Order
-
 ```typescript
-import { validateOrder } from "@junduck/trading-core";
-import type { Order } from "@junduck/trading-core";
+import { CMA, CuVar, RollingMax, EWMA } from "@junduck/trading-core";
 
-const order: Order = {
-  id: "order-1",
-  symbol: "AAPL",
-  side: "BUY",
-  effect: "OPEN_LONG",
-  type: "MARKET",
-  quantity: 100,
-  created: new Date()
-};
+// Create statistics trackers
+const priceAvg = new CMA();
+const priceVar = new CuVar();
+const rolling5High = new RollingMax(5);
+const ewma = new EWMA(0.1);
 
-const position = portfolio.positions.get("USD")!;
-const result = validateOrder(order, position, snapshot);
-if (!result.valid) {
-  console.error(`Order invalid: ${result.error?.type}`);
-}
+// WebSocket example: update on each tick
+websocket.on('message', (data) => {
+  const price = data.price;
+
+  const mean = priceAvg.update(price);        // Cumulative mean
+  const variance = priceVar.update(price);    // Cumulative variance
+  const high5 = rolling5High.update(price);   // 5-period high
+  const smoothed = ewma.update(price);        // Exponentially weighted MA
+
+  console.log({ mean, variance, high5, smoothed });
+});
 ```
 
-### Algorithms: Rolling Window Statistics
+**Use cases:**
+
+- **Real-time monitoring**: Track live market statistics without storing historical data
+- **Memory efficiency**: O(1) space complexity regardless of data volume
+- **Stream processing**: Calculate metrics on continuous data feeds
+- **High-frequency**: Fast updates suitable for tick-by-tick processing
+
+### CircularBuffer: Fixed-Size Sliding Windows
+
+Fixed-size buffer that automatically overwrites old data - perfect for sliding windows without manual cleanup:
 
 ```typescript
-import { SMA, EMA, RollingStddev } from "@junduck/trading-core";
+import { CircularBuffer } from "@junduck/trading-core";
 
-// Simple Moving Average
-const sma = new SMA({ period: 20 });
-sma.update(100); // returns 100
-sma.update(102); // returns 101
+const lastPrices = new CircularBuffer<number>(3);
 
-// Exponential Moving Average
-const ema = new EMA({ period: 12 });
-ema.update(100);
-ema.update(105);
+lastPrices.push(100);  // [100]
+lastPrices.push(102);  // [100, 102]
+lastPrices.push(101);  // [100, 102, 101]
+lastPrices.push(103);  // [102, 101, 103] - overwrites oldest (100)
 
-// Rolling Standard Deviation
-const std = new RollingStddev({ period: 20 });
-const { mean, stddev } = std.update(100);
+console.log(lastPrices.toArray());  // [102, 101, 103]
+console.log(lastPrices.size());     // 3
 ```
 
-### Algorithms: Online Statistics
+**Overwriting behavior is intentional and useful:**
+
+- No need to manually remove old elements
+- Constant memory usage for sliding windows
+- Perfect for last-N-ticks scenarios
+- Ideal for maintaining recent history in streaming contexts
+
+### PriorityQueue: Bid/Ask Order Book
+
+Min-heap implementation for efficient order matching in a limit order book:
 
 ```typescript
-import { CMA, CuVar, CuCorr } from "@junduck/trading-core";
+import { PriorityQueue } from "@junduck/trading-core";
 
-// Cumulative Moving Average
-const cma = new CMA();
-cma.update(100); // returns 100
-cma.update(200); // returns 150
+type Order = { price: number; size: number; id: string };
 
-// Cumulative Variance
-const variance = new CuVar({ ddof: 1 });
-const { mean, variance: v } = variance.update(100);
+// Bid queue: buyers (highest price has priority)
+const bids = new PriorityQueue<Order>((a, b) => b.price - a.price);
 
-// Cumulative Correlation
-const corr = new CuCorr();
-const { corr: correlation } = corr.update(100, 200);
+// Ask queue: sellers (lowest price has priority)
+const asks = new PriorityQueue<Order>((a, b) => a.price - b.price);
+
+// Market makers place orders
+bids.push({ price: 50000, size: 2, id: "B1" });
+bids.push({ price: 50100, size: 1, id: "B2" });  // Better bid
+bids.push({ price: 49900, size: 5, id: "B3" });
+
+asks.push({ price: 50200, size: 1, id: "A1" });
+asks.push({ price: 50150, size: 2, id: "A2" });  // Better ask
+asks.push({ price: 50300, size: 3, id: "A3" });
+
+// Check best bid/ask (top of book)
+console.log(bids.peek());  // { price: 50100, size: 1, id: "B2" } - highest bid
+console.log(asks.peek());  // { price: 50150, size: 2, id: "A2" } - lowest ask
+
+// Market order arrives: match best prices
+const bestBid = bids.pop();
+const bestAsk = asks.pop();
+
+console.log(`Spread: ${bestAsk.price - bestBid.price}`);  // 50
 ```
 
-### Algorithms: Performance Metrics
+**Use cases:**
 
-```typescript
-import { CircularBuffer, maxDrawDown, maxRelDrawDown } from "@junduck/trading-core";
-
-const equity = new CircularBuffer<number>(1000);
-equity.push(100000);
-equity.push(105000);
-equity.push(102000);
-equity.push(108000);
-
-const mdd = maxDrawDown(equity);        // Absolute drawdown
-const relMdd = maxRelDrawDown(equity);  // Percentage drawdown
-```
-
-### Algorithms: Numeric Utilities
-
-```typescript
-import {
-  mean, stddev, corr, spearman,
-  returns, logReturns, winsorize,
-  argsort, rank
-} from "@junduck/trading-core";
-
-// Basic statistics
-const prices = [100, 102, 98, 105, 103];
-const avg = mean(prices);           // 101.6
-const std = stddev(prices, 1);      // sample stddev
-
-// Returns
-const rets = returns(prices);       // [0.02, -0.039, 0.071, -0.019]
-const logRets = logReturns(prices); // log returns
-
-// Correlation
-const x = [1, 2, 3, 4, 5];
-const y = [2, 4, 5, 4, 5];
-const pearson = corr(x, y);         // Pearson correlation
-const spear = spearman(x, y);       // Spearman rank correlation
-
-// Ranking
-const ranks = rank(prices);         // [0, 0.5, 0, 1, 0.75]
-const sorted = argsort(prices);     // [2, 0, 1, 4, 3]
-
-// Data preparation
-const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
-```
+- Limit order book implementation
+- Best bid/ask tracking
+- Order matching engines
+- Event scheduling by timestamp
 
 ## Core Data Structures
+
+### Bookkeeping Structures
+
+**Position** - Represents a currency account with:
+
+- Cash balance
+- Long positions (Map of symbol → LongPosition)
+- Short positions (Map of symbol → ShortPosition)
+- Realized P&L and commission tracking
+
+**Portfolio** - Multi-currency portfolio containing:
+
+- Map of currency → Position
+- Portfolio metadata (id, name, timestamps)
+
+**Order & Fill:**
+
+- **Order**: Trading intent (BUY/SELL with OPEN/CLOSE effect)
+- **Fill**: Actual execution record (price, quantity, commission)
+
+**Market Data:**
+
+- **MarketSnapshot**: Point-in-time market prices
+- **MarketQuote**: Bid/ask quotes
+- **MarketBar**: OHLCV bars
+- **Universe**: Collection of tradable assets
 
 ### Algorithm Foundations
 
@@ -268,32 +294,6 @@ const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
 - `norm`, `lag`, `lead`, `coalesce`, `locf`, `winsorize` - Data preparation
 - `argsort`, `rank` - Ranking utilities
 - `gcd`, `lcm`, `lerp`, `clamp` - Math utilities
-
-### Bookkeeping Structures
-
-**Position** - Represents a currency account with:
-
-- Cash balance
-- Long positions (Map of symbol → LongPosition)
-- Short positions (Map of symbol → ShortPosition)
-- Realized P&L and commission tracking
-
-**Portfolio** - Multi-currency portfolio containing:
-
-- Map of currency → Position
-- Portfolio metadata (id, name, timestamps)
-
-**Order & Fill:**
-
-- **Order**: Trading intent (BUY/SELL with OPEN/CLOSE effect)
-- **Fill**: Actual execution record (price, quantity, commission)
-
-**Market Data:**
-
-- **MarketSnapshot**: Point-in-time market prices
-- **MarketQuote**: Bid/ask quotes
-- **MarketBar**: OHLCV bars
-- **Universe**: Collection of tradable assets
 
 ## API Reference
 
@@ -351,72 +351,31 @@ Position-level functions (exported directly):
 - `calculateUnrealizedPnL(position, snapshot)` - Calculate unrealized profit/loss
 - `isAssetValidAt(asset, timestamp)` - Check if asset is valid at timestamp
 
-### Fill Utils
+### Order Utils
 
-- `applyFill(position, fill, closeStrategy?)` - Apply a single fill to position
-- `applyFills(position, fills, closeStrategy?)` - Apply multiple fills sequentially
+**Order Creation:**
 
-### Order Validation
+- `buyOrder(opts)` - Create BUY order to open long position
+- `sellOrder(opts)` - Create SELL order to close long position
+- `shortOrder(opts)` - Create SELL order to open short position
+- `coverOrder(opts)` - Create BUY order to close short position (cover)
+
+**Order Lifecycle:**
+
+- `acceptOrder(order, time?)` - Accept order and create OrderState with status "OPEN"
+- `rejectOrder(order, time?)` - Reject order and create OrderState with status "REJECT"
+- `cancelOrder(state, time?)` - Cancel active order by updating state to "CANCELLED"
+
+**Order Validation:**
 
 - `validateOrder(order, position, snapshot)` - Validate order against position and market state
 
-## Example: Complete Trading Flow
+### Fill Utils
 
-```typescript
-import {
-  pu,
-  appraisePortfolio,
-  calculateUnrealizedPnL,
-  validateOrder
-} from "@junduck/trading-core";
-import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
-
-// 1. Create portfolio with initial cash
-const portfolio = pu.create("backtest-1", "Momentum Strategy");
-pu.createPosition(portfolio, "USD", 100000);
-
-// 2. Define asset and market data
-const aapl: Asset = { symbol: "AAPL", currency: "USD" };
-
-const snapshot1: MarketSnapshot = {
-  timestamp: new Date("2024-01-01"),
-  price: new Map([["AAPL", 150]])
-};
-
-// 3. Validate and execute buy order
-const buyOrder: Order = {
-  id: "order-1",
-  symbol: "AAPL",
-  side: "BUY",
-  effect: "OPEN_LONG",
-  type: "MARKET",
-  quantity: 100,
-  created: new Date("2024-01-01")
-};
-
-const validation = validateOrder(buyOrder, usdPos, snapshot1);
-if (validation.valid) {
-  pu.openLong(portfolio, aapl, 150, 100, 1);
-}
-
-// 4. Check portfolio value after some time
-const snapshot2: MarketSnapshot = {
-  timestamp: new Date("2024-02-01"),
-  price: new Map([["AAPL", 160]])
-};
-
-const position = portfolio.positions.get("USD")!;
-const unrealizedPnL = calculateUnrealizedPnL(position, snapshot2);
-const totalValue = appraisePortfolio(portfolio, snapshot2).get("USD")!;
-
-console.log(`Unrealized P&L: $${unrealizedPnL}`);
-console.log(`Total Value: $${totalValue}`);
-
-// 5. Close position
-pu.closeLong(portfolio, aapl, 160, 100, 1, "FIFO");
-
-console.log(`Realized P&L: $${position.realisedPnL}`);
-```
+- `fillOrder(opts)` - Fill an order and create Fill receipt, updates OrderState
+- `processFill(position, fill, closeStrategy?)` - Process a fill to update position
+- `applyFill(position, fill, closeStrategy?)` - (deprecated) Apply a single fill to position
+- `applyFills(position, fills, closeStrategy?)` - (deprecated) Apply multiple fills sequentially
 
 ## Testing
 

@@ -10,7 +10,7 @@
 
 - **持仓跟踪** - 多头和空头持仓，支持批次级别的会计核算（FIFO/LIFO）
 - **投资组合管理** - 多币种持仓，支持公司行为处理
-- **订单验证** - 执行前订单检查
+- **订单管理** - 完整的订单生命周期跟踪
 - **投资组合估值** - 实时价值和盈亏计算
 - **市场数据** - 价格快照、报价和K线
 - **公司行为** - 股票拆分、分红、分拆、合并、硬分叉、空投
@@ -42,178 +42,204 @@ npm install @junduck/trading-core
 
 ## 快速开始
 
-### 记账：创建投资组合
+本库支持两种管理持仓的方式，取决于您的需求：
 
-```typescript
-import { pu } from "@junduck/trading-core";
+### 记账方式 1：直接持仓操作
 
-// 创建投资组合
-const portfolio = pu.create("my-portfolio", "我的交易组合");
+适用于已有成交价格和数量的简单工作流。适合回测、导入交易记录和简单的投资组合跟踪。
 
-// 初始化 USD 持仓及现金
-pu.createPosition(portfolio, "USD", 100000);
+```text
+createPosition() → Position(初始现金)
+   |
+   |-- openLong/closeLong/openShort/closeShort() → Position 更新
+   |
+   |-- 市场条件更新
+   |
+   |-- appraisePosition/appraisePortfolio() → 投资组合价值
 ```
 
-### 记账：开仓做多
-
 ```typescript
-import { pu } from "@junduck/trading-core";
-import type { Asset } from "@junduck/trading-core";
+import { createPosition, openLong, closeLong, appraisePosition } from "@junduck/trading-core";
 
-const asset: Asset = {
-  symbol: "AAPL",
-  currency: "USD"
-};
+const position = createPosition(100_000);
+openLong(position, "BTC", 50_000, 10, 10);
+closeLong(position, "BTC", 55_000, 5, 10, "FIFO");
 
-pu.openLong(portfolio, asset, 150, 100, 1);
+// 市场更新
+const snapshot = { price: new Map([["BTC", 52_000]]), timestamp: new Date() };
+const value = appraisePosition(position, snapshot);
 ```
 
-### 记账：平仓
+### 记账方式 2：订单抽象
 
-```typescript
-import { pu } from "@junduck/trading-core";
+适用于需要订单生命周期管理的真实交易。适合订单簿模拟、部分成交和订单状态跟踪。
 
-pu.closeLong(portfolio, asset, 160, 50, 1, "FIFO");
+```text
+Order (交易意图)
+   |
+   |-- validateOrder() --> 无效 → rejectOrder() → OrderState(REJECT)
+   |
+   |-- validateOrder() --> 有效 → acceptOrder() → OrderState(OPEN)
+                                         |
+                                         |-- fillOrder() → Fill + OrderState(PARTIAL/FILLED)
+                                         |        |
+                                         |        v
+                                         |   processFill() → Position 更新
+                                         |
+                                         |-- cancelOrder() → OrderState(CANCELLED)
 ```
 
-### 计算投资组合价值
-
 ```typescript
-import { appraisePortfolio } from "@junduck/trading-core";
-import type { MarketSnapshot } from "@junduck/trading-core";
+import { buyOrder, acceptOrder, fillOrder, processFill } from "@junduck/trading-core";
 
-const snapshot: MarketSnapshot = {
-  timestamp: new Date(),
-  price: new Map([
-    ["AAPL", 155],
-    ["TSLA", 200]
-  ])
-};
+const order = buyOrder({ symbol: "BTC", quant: 10, price: 50_000 });
+const orderState = acceptOrder(order);
 
-const values = appraisePortfolio(portfolio, snapshot);
-console.log(`USD 投资组合价值: $${values.get("USD")}`);
+const fill = fillOrder({ state: orderState, quant: 5, price: 50_000, commission: 10 });
+const effect = processFill(position, fill);  // 更新持仓
+
+// 部分成交: orderState.status === "PARTIAL"
+cancelOrder(orderState);  // 取消剩余部分
 ```
 
-### 计算未实现盈亏
+**使用场景：**
 
-```typescript
-import { calculateUnrealizedPnL } from "@junduck/trading-core";
+- **直接操作**：使用完整数据的回测、导入历史交易、简单场景
+- **订单抽象**：订单簿模拟、部分成交、真实订单生命周期、复杂系统
 
-const position = portfolio.positions.get("USD")!;
-const unrealizedPnL = calculateUnrealizedPnL(position, snapshot);
-console.log(`未实现盈亏: $${unrealizedPnL}`);
+两种方式都更新相同的 `Position` 结构，可以根据需要混合使用。
+
+### 在线统计：O(1) 实时计算
+
+对于流式数据场景，使用在线统计进行增量更新，复杂度为 O(1)：
+
+```text
+创建实例 → 新数据到达 → update(x) → 返回新值 + 内部状态更新
 ```
 
-### 记账：验证订单
-
 ```typescript
-import { validateOrder } from "@junduck/trading-core";
-import type { Order } from "@junduck/trading-core";
+import { CMA, CuVar, RollingMax, EWMA } from "@junduck/trading-core";
 
-const order: Order = {
-  id: "order-1",
-  symbol: "AAPL",
-  side: "BUY",
-  effect: "OPEN_LONG",
-  type: "MARKET",
-  quantity: 100,
-  created: new Date()
-};
+// 创建统计跟踪器
+const priceAvg = new CMA();
+const priceVar = new CuVar();
+const rolling5High = new RollingMax(5);
+const ewma = new EWMA(0.1);
 
-const position = portfolio.positions.get("USD")!;
-const result = validateOrder(order, position, snapshot);
-if (!result.valid) {
-  console.error(`订单无效: ${result.error?.type}`);
-}
+// WebSocket 示例：每次行情更新时更新
+websocket.on('message', (data) => {
+  const price = data.price;
+
+  const mean = priceAvg.update(price);        // 累积均值
+  const variance = priceVar.update(price);    // 累积方差
+  const high5 = rolling5High.update(price);   // 5 周期最高价
+  const smoothed = ewma.update(price);        // 指数加权移动平均
+
+  console.log({ mean, variance, high5, smoothed });
+});
 ```
 
-### 算法：滚动窗口统计
+**使用场景：**
+
+- **实时监控**：跟踪实时市场统计而无需存储历史数据
+- **内存效率**：无论数据量多大，空间复杂度均为 O(1)
+- **流处理**：对连续数据流计算指标
+- **高频交易**：适合逐笔处理的快速更新
+
+### 循环缓冲区：固定大小滑动窗口
+
+固定大小缓冲区，自动覆盖旧数据 - 非常适合滑动窗口而无需手动清理：
 
 ```typescript
-import { SMA, EMA, RollingStddev } from "@junduck/trading-core";
+import { CircularBuffer } from "@junduck/trading-core";
 
-// 简单移动平均
-const sma = new SMA({ period: 20 });
-sma.update(100); // 返回 100
-sma.update(102); // 返回 101
+const lastPrices = new CircularBuffer<number>(3);
 
-// 指数移动平均
-const ema = new EMA({ period: 12 });
-ema.update(100);
-ema.update(105);
+lastPrices.push(100);  // [100]
+lastPrices.push(102);  // [100, 102]
+lastPrices.push(101);  // [100, 102, 101]
+lastPrices.push(103);  // [102, 101, 103] - 覆盖最旧的 (100)
 
-// 滚动标准差
-const std = new RollingStddev({ period: 20 });
-const { mean, stddev } = std.update(100);
+console.log(lastPrices.toArray());  // [102, 101, 103]
+console.log(lastPrices.size());     // 3
 ```
 
-### 算法：在线统计
+**覆盖行为是有意设计且有用的：**
+
+- 无需手动删除旧元素
+- 滑动窗口的恒定内存使用
+- 非常适合最近 N 个行情的场景
+- 适合在流式上下文中维护最近历史记录
+
+### 优先队列：买卖盘订单簿
+
+基于最小堆的实现，用于限价订单簿的高效订单匹配：
 
 ```typescript
-import { CMA, CuVar, CuCorr } from "@junduck/trading-core";
+import { PriorityQueue } from "@junduck/trading-core";
 
-// 累积移动平均
-const cma = new CMA();
-cma.update(100); // 返回 100
-cma.update(200); // 返回 150
+type Order = { price: number; size: number; id: string };
 
-// 累积方差
-const variance = new CuVar({ ddof: 1 });
-const { mean, variance: v } = variance.update(100);
+// 买盘队列：买家（最高价格优先）
+const bids = new PriorityQueue<Order>((a, b) => b.price - a.price);
 
-// 累积相关性
-const corr = new CuCorr();
-const { corr: correlation } = corr.update(100, 200);
+// 卖盘队列：卖家（最低价格优先）
+const asks = new PriorityQueue<Order>((a, b) => a.price - b.price);
+
+// 做市商下单
+bids.push({ price: 50000, size: 2, id: "B1" });
+bids.push({ price: 50100, size: 1, id: "B2" });  // 更好的买价
+bids.push({ price: 49900, size: 5, id: "B3" });
+
+asks.push({ price: 50200, size: 1, id: "A1" });
+asks.push({ price: 50150, size: 2, id: "A2" });  // 更好的卖价
+asks.push({ price: 50300, size: 3, id: "A3" });
+
+// 查看最佳买卖价（盘口）
+console.log(bids.peek());  // { price: 50100, size: 1, id: "B2" } - 最高买价
+console.log(asks.peek());  // { price: 50150, size: 2, id: "A2" } - 最低卖价
+
+// 市价单到达：匹配最佳价格
+const bestBid = bids.pop();
+const bestAsk = asks.pop();
+
+console.log(`价差: ${bestAsk.price - bestBid.price}`);  // 50
 ```
 
-### 算法：性能指标
+**使用场景：**
 
-```typescript
-import { CircularBuffer, maxDrawDown, maxRelDrawDown } from "@junduck/trading-core";
-
-const equity = new CircularBuffer<number>(1000);
-equity.push(100000);
-equity.push(105000);
-equity.push(102000);
-equity.push(108000);
-
-const mdd = maxDrawDown(equity);        // 绝对回撤
-const relMdd = maxRelDrawDown(equity);  // 百分比回撤
-```
-
-### 算法：数值工具
-
-```typescript
-import {
-  mean, stddev, corr, spearman,
-  returns, logReturns, winsorize,
-  argsort, rank
-} from "@junduck/trading-core";
-
-// 基本统计
-const prices = [100, 102, 98, 105, 103];
-const avg = mean(prices);           // 101.6
-const std = stddev(prices, 1);      // 样本标准差
-
-// 收益率
-const rets = returns(prices);       // [0.02, -0.039, 0.071, -0.019]
-const logRets = logReturns(prices); // 对数收益率
-
-// 相关性
-const x = [1, 2, 3, 4, 5];
-const y = [2, 4, 5, 4, 5];
-const pearson = corr(x, y);         // Pearson 相关系数
-const spear = spearman(x, y);       // Spearman 秩相关系数
-
-// 排序
-const ranks = rank(prices);         // [0, 0.5, 0, 1, 0.75]
-const sorted = argsort(prices);     // [2, 0, 1, 4, 3]
-
-// 数据预处理
-const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
-```
+- 限价订单簿实现
+- 最佳买卖价跟踪
+- 订单匹配引擎
+- 按时间戳的事件调度
 
 ## 核心数据结构
+
+### 记账结构
+
+**Position（持仓）** - 表示一个币种账户：
+
+- 现金余额
+- 多头持仓（符号 → LongPosition 的映射）
+- 空头持仓（符号 → ShortPosition 的映射）
+- 已实现盈亏和佣金跟踪
+
+**Portfolio（投资组合）** - 多币种投资组合：
+
+- 币种 → Position 的映射
+- 投资组合元数据（id、name、timestamps）
+
+**Order 和 Fill：**
+
+- **Order**：交易意图（BUY/SELL 配合 OPEN/CLOSE 效果）
+- **Fill**：实际成交记录（价格、数量、佣金）
+
+**Market Data（市场数据）：**
+
+- **MarketSnapshot**：某时刻的市场价格快照
+- **MarketQuote**：买卖报价
+- **MarketBar**：OHLCV K线
+- **Universe**：可交易资产集合
 
 ### 算法基础
 
@@ -268,32 +294,6 @@ const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
 - `norm`、`lag`、`lead`、`coalesce`、`locf`、`winsorize` - 数据预处理
 - `argsort`、`rank` - 排序工具
 - `gcd`、`lcm`、`lerp`、`clamp` - 数学工具
-
-### 记账结构
-
-**Position（持仓）** - 表示一个币种账户：
-
-- 现金余额
-- 多头持仓（符号 → LongPosition 的映射）
-- 空头持仓（符号 → ShortPosition 的映射）
-- 已实现盈亏和佣金跟踪
-
-**Portfolio（投资组合）** - 多币种投资组合：
-
-- 币种 → Position 的映射
-- 投资组合元数据（id、name、timestamps）
-
-**Order 和 Fill：**
-
-- **Order**：交易意图（BUY/SELL 配合 OPEN/CLOSE 效果）
-- **Fill**：实际成交记录（价格、数量、佣金）
-
-**Market Data（市场数据）：**
-
-- **MarketSnapshot**：某时刻的市场价格快照
-- **MarketQuote**：买卖报价
-- **MarketBar**：OHLCV K线
-- **Universe**：可交易资产集合
 
 ## API 参考
 
@@ -351,73 +351,31 @@ const clean = winsorize(prices, { lower: 0.05, upper: 0.95 });
 - `calculateUnrealizedPnL(position, snapshot)` - 计算未实现盈亏
 - `isAssetValidAt(asset, timestamp)` - 检查资产在指定时间是否有效
 
-### Fill 工具函数
+### Order 工具函数
 
-- `applyFill(position, fill, closeStrategy?)` - 对持仓应用单个成交
-- `applyFills(position, fills, closeStrategy?)` - 顺序应用多个成交
+**订单创建：**
 
-### 订单验证
+- `buyOrder(opts)` - 创建 BUY 订单以开多头仓位
+- `sellOrder(opts)` - 创建 SELL 订单以平多头仓位
+- `shortOrder(opts)` - 创建 SELL 订单以开空头仓位
+- `coverOrder(opts)` - 创建 BUY 订单以平空头仓位（回补）
+
+**订单生命周期：**
+
+- `acceptOrder(order, time?)` - 接受订单并创建状态为 "OPEN" 的 OrderState
+- `rejectOrder(order, time?)` - 拒绝订单并创建状态为 "REJECT" 的 OrderState
+- `cancelOrder(state, time?)` - 通过更新状态为 "CANCELLED" 来取消活动订单
+
+**订单验证：**
 
 - `validateOrder(order, position, snapshot)` - 验证订单是否符合持仓和市场状态
 
-## 示例：完整交易流程
+### Fill 工具函数
 
-```typescript
-import {
-  pu,
-  appraisePortfolio,
-  calculateUnrealizedPnL,
-  validateOrder
-} from "@junduck/trading-core";
-import type { Asset, Order, MarketSnapshot } from "@junduck/trading-core";
-
-// 1. 创建初始现金的投资组合
-const portfolio = pu.create("backtest-1", "动量策略");
-pu.createPosition(portfolio, "USD", 100000);
-
-// 2. 定义资产和市场数据
-const aapl: Asset = { symbol: "AAPL", currency: "USD" };
-
-const snapshot1: MarketSnapshot = {
-  timestamp: new Date("2024-01-01"),
-  price: new Map([["AAPL", 150]])
-};
-
-// 3. 验证并执行买入订单
-const buyOrder: Order = {
-  id: "order-1",
-  symbol: "AAPL",
-  side: "BUY",
-  effect: "OPEN_LONG",
-  type: "MARKET",
-  quantity: 100,
-  created: new Date("2024-01-01")
-};
-
-const usdPos = portfolio.positions.get("USD")!;
-const validation = validateOrder(buyOrder, usdPos, snapshot1);
-if (validation.valid) {
-  pu.openLong(portfolio, aapl, 150, 100, 1);
-}
-
-// 4. 一段时间后检查投资组合价值
-const snapshot2: MarketSnapshot = {
-  timestamp: new Date("2024-02-01"),
-  price: new Map([["AAPL", 160]])
-};
-
-const position = portfolio.positions.get("USD")!;
-const unrealizedPnL = calculateUnrealizedPnL(position, snapshot2);
-const totalValue = appraisePortfolio(portfolio, snapshot2).get("USD")!;
-
-console.log(`未实现盈亏: $${unrealizedPnL}`);
-console.log(`总价值: $${totalValue}`);
-
-// 5. 平仓
-pu.closeLong(portfolio, aapl, 160, 100, 1, "FIFO");
-
-console.log(`已实现盈亏: $${position.realisedPnL}`);
-```
+- `fillOrder(opts)` - 成交订单并创建 Fill 回执，更新 OrderState
+- `processFill(position, fill, closeStrategy?)` - 处理成交以更新持仓
+- `applyFill(position, fill, closeStrategy?)` - （已弃用）对持仓应用单个成交
+- `applyFills(position, fills, closeStrategy?)` - （已弃用）顺序应用多个成交
 
 ## 测试
 
