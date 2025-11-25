@@ -1,4 +1,4 @@
-import type { Order } from "../types/order.js";
+import type { Order, OrderState } from "../types/order.js";
 
 type OrderPrice =
   | { price?: never; stopPrice?: never }
@@ -21,7 +21,14 @@ type OrderOpts = OrderPrice & {
  * @group Order Management
  */
 export function buyOrder(opts: OrderOpts): Order {
-  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+  const {
+    id = "",
+    symbol,
+    quant,
+    price,
+    stopPrice,
+    create = new Date(),
+  } = opts;
 
   let type: Order["type"];
   if (price === undefined && stopPrice === undefined) {
@@ -54,7 +61,14 @@ export function buyOrder(opts: OrderOpts): Order {
  * @group Order Management
  */
 export function sellOrder(opts: OrderOpts): Order {
-  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+  const {
+    id = "",
+    symbol,
+    quant,
+    price,
+    stopPrice,
+    create = new Date(),
+  } = opts;
 
   let type: Order["type"];
   if (price === undefined && stopPrice === undefined) {
@@ -87,7 +101,14 @@ export function sellOrder(opts: OrderOpts): Order {
  * @group Order Management
  */
 export function shortOrder(opts: OrderOpts): Order {
-  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+  const {
+    id = "",
+    symbol,
+    quant,
+    price,
+    stopPrice,
+    create = new Date(),
+  } = opts;
 
   let type: Order["type"];
   if (price === undefined && stopPrice === undefined) {
@@ -120,7 +141,14 @@ export function shortOrder(opts: OrderOpts): Order {
  * @group Order Management
  */
 export function coverOrder(opts: OrderOpts): Order {
-  const { id = "", symbol, quant, price, stopPrice, create = new Date() } = opts;
+  const {
+    id = "",
+    symbol,
+    quant,
+    price,
+    stopPrice,
+    create = new Date(),
+  } = opts;
 
   let type: Order["type"];
   if (price === undefined && stopPrice === undefined) {
@@ -142,4 +170,52 @@ export function coverOrder(opts: OrderOpts): Order {
     ...(stopPrice !== undefined && { stopPrice }),
     created: create,
   };
+}
+
+/**
+ * Accepts an order and creates OrderState ready for execution.
+ * Initializes tracking with status "OPEN" and quantity counters.
+ * @param order - The order to accept
+ * @param time - Optional acceptance timestamp (defaults to current time)
+ * @returns New OrderState ready to be filled
+ * @group Order Management
+ */
+export function acceptOrder(order: Order, time?: Date): OrderState {
+  const modified = time ?? new Date();
+  return {
+    ...order,
+    filledQuantity: 0,
+    remainingQuantity: order.quantity,
+    status: "OPEN",
+    modified,
+  };
+}
+
+/**
+ * Rejects an order and creates OrderState with rejected status.
+ * @param order - The order to reject
+ * @param time - Optional rejection timestamp (defaults to current time)
+ * @returns New OrderState marked as rejected
+ * @group Order Management
+ */
+export function rejectOrder(order: Order, time?: Date): OrderState {
+  const modified = time ?? new Date();
+  return {
+    ...order,
+    filledQuantity: 0,
+    remainingQuantity: order.quantity,
+    status: "REJECT",
+    modified,
+  };
+}
+
+/**
+ * Cancels an active order by updating its state.
+ * @param state - The order state to cancel
+ * @param time - Optional cancellation timestamp (defaults to current time)
+ * @group Order Management
+ */
+export function cancelOrder(state: OrderState, time?: Date): void {
+  state.status = "CANCELLED";
+  state.modified = time ?? new Date();
 }

@@ -114,6 +114,9 @@ export {
   sellOrder,
   shortOrder,
   coverOrder,
+  acceptOrder,
+  rejectOrder,
+  cancelOrder,
 } from "./utils/order.utils.js";
 
 // Data Structures
