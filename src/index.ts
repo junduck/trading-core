@@ -192,6 +192,7 @@ export {
 } from "./online/perf-drawdown.js";
 
 export {
+  RunningDownStats,
   RunningSharpe,
   RunningSortino,
   RunningWinRate,

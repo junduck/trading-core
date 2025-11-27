@@ -7,7 +7,7 @@ import { Kahan } from "../numeric/accum.js";
  * Only considers returns below the threshold (typically riskfree rate).
  * @group Performance Analysis - Online
  */
-export class DownStats {
+export class RunningDownStats {
   private readonly std: CuStddev;
   private threshold: number;
 
@@ -82,7 +82,7 @@ export class RunningSharpe {
  * @group Performance Analysis - Online
  */
 export class RunningSortino {
-  private readonly downside: DownStats;
+  private readonly downside: RunningDownStats;
   private readonly mean: CMA = new CMA();
   private riskfree: number;
 
@@ -99,7 +99,7 @@ export class RunningSortino {
    */
   constructor(opts?: { riskfree?: number }) {
     this.riskfree = opts?.riskfree ?? 0;
-    this.downside = new DownStats({ threshold: this.riskfree });
+    this.downside = new RunningDownStats({ threshold: this.riskfree });
   }
 
   /**

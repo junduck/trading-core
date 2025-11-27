@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
-  DownStats,
+  RunningDownStats,
   RunningSharpe,
   RunningSortino,
   RunningWinRate,
@@ -136,9 +136,9 @@ class BatchProfitFactor {
   }
 }
 
-describe("DownStats", () => {
+describe("RunningDownStats", () => {
   it("computes downside mean and standard deviation", () => {
-    const ds = new DownStats();
+    const ds = new RunningDownStats();
     const returns = [0.05, -0.02, 0.03, -0.04, 0.01];
 
     // Process returns one by one
@@ -156,7 +156,7 @@ describe("DownStats", () => {
 
   it("handles custom threshold", () => {
     const threshold = 0.02;
-    const ds = new DownStats({ threshold });
+    const ds = new RunningDownStats({ threshold });
     const returns = [0.05, -0.02, 0.03, -0.04, 0.01];
 
     let result;
@@ -171,7 +171,7 @@ describe("DownStats", () => {
   });
 
   it("returns zero when no downside returns", () => {
-    const ds = new DownStats();
+    const ds = new RunningDownStats();
     const returns = [0.05, 0.03, 0.01, 0.04];
 
     for (const ret of returns) {
@@ -184,7 +184,7 @@ describe("DownStats", () => {
   });
 
   it("allows threshold updates", () => {
-    const ds = new DownStats({ threshold: 0 });
+    const ds = new RunningDownStats({ threshold: 0 });
 
     // Add some data with initial threshold
     ds.update(-0.02);
@@ -454,7 +454,7 @@ describe("Edge Cases", () => {
     const extremeReturns = [1e10, -1e10, 1e-10, -1e-10, 0];
 
     // Test all classes with extreme values
-    const ds = new DownStats();
+    const ds = new RunningDownStats();
     const rs = new RunningSharpe();
     const rso = new RunningSortino();
     const rw = new RunningWinRate();
@@ -485,7 +485,7 @@ describe("Edge Cases", () => {
   });
 
   it("handles NaN and Infinity inputs", () => {
-    const ds = new DownStats();
+    const ds = new RunningDownStats();
     const rs = new RunningSharpe();
     const rso = new RunningSortino();
     const rw = new RunningWinRate();
