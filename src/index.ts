@@ -274,3 +274,14 @@ export {
   parametricCVaR,
   expWeightedCVaR,
 } from "./numeric/CVaR.js";
+
+// Numeric Utilities - Performance Metrics
+export {
+  sharpe,
+  sortino,
+  calmar,
+  winRate,
+  gainLoss,
+  expectancy,
+  profitFactor,
+} from "./numeric/metrics.js";
