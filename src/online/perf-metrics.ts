@@ -5,6 +5,7 @@ import { Kahan } from "../numeric/accum.js";
 /**
  * Tracks downside mean and standard deviation (semi-deviation).
  * Only considers returns below the threshold (typically riskfree rate).
+ * @group Performance Analysis - Online
  */
 export class DownStats {
   private readonly std: CuStddev;
@@ -41,6 +42,7 @@ export class DownStats {
 /**
  * Running Sharpe ratio: (mean_return - riskfree) / stddev_return
  * Uses sample standard deviation (ddof=1) per industry convention.
+ * @group Performance Analysis - Online
  */
 export class RunningSharpe {
   private readonly stats: CuStddev;
@@ -77,6 +79,7 @@ export class RunningSharpe {
  * Running Sortino ratio: (mean_return - riskfree) / downside_stddev
  * Similar to Sharpe but only penalizes downside volatility.
  * Uses sample standard deviation (ddof=1) per industry convention.
+ * @group Performance Analysis - Online
  */
 export class RunningSortino {
   private readonly downside: DownStats;
@@ -114,6 +117,7 @@ export class RunningSortino {
 
 /**
  * Running win rate (hit ratio): percentage of positive returns.
+ * @group Performance Analysis - Online
  */
 export class RunningWinRate {
   private wins: number = 0;
@@ -147,6 +151,7 @@ export class RunningWinRate {
 
 /**
  * Running gain/loss ratio: average_gain / average_loss.
+ * @group Performance Analysis - Online
  */
 export class RunningGainLoss {
   private readonly gainMean: CMA = new CMA();
@@ -184,6 +189,7 @@ export class RunningGainLoss {
 
 /**
  * Running expectancy: (win_rate × avg_gain) - (loss_rate × avg_loss).
+ * @group Performance Analysis - Online
  */
 export class RunningExpectancy {
   private readonly gainMean: CMA = new CMA();
@@ -228,6 +234,7 @@ export class RunningExpectancy {
 
 /**
  * Running profit factor: sum_of_gains / sum_of_losses.
+ * @group Performance Analysis - Online
  */
 export class RunningProfitFactor {
   private readonly gainSum: Kahan = new Kahan();

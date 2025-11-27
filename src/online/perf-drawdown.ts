@@ -1,5 +1,6 @@
 /**
  * @template T Time type
+ * @group Performance Analysis - Online
  */
 export interface RunningDrawResult<T> {
   value: number;
@@ -11,6 +12,7 @@ export interface RunningDrawResult<T> {
 /**
  * Tracks absolute drawdown as peak - value.
  * @template T Time type (default: Date)
+ * @group Performance Analysis - Online
  */
 export class RunningDrawdown<T = Date> {
   private peak: number;
@@ -64,6 +66,7 @@ export class RunningDrawdown<T = Date> {
 /**
  * Tracks absolute drawup as value - trough.
  * @template T Time type (default: Date)
+ * @group Performance Analysis - Online
  */
 export class RunningDrawup<T = Date> {
   private trough: number;
@@ -119,6 +122,7 @@ export class RunningDrawup<T = Date> {
  * @template T Time type (default: Date)
  * @throws {Error} If initValue <= 0
  * @note Mathematically invalid if values cross zero
+ * @group Performance Analysis - Online
  */
 export class RunningRelDrawdown<T = Date> {
   private peak: number;
@@ -174,6 +178,7 @@ export class RunningRelDrawdown<T = Date> {
  * @template T Time type (default: Date)
  * @throws {Error} If initValue <= 0
  * @note Mathematically invalid if values cross zero
+ * @group Performance Analysis - Online
  */
 export class RunningRelDrawup<T = Date> {
   private trough: number;
@@ -225,6 +230,7 @@ export class RunningRelDrawup<T = Date> {
 
 /**
  * @template T Time type
+ * @group Performance Analysis - Online
  */
 export interface RunningDrawDurationResult<T> {
   duration: number;
@@ -236,6 +242,7 @@ export interface RunningDrawDurationResult<T> {
 /**
  * Tracks longest drawdown duration (time from peak to recovery).
  * @template T Time type (default: Date)
+ * @group Performance Analysis - Online
  */
 export class RunningLongestDrawdown<T = Date> {
   private peak: number;
@@ -313,6 +320,7 @@ export class RunningLongestDrawdown<T = Date> {
 /**
  * Tracks longest drawup duration (time from trough to recovery).
  * @template T Time type (default: Date)
+ * @group Performance Analysis - Online
  */
 export class RunningLongestDrawup<T = Date> {
   private trough: number;

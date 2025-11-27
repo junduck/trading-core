@@ -176,6 +176,30 @@ export { RollingMedian, RollingQuantile } from "./rolling/rank.js";
 export { RollingSkew, RollingKurt } from "./rolling/moments.js";
 export { RollingHistogram } from "./rolling/histogram.js";
 
+// Performance Analysis - Online
+export type {
+  RunningDrawDurationResult,
+  RunningDrawResult,
+} from "./online/perf-drawdown.js";
+
+export {
+  RunningDrawdown,
+  RunningDrawup,
+  RunningRelDrawdown,
+  RunningRelDrawup,
+  RunningLongestDrawdown,
+  RunningLongestDrawup,
+} from "./online/perf-drawdown.js";
+
+export {
+  RunningSharpe,
+  RunningSortino,
+  RunningWinRate,
+  RunningExpectancy,
+  RunningGainLoss,
+  RunningProfitFactor,
+} from "./online/perf-metrics.js";
+
 // Performance Analysis
 export {
   maxDrawDown,
