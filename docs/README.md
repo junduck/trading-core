@@ -1,8 +1,8 @@
-**@junduck/trading-core v2.2.0**
+**@junduck/trading-core v2.5.2**
 
 ***
 
-# @junduck/trading-core v2.2.0
+# @junduck/trading-core v2.5.2
 
 ## Portfolio
 
@@ -16,6 +16,7 @@
 - [hasAsset](functions/hasAsset.md)
 - [portfolioCloseLong](functions/portfolioCloseLong.md)
 - [portfolioCloseShort](functions/portfolioCloseShort.md)
+- [portfolioCreatePosition](functions/portfolioCreatePosition.md)
 - [portfolioHandleAirdrop](functions/portfolioHandleAirdrop.md)
 - [portfolioHandleCashDividend](functions/portfolioHandleCashDividend.md)
 - [portfolioHandleHardFork](functions/portfolioHandleHardFork.md)
@@ -29,7 +30,7 @@
 
 ## Position
 
-- [ApplyFillResult](interfaces/ApplyFillResult.md)
+- [~~ApplyFillResult~~](interfaces/ApplyFillResult.md)
 - [LongPosition](interfaces/LongPosition.md)
 - [LongPositionLot](interfaces/LongPositionLot.md)
 - [Position](interfaces/Position.md)
@@ -38,8 +39,8 @@
 - [CloseStrategy](type-aliases/CloseStrategy.md)
 - [amendLongPositionLot](functions/amendLongPositionLot.md)
 - [amendShortPositionLot](functions/amendShortPositionLot.md)
-- [applyFill](functions/applyFill.md)
-- [applyFills](functions/applyFills.md)
+- [~~applyFill~~](functions/applyFill.md)
+- [~~applyFills~~](functions/applyFills.md)
 - [closeLong](functions/closeLong.md)
 - [closeShort](functions/closeShort.md)
 - [createPosition](functions/createPosition.md)
@@ -55,6 +56,7 @@
 - [handleTokenSwap](functions/handleTokenSwap.md)
 - [openLong](functions/openLong.md)
 - [openShort](functions/openShort.md)
+- [processFill](functions/processFill.md)
 - [pushLongPositionLot](functions/pushLongPositionLot.md)
 - [pushShortPositionLot](functions/pushShortPositionLot.md)
 - [validatePosition](functions/validatePosition.md)
@@ -82,6 +84,7 @@
 
 ## Order Management
 
+- [FillEffect](interfaces/FillEffect.md)
 - [OrderValidationResult](interfaces/OrderValidationResult.md)
 - [Fill](type-aliases/Fill.md)
 - [Order](type-aliases/Order.md)
@@ -92,6 +95,14 @@
 - [OrderType](type-aliases/OrderType.md)
 - [OrderValidationError](type-aliases/OrderValidationError.md)
 - [PositionEffect](type-aliases/PositionEffect.md)
+- [acceptOrder](functions/acceptOrder.md)
+- [buyOrder](functions/buyOrder.md)
+- [cancelOrder](functions/cancelOrder.md)
+- [coverOrder](functions/coverOrder.md)
+- [fillOrder](functions/fillOrder.md)
+- [rejectOrder](functions/rejectOrder.md)
+- [sellOrder](functions/sellOrder.md)
+- [shortOrder](functions/shortOrder.md)
 - [validateOrder](functions/validateOrder.md)
 
 ## Data Structures
@@ -212,3 +223,43 @@
 - [SmoothedAccum](classes/SmoothedAccum.md)
 - [exp\_factor](functions/exp_factor.md)
 - [wilders\_factor](functions/wilders_factor.md)
+
+## Numeric Utilities - Risk Metrics
+
+- [expWeightedCVaR](functions/expWeightedCVaR.md)
+- [historicalCVaR](functions/historicalCVaR.md)
+- [invNormalCDF](functions/invNormalCDF.md)
+- [normalPDF](functions/normalPDF.md)
+- [parametricCVaR](functions/parametricCVaR.md)
+
+## Performance Analysis - Batch
+
+- [calmar](functions/calmar.md)
+- [expectancy](functions/expectancy.md)
+- [gainLoss](functions/gainLoss.md)
+- [profitFactor](functions/profitFactor.md)
+- [sharpe](functions/sharpe.md)
+- [sortino](functions/sortino.md)
+- [winRate](functions/winRate.md)
+
+## Performance Analysis - Online
+
+- [RunningDownStats](classes/RunningDownStats.md)
+- [RunningDrawdown](classes/RunningDrawdown.md)
+- [RunningDrawup](classes/RunningDrawup.md)
+- [RunningExpectancy](classes/RunningExpectancy.md)
+- [RunningGainLoss](classes/RunningGainLoss.md)
+- [RunningLongestDrawdown](classes/RunningLongestDrawdown.md)
+- [RunningLongestDrawup](classes/RunningLongestDrawup.md)
+- [RunningProfitFactor](classes/RunningProfitFactor.md)
+- [RunningRelDrawdown](classes/RunningRelDrawdown.md)
+- [RunningRelDrawup](classes/RunningRelDrawup.md)
+- [RunningSharpe](classes/RunningSharpe.md)
+- [RunningSortino](classes/RunningSortino.md)
+- [RunningWinRate](classes/RunningWinRate.md)
+- [RunningDrawDurationResult](interfaces/RunningDrawDurationResult.md)
+- [RunningDrawResult](interfaces/RunningDrawResult.md)
+
+## Type Aliases
+
+- [OrderOpts](type-aliases/OrderOpts.md)

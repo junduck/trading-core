@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: DrawdownResult
 
-Defined in: [utils/drawdown.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/drawdown.ts#L7)
+Defined in: [numeric/drawdown.ts:7](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/drawdown.ts#L7)
 
 Result of drawdown/drawup calculation
 
@@ -16,7 +16,7 @@ Result of drawdown/drawup calculation
 
 > **from**: `number`
 
-Defined in: [utils/drawdown.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/drawdown.ts#L11)
+Defined in: [numeric/drawdown.ts:11](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/drawdown.ts#L11)
 
 Index of the extremum (peak for drawdown, trough for drawup)
 
@@ -26,7 +26,7 @@ Index of the extremum (peak for drawdown, trough for drawup)
 
 > **to**: `number`
 
-Defined in: [utils/drawdown.ts:13](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/drawdown.ts#L13)
+Defined in: [numeric/drawdown.ts:13](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/drawdown.ts#L13)
 
 Index where maximum movement occurred
 
@@ -36,6 +36,6 @@ Index where maximum movement occurred
 
 > **value**: `number`
 
-Defined in: [utils/drawdown.ts:9](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/drawdown.ts#L9)
+Defined in: [numeric/drawdown.ts:9](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/drawdown.ts#L9)
 
 The drawdown/drawup value

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,39 @@
 
 # Class: RollingBeta
 
-Defined in: [rolling/stats.ts:363](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L363)
+Defined in: [rolling/stats.ts:459](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L459)
 
 O(1) rolling beta coefficient (regression slope).
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:470](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L470)
+
+##### Returns
+
+`object`
+
+###### beta
+
+> **beta**: `number`
+
+###### cov
+
+> **cov**: `number`
+
+###### meanX
+
+> **meanX**: `number`
+
+###### meanY
+
+> **meanY**: `number`
 
 ## Constructors
 
@@ -16,7 +46,7 @@ O(1) rolling beta coefficient (regression slope).
 
 > **new RollingBeta**(`opts`): `RollingBeta`
 
-Defined in: [rolling/stats.ts:378](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L378)
+Defined in: [rolling/stats.ts:489](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L489)
 
 #### Parameters
 
@@ -44,7 +74,7 @@ Window size
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [rolling/stats.ts:391](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L391)
+Defined in: [rolling/stats.ts:502](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L502)
 
 #### Parameters
 
@@ -82,7 +112,7 @@ Defined in: [rolling/stats.ts:391](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **bufferX**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:364](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L364)
+Defined in: [rolling/stats.ts:460](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L460)
 
 ***
 
@@ -90,4 +120,4 @@ Defined in: [rolling/stats.ts:364](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **bufferY**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:365](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L365)
+Defined in: [rolling/stats.ts:461](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L461)

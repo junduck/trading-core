@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > `const` **q**: `object`
 
-Defined in: [utils/position.utils.ts:500](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/position.utils.ts#L500)
+Defined in: [utils/position.utils.ts:540](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/position.utils.ts#L540)
 
 Opinionated query helpers for convenient position access.
 

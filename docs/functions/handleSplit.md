@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **handleSplit**(`pos`, `symbol`, `ratio`, `time?`): `void`
 
-Defined in: [utils/stock.utils.ts:22](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/stock.utils.ts#L22)
+Defined in: [utils/stock.utils.ts:22](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/stock.utils.ts#L22)
 
 Handles a stock split by adjusting position quantities and costs.
 

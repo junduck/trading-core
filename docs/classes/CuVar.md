@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,31 @@
 
 # Class: CuVar
 
-Defined in: [online/stats.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L7)
+Defined in: [online/stats.ts:7](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L7)
 
 O(1) cumulative variance using Welford's online algorithm.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [online/stats.ts:13](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L13)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### variance
+
+> **variance**: `number`
 
 ## Constructors
 
@@ -16,7 +38,7 @@ O(1) cumulative variance using Welford's online algorithm.
 
 > **new CuVar**(`opts?`): `CuVar`
 
-Defined in: [online/stats.ts:16](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L16)
+Defined in: [online/stats.ts:26](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L26)
 
 #### Parameters
 
@@ -38,7 +60,7 @@ Delta degrees of freedom (default: 0)
 
 > **update**(`x`): `object`
 
-Defined in: [online/stats.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L20)
+Defined in: [online/stats.ts:30](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L30)
 
 #### Parameters
 

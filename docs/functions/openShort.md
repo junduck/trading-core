@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **openShort**(`pos`, `symbol`, `price`, `quant`, `comm`, `time?`, `disableLot?`): `number`
 
-Defined in: [utils/position.utils.ts:345](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/position.utils.ts#L345)
+Defined in: [utils/position.utils.ts:375](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/position.utils.ts#L375)
 
 Opens a short position by borrowing and selling an asset.
 
@@ -61,3 +61,13 @@ If true, merges into single lot instead of tracking separate lots (default: fals
 `number`
 
 The cash proceeds from the short sale
+
+## Remarks
+
+This is a low-level primitive that operates permissively on position state without enforcing
+business logic or validation. It executes the requested operation as instructed:
+- Does not prevent opening short while holding long in the same symbol (spot market contradiction)
+- Does not validate margin requirements or borrowing availability
+- Does not enforce trading strategy rules or constraints
+
+Validation and business logic enforcement is the caller's responsibility.

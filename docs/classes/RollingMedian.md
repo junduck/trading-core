@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,11 +6,25 @@
 
 # Class: RollingMedian
 
-Defined in: [rolling/rank.ts:10](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/rank.ts#L10)
+Defined in: [rolling/rank.ts:10](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L10)
 
 Rolling median calculator. O(n) per update using QuickSelect.
 For even periods, returns the average of the two middle elements.
 Returns undefined if window is not full.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `number` \| `undefined`
+
+Defined in: [rolling/rank.ts:17](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L17)
+
+##### Returns
+
+`number` \| `undefined`
 
 ## Constructors
 
@@ -18,7 +32,7 @@ Returns undefined if window is not full.
 
 > **new RollingMedian**(`opts`): `RollingMedian`
 
-Defined in: [rolling/rank.ts:16](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/rank.ts#L16)
+Defined in: [rolling/rank.ts:21](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L21)
 
 #### Parameters
 
@@ -38,7 +52,7 @@ Defined in: [rolling/rank.ts:16](https://github.com/junduck/trading-core/blob/b0
 
 > **update**(`x`): `number` \| `undefined`
 
-Defined in: [rolling/rank.ts:23](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/rank.ts#L23)
+Defined in: [rolling/rank.ts:28](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L28)
 
 #### Parameters
 
@@ -56,7 +70,7 @@ Defined in: [rolling/rank.ts:23](https://github.com/junduck/trading-core/blob/b0
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/rank.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/rank.ts#L11)
+Defined in: [rolling/rank.ts:11](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L11)
 
 ***
 
@@ -64,4 +78,4 @@ Defined in: [rolling/rank.ts:11](https://github.com/junduck/trading-core/blob/b0
 
 > `readonly` **queue**: `number`[]
 
-Defined in: [rolling/rank.ts:12](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/rank.ts#L12)
+Defined in: [rolling/rank.ts:12](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/rank.ts#L12)

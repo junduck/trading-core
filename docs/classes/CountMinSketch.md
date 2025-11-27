@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CountMinSketch\<T\>
 
-Defined in: [online/probs.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L7)
+Defined in: [online/probs.ts:7](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/probs.ts#L7)
 
 Count-Min Sketch for frequency estimation in data streams.
 O(1) update and query with configurable error bounds.
@@ -24,7 +24,7 @@ Error is within epsilon * N with probability 1 - delta, where N is total count.
 
 > **new CountMinSketch**\<`T`\>(`opts`): `CountMinSketch`\<`T`\>
 
-Defined in: [online/probs.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L20)
+Defined in: [online/probs.ts:20](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/probs.ts#L20)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [online/probs.ts:20](https://github.com/junduck/trading-core/blob/b0
 
 > **query**(`key`): `number`
 
-Defined in: [online/probs.ts:59](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L59)
+Defined in: [online/probs.ts:59](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/probs.ts#L59)
 
 Estimate frequency of a key.
 
@@ -66,7 +66,7 @@ Estimated count (upper bound)
 
 > **update**(`key`, `count`): `void`
 
-Defined in: [online/probs.ts:46](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/probs.ts#L46)
+Defined in: [online/probs.ts:46](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/probs.ts#L46)
 
 Increment count for a key.
 

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: CircularBuffer\<T\>
 
-Defined in: [containers/circular-buffer.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L7)
+Defined in: [containers/circular-buffer.ts:7](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L7)
 
 Fixed-size circular buffer with Boost-like interface.
 Automatically overwrites oldest elements when full.
@@ -27,7 +27,7 @@ The type of elements stored in the buffer
 
 > **get** **length**(): `number`
 
-Defined in: [containers/circular-buffer.ts:149](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L149)
+Defined in: [containers/circular-buffer.ts:149](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L149)
 
 Returns current number of elements
 
@@ -41,7 +41,7 @@ Returns current number of elements
 
 > **new CircularBuffer**\<`T`\>(`capacity`): `CircularBuffer`\<`T`\>
 
-Defined in: [containers/circular-buffer.ts:18](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L18)
+Defined in: [containers/circular-buffer.ts:18](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L18)
 
 Creates a circular buffer with fixed capacity.
 
@@ -63,7 +63,7 @@ Maximum number of elements
 
 > **\[iterator\]**(): `Iterator`\<`T`\>
 
-Defined in: [containers/circular-buffer.ts:169](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L169)
+Defined in: [containers/circular-buffer.ts:169](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L169)
 
 Iterator support for for...of loops
 
@@ -77,7 +77,7 @@ Iterator support for for...of loops
 
 > **at**(`index`): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:90](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L90)
+Defined in: [containers/circular-buffer.ts:90](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L90)
 
 Accesses element at index.
 
@@ -101,7 +101,7 @@ Element or undefined if out of bounds
 
 > **back**(): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:137](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L137)
+Defined in: [containers/circular-buffer.ts:137](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L137)
 
 Gets back element without removing.
 
@@ -117,7 +117,7 @@ Back element or undefined if empty
 
 > **capacity**(): `number`
 
-Defined in: [containers/circular-buffer.ts:154](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L154)
+Defined in: [containers/circular-buffer.ts:154](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L154)
 
 Returns maximum capacity
 
@@ -131,7 +131,7 @@ Returns maximum capacity
 
 > **clear**(): `void`
 
-Defined in: [containers/circular-buffer.ts:75](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L75)
+Defined in: [containers/circular-buffer.ts:75](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L75)
 
 Removes all elements
 
@@ -145,7 +145,7 @@ Removes all elements
 
 > **empty**(): `boolean`
 
-Defined in: [containers/circular-buffer.ts:164](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L164)
+Defined in: [containers/circular-buffer.ts:164](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L164)
 
 Checks if buffer is empty
 
@@ -159,7 +159,7 @@ Checks if buffer is empty
 
 > **front**(): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:129](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L129)
+Defined in: [containers/circular-buffer.ts:129](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L129)
 
 Gets front element without removing.
 
@@ -175,7 +175,7 @@ Front element or undefined if empty
 
 > **full**(): `boolean`
 
-Defined in: [containers/circular-buffer.ts:159](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L159)
+Defined in: [containers/circular-buffer.ts:159](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L159)
 
 Checks if buffer is full
 
@@ -189,7 +189,7 @@ Checks if buffer is full
 
 > **get**(`index`): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:121](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L121)
+Defined in: [containers/circular-buffer.ts:121](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L121)
 
 Alias for at()
 
@@ -209,7 +209,7 @@ Alias for at()
 
 > **peek**(): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:81](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L81)
+Defined in: [containers/circular-buffer.ts:81](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L81)
 
 Alias for front()
 
@@ -223,7 +223,7 @@ Alias for front()
 
 > **pop**(): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:70](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L70)
+Defined in: [containers/circular-buffer.ts:70](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L70)
 
 Alias for pop_front()
 
@@ -237,7 +237,7 @@ Alias for pop_front()
 
 > **pop\_front**(): `T` \| `undefined`
 
-Defined in: [containers/circular-buffer.ts:57](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L57)
+Defined in: [containers/circular-buffer.ts:57](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L57)
 
 Removes and returns front element.
 
@@ -253,7 +253,7 @@ Front element or undefined if empty
 
 > **push**(`item`): `void`
 
-Defined in: [containers/circular-buffer.ts:49](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L49)
+Defined in: [containers/circular-buffer.ts:49](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L49)
 
 Alias for push_back()
 
@@ -273,7 +273,7 @@ Alias for push_back()
 
 > **push\_back**(`item`): `void`
 
-Defined in: [containers/circular-buffer.ts:29](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L29)
+Defined in: [containers/circular-buffer.ts:29](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L29)
 
 Adds element to back. Overwrites oldest if full.
 
@@ -295,7 +295,7 @@ Element to add
 
 > **size**(): `number`
 
-Defined in: [containers/circular-buffer.ts:144](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L144)
+Defined in: [containers/circular-buffer.ts:144](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L144)
 
 Returns current number of elements
 
@@ -309,7 +309,7 @@ Returns current number of elements
 
 > **toArray**(): `T`[]
 
-Defined in: [containers/circular-buffer.ts:197](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/containers/circular-buffer.ts#L197)
+Defined in: [containers/circular-buffer.ts:197](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/containers/circular-buffer.ts#L197)
 
 Converts buffer to array.
 

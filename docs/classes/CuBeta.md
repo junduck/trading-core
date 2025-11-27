@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,39 @@
 
 # Class: CuBeta
 
-Defined in: [online/stats.ts:151](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L151)
+Defined in: [online/stats.ts:168](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L168)
 
 O(1) cumulative beta coefficient (regression slope).
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [online/stats.ts:176](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L176)
+
+##### Returns
+
+`object`
+
+###### beta
+
+> **beta**: `number`
+
+###### cov
+
+> **cov**: `number`
+
+###### meanX
+
+> **meanX**: `number`
+
+###### meanY
+
+> **meanY**: `number`
 
 ## Constructors
 
@@ -16,7 +46,7 @@ O(1) cumulative beta coefficient (regression slope).
 
 > **new CuBeta**(`opts?`): `CuBeta`
 
-Defined in: [online/stats.ts:162](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L162)
+Defined in: [online/stats.ts:192](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L192)
 
 #### Parameters
 
@@ -38,7 +68,7 @@ Delta degrees of freedom (default: 0)
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [online/stats.ts:166](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L166)
+Defined in: [online/stats.ts:196](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L196)
 
 #### Parameters
 

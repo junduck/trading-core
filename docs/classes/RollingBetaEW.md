@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,39 @@
 
 # Class: RollingBetaEW
 
-Defined in: [rolling/stats.ts:538](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L538)
+Defined in: [rolling/stats.ts:669](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L669)
 
 Exponentially weighted beta coefficient with infinite window.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:676](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L676)
+
+##### Returns
+
+`object`
+
+###### beta
+
+> **beta**: `number`
+
+###### cov
+
+> **cov**: `number`
+
+###### meanX
+
+> **meanX**: `number`
+
+###### meanY
+
+> **meanY**: `number`
 
 ## Constructors
 
@@ -16,7 +46,7 @@ Exponentially weighted beta coefficient with infinite window.
 
 > **new RollingBetaEW**(`opts`): `RollingBetaEW`
 
-Defined in: [rolling/stats.ts:549](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L549)
+Defined in: [rolling/stats.ts:692](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L692)
 
 #### Parameters
 
@@ -50,7 +80,7 @@ Direct smoothing factor
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [rolling/stats.ts:557](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L557)
+Defined in: [rolling/stats.ts:700](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L700)
 
 #### Parameters
 

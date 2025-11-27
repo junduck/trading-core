@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **openLong**(`pos`, `symbol`, `price`, `quant`, `comm`, `time?`, `disableLot?`): `number`
 
-Defined in: [utils/position.utils.ts:214](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/position.utils.ts#L214)
+Defined in: [utils/position.utils.ts:224](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/position.utils.ts#L224)
 
 Opens a long position by purchasing an asset.
 
@@ -61,3 +61,13 @@ If true, merges into single lot instead of tracking separate lots (default: fals
 `number`
 
 The cash flow (negative value representing cost)
+
+## Remarks
+
+This is a low-level primitive that operates permissively on position state without enforcing
+business logic or validation. It executes the requested operation as instructed:
+- Does not prevent opening long while holding short in the same symbol
+- Does not validate sufficient cash availability
+- Does not enforce trading strategy rules or constraints
+
+Validation and business logic enforcement is the caller's responsibility.

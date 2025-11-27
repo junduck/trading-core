@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: NumericBuffer
 
-Defined in: [numeric/utils.ts:6](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/numeric/utils.ts#L6)
+Defined in: [numeric/utils.ts:6](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/utils.ts#L6)
 
 Represents an indexable, sized numeric container
 
@@ -16,7 +16,7 @@ Represents an indexable, sized numeric container
 
 > **at**(`index`): `number` \| `undefined`
 
-Defined in: [numeric/utils.ts:7](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/numeric/utils.ts#L7)
+Defined in: [numeric/utils.ts:7](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/utils.ts#L7)
 
 #### Parameters
 
@@ -34,4 +34,4 @@ Defined in: [numeric/utils.ts:7](https://github.com/junduck/trading-core/blob/b0
 
 > **length**: `number`
 
-Defined in: [numeric/utils.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/numeric/utils.ts#L8)
+Defined in: [numeric/utils.ts:8](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/utils.ts#L8)

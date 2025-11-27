@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,35 @@
 
 # Class: RollingZScore
 
-Defined in: [rolling/stats.ts:139](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L139)
+Defined in: [rolling/stats.ts:169](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L169)
 
 O(1) rolling z-score calculator.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:174](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L174)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### stddev
+
+> **stddev**: `number`
+
+###### zscore
+
+> **zscore**: `number`
 
 ## Constructors
 
@@ -16,7 +42,7 @@ O(1) rolling z-score calculator.
 
 > **new RollingZScore**(`opts`): `RollingZScore`
 
-Defined in: [rolling/stats.ts:143](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L143)
+Defined in: [rolling/stats.ts:179](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L179)
 
 #### Parameters
 
@@ -36,7 +62,7 @@ Defined in: [rolling/stats.ts:143](https://github.com/junduck/trading-core/blob/
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:148](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L148)
+Defined in: [rolling/stats.ts:184](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L184)
 
 #### Parameters
 
@@ -66,4 +92,4 @@ Defined in: [rolling/stats.ts:148](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:141](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L141)
+Defined in: [rolling/stats.ts:171](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L171)

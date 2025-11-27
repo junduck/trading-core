@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,10 +6,24 @@
 
 # Class: IQR
 
-Defined in: [rolling/deviation.ts:86](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L86)
+Defined in: [rolling/deviation.ts:103](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L103)
 
 Rolling Interquartile Range (IQR).
 IQR = Q3 - Q1 (75th percentile - 25th percentile)
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): \{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `undefined`
+
+Defined in: [rolling/deviation.ts:111](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L111)
+
+##### Returns
+
+\{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `undefined`
 
 ## Constructors
 
@@ -17,7 +31,7 @@ IQR = Q3 - Q1 (75th percentile - 25th percentile)
 
 > **new IQR**(`opts`): `IQR`
 
-Defined in: [rolling/deviation.ts:92](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L92)
+Defined in: [rolling/deviation.ts:118](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L118)
 
 #### Parameters
 
@@ -35,9 +49,9 @@ Defined in: [rolling/deviation.ts:92](https://github.com/junduck/trading-core/bl
 
 ### update()
 
-> **update**(`x`): \{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `null`
+> **update**(`x`): \{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `undefined`
 
-Defined in: [rolling/deviation.ts:99](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L99)
+Defined in: [rolling/deviation.ts:125](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L125)
 
 #### Parameters
 
@@ -47,7 +61,7 @@ Defined in: [rolling/deviation.ts:99](https://github.com/junduck/trading-core/bl
 
 #### Returns
 
-\{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `null`
+\{ `iqr`: `number`; `q1`: `number`; `q3`: `number`; \} \| `undefined`
 
 ## Properties
 
@@ -55,4 +69,4 @@ Defined in: [rolling/deviation.ts:99](https://github.com/junduck/trading-core/bl
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/deviation.ts:87](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L87)
+Defined in: [rolling/deviation.ts:104](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L104)

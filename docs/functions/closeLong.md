@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **closeLong**(`pos`, `symbol`, `price`, `quant`, `comm`, `strat`, `time?`): `number`
 
-Defined in: [utils/position.utils.ts:263](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/position.utils.ts#L263)
+Defined in: [utils/position.utils.ts:283](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/position.utils.ts#L283)
 
 Closes a long position by selling an asset.
 
@@ -61,6 +61,16 @@ The transaction time (default: current date)
 `number`
 
 The realised profit or loss
+
+## Remarks
+
+This is a low-level primitive that operates permissively on position state without enforcing
+business logic or validation. It executes the requested operation as instructed:
+- Does not validate if the quantity exceeds available holdings (will process the requested amount)
+- Does not enforce trading strategy rules or constraints
+- Only throws error if no long position exists at all
+
+Validation and business logic enforcement is the caller's responsibility.
 
 ## Throws
 

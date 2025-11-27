@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: Asset
 
-Defined in: [types/asset.ts:6](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L6)
+Defined in: [types/asset.ts:6](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L6)
 
 Represents a tradable asset in a SPOT market.
 Contains metadata and trading specifications for the asset.
@@ -17,7 +17,7 @@ Contains metadata and trading specifications for the asset.
 
 > **currency**: `string`
 
-Defined in: [types/asset.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L20)
+Defined in: [types/asset.ts:20](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L20)
 
 Base currency used for pricing (e.g., "USD", "USDT")
 
@@ -27,7 +27,7 @@ Base currency used for pricing (e.g., "USD", "USDT")
 
 > `optional` **exchange**: `string`
 
-Defined in: [types/asset.ts:17](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L17)
+Defined in: [types/asset.ts:17](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L17)
 
 Exchange or trading venue where the asset is traded
 
@@ -37,7 +37,7 @@ Exchange or trading venue where the asset is traded
 
 > `optional` **lotSize**: `number`
 
-Defined in: [types/asset.ts:23](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L23)
+Defined in: [types/asset.ts:23](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L23)
 
 Minimum quantity increment for trading (minimum order size)
 
@@ -47,7 +47,7 @@ Minimum quantity increment for trading (minimum order size)
 
 > `optional` **name**: `string`
 
-Defined in: [types/asset.ts:14](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L14)
+Defined in: [types/asset.ts:14](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L14)
 
 Human-readable name of the asset
 
@@ -57,7 +57,7 @@ Human-readable name of the asset
 
 > **symbol**: `string`
 
-Defined in: [types/asset.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L8)
+Defined in: [types/asset.ts:8](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L8)
 
 Unique identifier for the asset (e.g., "BTCUSDT", "AAPL")
 
@@ -67,7 +67,7 @@ Unique identifier for the asset (e.g., "BTCUSDT", "AAPL")
 
 > `optional` **tickSize**: `number`
 
-Defined in: [types/asset.ts:26](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L26)
+Defined in: [types/asset.ts:26](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L26)
 
 Minimum price increment (smallest price movement allowed)
 
@@ -77,7 +77,7 @@ Minimum price increment (smallest price movement allowed)
 
 > `optional` **type**: `string`
 
-Defined in: [types/asset.ts:11](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L11)
+Defined in: [types/asset.ts:11](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L11)
 
 Type of asset (e.g., "crypto", "stock", "forex")
 
@@ -87,7 +87,7 @@ Type of asset (e.g., "crypto", "stock", "forex")
 
 > `optional` **validFrom**: `Date`
 
-Defined in: [types/asset.ts:29](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L29)
+Defined in: [types/asset.ts:29](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L29)
 
 Date from which this asset becomes valid/tradable (null means always valid)
 
@@ -97,6 +97,6 @@ Date from which this asset becomes valid/tradable (null means always valid)
 
 > `optional` **validUntil**: `Date`
 
-Defined in: [types/asset.ts:32](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/asset.ts#L32)
+Defined in: [types/asset.ts:32](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/asset.ts#L32)
 
 Date until which this asset is valid/tradable (null means no expiry)

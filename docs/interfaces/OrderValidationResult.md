@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: OrderValidationResult
 
-Defined in: [utils/order.utils.ts:57](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/order.utils.ts#L57)
+Defined in: [utils/order.validation.ts:61](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/order.validation.ts#L61)
 
 Validation result for order checks
 
@@ -16,7 +16,7 @@ Validation result for order checks
 
 > `optional` **error**: [`OrderValidationError`](../type-aliases/OrderValidationError.md)
 
-Defined in: [utils/order.utils.ts:61](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/order.utils.ts#L61)
+Defined in: [utils/order.validation.ts:65](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/order.validation.ts#L65)
 
 Structured error if invalid
 
@@ -26,6 +26,6 @@ Structured error if invalid
 
 > **valid**: `boolean`
 
-Defined in: [utils/order.utils.ts:59](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/order.utils.ts#L59)
+Defined in: [utils/order.validation.ts:63](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/order.validation.ts#L63)
 
 Whether the order is valid

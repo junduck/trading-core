@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,31 @@
 
 # Class: CuStddev
 
-Defined in: [online/stats.ts:40](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L40)
+Defined in: [online/stats.ts:44](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L44)
 
 O(1) cumulative standard deviation.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [online/stats.ts:47](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L47)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### stddev
+
+> **stddev**: `number`
 
 ## Constructors
 
@@ -16,7 +38,7 @@ O(1) cumulative standard deviation.
 
 > **new CuStddev**(`opts?`): `CuStddev`
 
-Defined in: [online/stats.ts:46](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L46)
+Defined in: [online/stats.ts:55](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L55)
 
 #### Parameters
 
@@ -38,7 +60,7 @@ Delta degrees of freedom (default: 0)
 
 > **update**(`x`): `object`
 
-Defined in: [online/stats.ts:50](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/online/stats.ts#L50)
+Defined in: [online/stats.ts:59](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/online/stats.ts#L59)
 
 #### Parameters
 

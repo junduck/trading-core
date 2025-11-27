@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,10 +6,24 @@
 
 # Class: EWMA
 
-Defined in: [rolling/average.ts:91](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L91)
+Defined in: [rolling/average.ts:103](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/average.ts#L103)
 
 O(1) exponential weighted moving average with fixed window.
 Combines exponential weighting with sliding window.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `number`
+
+Defined in: [rolling/average.ts:111](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/average.ts#L111)
+
+##### Returns
+
+`number`
 
 ## Constructors
 
@@ -17,7 +31,7 @@ Combines exponential weighting with sliding window.
 
 > **new EWMA**(`opts`): `EWMA`
 
-Defined in: [rolling/average.ts:99](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L99)
+Defined in: [rolling/average.ts:115](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/average.ts#L115)
 
 #### Parameters
 
@@ -37,7 +51,7 @@ Defined in: [rolling/average.ts:99](https://github.com/junduck/trading-core/blob
 
 > **update**(`x`): `number`
 
-Defined in: [rolling/average.ts:106](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L106)
+Defined in: [rolling/average.ts:122](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/average.ts#L122)
 
 #### Parameters
 
@@ -55,4 +69,4 @@ Defined in: [rolling/average.ts:106](https://github.com/junduck/trading-core/blo
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/average.ts:92](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/average.ts#L92)
+Defined in: [rolling/average.ts:104](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/average.ts#L104)

@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,35 @@
 
 # Class: RollingCovEW
 
-Defined in: [rolling/stats.ts:448](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L448)
+Defined in: [rolling/stats.ts:559](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L559)
 
 Exponentially weighted covariance with infinite window.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:565](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L565)
+
+##### Returns
+
+`object`
+
+###### cov
+
+> **cov**: `number`
+
+###### meanX
+
+> **meanX**: `number`
+
+###### meanY
+
+> **meanY**: `number`
 
 ## Constructors
 
@@ -16,7 +42,7 @@ Exponentially weighted covariance with infinite window.
 
 > **new RollingCovEW**(`opts`): `RollingCovEW`
 
-Defined in: [rolling/stats.ts:458](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L458)
+Defined in: [rolling/stats.ts:576](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L576)
 
 #### Parameters
 
@@ -50,7 +76,7 @@ Direct smoothing factor
 
 > **update**(`x`, `y`): `object`
 
-Defined in: [rolling/stats.ts:466](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L466)
+Defined in: [rolling/stats.ts:584](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L584)
 
 #### Parameters
 

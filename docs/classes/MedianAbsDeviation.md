@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,10 +6,24 @@
 
 # Class: MedianAbsDeviation
 
-Defined in: [rolling/deviation.ts:39](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L39)
+Defined in: [rolling/deviation.ts:48](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L48)
 
 Rolling Median Absolute Deviation (MAD).
 MAD = median(|x_i - median(x)|)
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): \{ `mad`: `number`; `median`: `number`; \} \| `undefined`
+
+Defined in: [rolling/deviation.ts:57](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L57)
+
+##### Returns
+
+\{ `mad`: `number`; `median`: `number`; \} \| `undefined`
 
 ## Constructors
 
@@ -17,7 +31,7 @@ MAD = median(|x_i - median(x)|)
 
 > **new MedianAbsDeviation**(`opts`): `MedianAbsDeviation`
 
-Defined in: [rolling/deviation.ts:46](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L46)
+Defined in: [rolling/deviation.ts:64](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L64)
 
 #### Parameters
 
@@ -37,7 +51,7 @@ Defined in: [rolling/deviation.ts:46](https://github.com/junduck/trading-core/bl
 
 > **update**(`x`): \{ `mad`: `number`; `median`: `number`; \} \| `undefined`
 
-Defined in: [rolling/deviation.ts:54](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L54)
+Defined in: [rolling/deviation.ts:72](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L72)
 
 #### Parameters
 
@@ -55,4 +69,4 @@ Defined in: [rolling/deviation.ts:54](https://github.com/junduck/trading-core/bl
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/deviation.ts:41](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/deviation.ts#L41)
+Defined in: [rolling/deviation.ts:50](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/deviation.ts#L50)

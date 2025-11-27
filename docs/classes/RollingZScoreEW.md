@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,35 @@
 
 # Class: RollingZScoreEW
 
-Defined in: [rolling/stats.ts:159](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L159)
+Defined in: [rolling/stats.ts:196](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L196)
 
 Exponentially weighted z-score with infinite window.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:200](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L200)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### stddev
+
+> **stddev**: `number`
+
+###### zscore
+
+> **zscore**: `number`
 
 ## Constructors
 
@@ -16,7 +42,7 @@ Exponentially weighted z-score with infinite window.
 
 > **new RollingZScoreEW**(`opts`): `RollingZScoreEW`
 
-Defined in: [rolling/stats.ts:166](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L166)
+Defined in: [rolling/stats.ts:209](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L209)
 
 #### Parameters
 
@@ -50,7 +76,7 @@ Direct smoothing factor
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:170](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L170)
+Defined in: [rolling/stats.ts:213](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L213)
 
 #### Parameters
 

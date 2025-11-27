@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,11 +6,49 @@
 
 # Class: RollingArgMinMax
 
-Defined in: [rolling/minmax.ts:212](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L212)
+Defined in: [rolling/minmax.ts:243](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/minmax.ts#L243)
 
 Rolling minimum and maximum with position tracking over a sliding window.
 Returns both min/max values and their indices within the window (0 = oldest).
 O(1) amortized time per update.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/minmax.ts:250](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/minmax.ts#L250)
+
+##### Returns
+
+`object`
+
+###### max
+
+> **max**: `object`
+
+###### max.pos
+
+> **pos**: `number`
+
+###### max.val
+
+> **val**: `number`
+
+###### min
+
+> **min**: `object`
+
+###### min.pos
+
+> **pos**: `number`
+
+###### min.val
+
+> **val**: `number`
 
 ## Constructors
 
@@ -18,7 +56,7 @@ O(1) amortized time per update.
 
 > **new RollingArgMinMax**(`opts`): `RollingArgMinMax`
 
-Defined in: [rolling/minmax.ts:219](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L219)
+Defined in: [rolling/minmax.ts:267](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/minmax.ts#L267)
 
 #### Parameters
 
@@ -38,7 +76,7 @@ Defined in: [rolling/minmax.ts:219](https://github.com/junduck/trading-core/blob
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/minmax.ts:228](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L228)
+Defined in: [rolling/minmax.ts:276](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/minmax.ts#L276)
 
 #### Parameters
 
@@ -80,4 +118,4 @@ Defined in: [rolling/minmax.ts:228](https://github.com/junduck/trading-core/blob
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/minmax.ts:213](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/minmax.ts#L213)
+Defined in: [rolling/minmax.ts:244](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/minmax.ts#L244)

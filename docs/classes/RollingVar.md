@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,31 @@
 
 # Class: RollingVar
 
-Defined in: [rolling/stats.ts:8](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L8)
+Defined in: [rolling/stats.ts:8](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L8)
 
 O(1) rolling variance using Welford's online algorithm.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:16](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L16)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### variance
+
+> **variance**: `number`
 
 ## Constructors
 
@@ -16,7 +38,7 @@ O(1) rolling variance using Welford's online algorithm.
 
 > **new RollingVar**(`opts`): `RollingVar`
 
-Defined in: [rolling/stats.ts:20](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L20)
+Defined in: [rolling/stats.ts:33](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L33)
 
 #### Parameters
 
@@ -44,7 +66,7 @@ Window size
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:30](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L30)
+Defined in: [rolling/stats.ts:43](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L43)
 
 #### Parameters
 
@@ -70,4 +92,4 @@ Defined in: [rolling/stats.ts:30](https://github.com/junduck/trading-core/blob/b
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:9](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L9)
+Defined in: [rolling/stats.ts:9](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L9)

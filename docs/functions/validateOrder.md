@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **validateOrder**(`order`, `position`, `snapshot`): [`OrderValidationResult`](../interfaces/OrderValidationResult.md)
 
-Defined in: [utils/order.validation.ts:315](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/order.validation.ts#L315)
+Defined in: [utils/order.validation.ts:377](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/order.validation.ts#L377)
 
 Main dispatcher for order validation.
 Validates order structure and delegates to type-specific validators.

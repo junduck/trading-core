@@ -1,14 +1,14 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
 [@junduck/trading-core](../README.md) / applyFills
 
-# Function: applyFills()
+# ~~Function: applyFills()~~
 
 > **applyFills**(`position`, `fills`, `closeStrategy`): [`ApplyFillResult`](../interfaces/ApplyFillResult.md)
 
-Defined in: [utils/fill.utils.ts:110](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/fill.utils.ts#L110)
+Defined in: [utils/fill.utils.ts:191](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/fill.utils.ts#L191)
 
 Applies multiple fills to a position sequentially.
 Returns cumulative result with all fills, total cash flow, and total realized PnL.
@@ -42,3 +42,7 @@ Cumulative result with all fills and totals
 ## Throws
 
 Error if any fill cannot be applied
+
+## Deprecated
+
+Use processFill with map/reduce instead. This function will be removed in v3.0.

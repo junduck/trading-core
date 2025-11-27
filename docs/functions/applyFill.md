@@ -1,14 +1,14 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
 [@junduck/trading-core](../README.md) / applyFill
 
-# Function: applyFill()
+# ~~Function: applyFill()~~
 
 > **applyFill**(`position`, `fill`, `closeStrategy`): [`ApplyFillResult`](../interfaces/ApplyFillResult.md)
 
-Defined in: [utils/fill.utils.ts:33](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/fill.utils.ts#L33)
+Defined in: [utils/fill.utils.ts:167](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/utils/fill.utils.ts#L167)
 
 Applies a single fill to update a position.
 Routes to appropriate position utility based on fill effect.
@@ -38,3 +38,7 @@ Lot closing strategy for closing positions (default: "FIFO")
 [`ApplyFillResult`](../interfaces/ApplyFillResult.md)
 
 Result with fill, cash flow, and realized PnL
+
+## Deprecated
+
+Use processFill instead. This function will be removed in v3.0.

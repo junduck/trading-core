@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: MarketQuote
 
-Defined in: [types/market.ts:87](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L87)
+Defined in: [types/market.ts:87](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L87)
 
 Represent a market quote data for a specific time.
 
@@ -16,7 +16,7 @@ Represent a market quote data for a specific time.
 
 > `optional` **ask**: `number`
 
-Defined in: [types/market.ts:110](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L110)
+Defined in: [types/market.ts:110](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L110)
 
 Best ask price (lowest sell order)
 
@@ -26,7 +26,7 @@ Best ask price (lowest sell order)
 
 > `optional` **askVol**: `number`
 
-Defined in: [types/market.ts:113](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L113)
+Defined in: [types/market.ts:113](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L113)
 
 Volume available at the ask price
 
@@ -36,7 +36,7 @@ Volume available at the ask price
 
 > `optional` **bid**: `number`
 
-Defined in: [types/market.ts:104](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L104)
+Defined in: [types/market.ts:104](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L104)
 
 Best bid price (highest buy order)
 
@@ -46,7 +46,7 @@ Best bid price (highest buy order)
 
 > `optional` **bidVol**: `number`
 
-Defined in: [types/market.ts:107](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L107)
+Defined in: [types/market.ts:107](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L107)
 
 Volume available at the bid price
 
@@ -56,7 +56,7 @@ Volume available at the bid price
 
 > `optional` **preClose**: `number`
 
-Defined in: [types/market.ts:116](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L116)
+Defined in: [types/market.ts:116](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L116)
 
 Previous close price
 
@@ -66,7 +66,7 @@ Previous close price
 
 > **price**: `number`
 
-Defined in: [types/market.ts:92](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L92)
+Defined in: [types/market.ts:92](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L92)
 
 Last traded price
 
@@ -76,7 +76,7 @@ Last traded price
 
 > **symbol**: `string`
 
-Defined in: [types/market.ts:89](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L89)
+Defined in: [types/market.ts:89](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L89)
 
 Symbol of the asset this quote refers to
 
@@ -86,7 +86,7 @@ Symbol of the asset this quote refers to
 
 > **timestamp**: `Date`
 
-Defined in: [types/market.ts:101](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L101)
+Defined in: [types/market.ts:101](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L101)
 
 Timestamp when this quote was generated
 
@@ -96,7 +96,7 @@ Timestamp when this quote was generated
 
 > `optional` **totalVolume**: `number`
 
-Defined in: [types/market.ts:98](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L98)
+Defined in: [types/market.ts:98](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L98)
 
 Total traded volume
 
@@ -106,6 +106,6 @@ Total traded volume
 
 > `optional` **volume**: `number`
 
-Defined in: [types/market.ts:95](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/types/market.ts#L95)
+Defined in: [types/market.ts:95](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/types/market.ts#L95)
 
 Last traded volume

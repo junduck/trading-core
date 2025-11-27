@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: SmoothedAccum
 
-Defined in: [utils/accum.ts:29](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/accum.ts#L29)
+Defined in: [numeric/accum.ts:29](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/accum.ts#L29)
 
 Smoothed accumulator for weighted observations.
 Implements val = (1-w)*val + w*obs.
@@ -17,7 +17,7 @@ Implements val = (1-w)*val + w*obs.
 
 > **new SmoothedAccum**(`init`): `SmoothedAccum`
 
-Defined in: [utils/accum.ts:35](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/accum.ts#L35)
+Defined in: [numeric/accum.ts:35](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/accum.ts#L35)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Initial value (default: 0)
 
 > **accum**(`obs`, `weight`): `number`
 
-Defined in: [utils/accum.ts:45](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/accum.ts#L45)
+Defined in: [numeric/accum.ts:45](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/accum.ts#L45)
 
 Updates value using exponential smoothing.
 
@@ -67,7 +67,7 @@ Updated smoothed value
 
 > **roll**(`obs_new`, `obs_old`, `weight`): `number`
 
-Defined in: [utils/accum.ts:58](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/accum.ts#L58)
+Defined in: [numeric/accum.ts:58](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/accum.ts#L58)
 
 Updates value by rolling out old observation and rolling in new one.
 Requires obs_new and obs_old have same weight
@@ -104,4 +104,4 @@ Updated smoothed value
 
 > **val**: `number`
 
-Defined in: [utils/accum.ts:30](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/utils/accum.ts#L30)
+Defined in: [numeric/accum.ts:30](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/numeric/accum.ts#L30)

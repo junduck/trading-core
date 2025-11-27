@@ -1,4 +1,4 @@
-[**@junduck/trading-core v2.2.0**](../README.md)
+[**@junduck/trading-core v2.5.2**](../README.md)
 
 ***
 
@@ -6,9 +6,31 @@
 
 # Class: RollingStddev
 
-Defined in: [rolling/stats.ts:95](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L95)
+Defined in: [rolling/stats.ts:115](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L115)
 
 O(1) rolling standard deviation.
+
+## Accessors
+
+### value
+
+#### Get Signature
+
+> **get** **value**(): `object`
+
+Defined in: [rolling/stats.ts:119](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L119)
+
+##### Returns
+
+`object`
+
+###### mean
+
+> **mean**: `number`
+
+###### stddev
+
+> **stddev**: `number`
 
 ## Constructors
 
@@ -16,7 +38,7 @@ O(1) rolling standard deviation.
 
 > **new RollingStddev**(`opts`): `RollingStddev`
 
-Defined in: [rolling/stats.ts:103](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L103)
+Defined in: [rolling/stats.ts:128](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L128)
 
 #### Parameters
 
@@ -44,7 +66,7 @@ Window size
 
 > **update**(`x`): `object`
 
-Defined in: [rolling/stats.ts:108](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L108)
+Defined in: [rolling/stats.ts:133](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L133)
 
 #### Parameters
 
@@ -70,4 +92,4 @@ Defined in: [rolling/stats.ts:108](https://github.com/junduck/trading-core/blob/
 
 > `readonly` **buffer**: [`CircularBuffer`](CircularBuffer.md)\<`number`\>
 
-Defined in: [rolling/stats.ts:97](https://github.com/junduck/trading-core/blob/b03088bd0ee00897e0cf49496dd81d343e43bb66/src/rolling/stats.ts#L97)
+Defined in: [rolling/stats.ts:117](https://github.com/junduck/trading-core/blob/2826ecdee150f415f8d111535936ebaf954a775b/src/rolling/stats.ts#L117)
