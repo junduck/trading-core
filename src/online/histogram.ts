@@ -27,11 +27,11 @@ export class CuHistogram {
    * @param x New value
    * @returns Reference to internal counts array
    */
-  update(x: number): readonly number[] {
+  update(x: number): number[] {
     this.n++;
     const bin = this.findBin(x);
     this.counts[bin]!++;
-    return this.counts;
+    return [...this.counts];
   }
 
   /**
@@ -43,13 +43,13 @@ export class CuHistogram {
   }
 
   /** Get all bin counts */
-  getCounts(): readonly number[] {
-    return this.counts;
+  getCounts(): number[] {
+    return [...this.counts];
   }
 
   /** Get bin edges */
-  getEdges(): readonly number[] {
-    return this.edges;
+  getEdges(): number[] {
+    return [...this.edges];
   }
 
   /** Get total count of all observations */

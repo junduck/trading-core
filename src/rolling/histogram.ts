@@ -31,7 +31,7 @@ export class RollingHistogram {
    * @param x New value
    * @returns Reference to internal counts array
    */
-  update(x: number): readonly number[] {
+  update(x: number): number[] {
     if (this.buffer.full()) {
       const old = this.buffer.front()!;
       const oldBin = this.findBin(old);
@@ -42,7 +42,7 @@ export class RollingHistogram {
     const newBin = this.findBin(x);
     this.counts[newBin]!++;
 
-    return this.counts;
+    return [...this.counts];
   }
 
   /**
@@ -54,13 +54,13 @@ export class RollingHistogram {
   }
 
   /** Get all bin counts */
-  getCounts(): readonly number[] {
-    return this.counts;
+  getCounts(): number[] {
+    return [...this.counts];
   }
 
   /** Get bin edges */
-  getEdges(): readonly number[] {
-    return this.edges;
+  getEdges(): number[] {
+    return [...this.edges];
   }
 
   /**
