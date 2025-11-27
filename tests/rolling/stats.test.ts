@@ -244,6 +244,17 @@ describe("RollingVar", () => {
       "Period should be larger than DDoF."
     );
   });
+
+  it("should return same value from value property as last update", () => {
+    const rv = new RollingVar({ period: 4 });
+    let lastValue = rv.update(10);
+    expect(rv.value).toEqual(lastValue);
+    rv.update(20);
+    rv.update(30);
+    rv.update(40);
+    lastValue = rv.update(50);
+    expect(rv.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingVarEW", () => {
@@ -274,6 +285,16 @@ describe("RollingVarEW", () => {
       expect(result[i].mean).toBeCloseTo(expected[i].mean, 8);
       expect(result[i].variance).toBeCloseTo(expected[i].variance, 8);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rvew = new RollingVarEW({ period: 10 });
+    let lastValue = rvew.update(10);
+    expect(rvew.value).toEqual(lastValue);
+    rvew.update(20);
+    rvew.update(30);
+    lastValue = rvew.update(40);
+    expect(rvew.value).toEqual(lastValue);
   });
 });
 
@@ -307,6 +328,17 @@ describe("RollingStddev", () => {
       expect(result[i].stddev).toBeCloseTo(Math.sqrt(expected[i].variance), 8);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const rs = new RollingStddev({ period: 4 });
+    let lastValue = rs.update(10);
+    expect(rs.value).toEqual(lastValue);
+    rs.update(20);
+    rs.update(30);
+    rs.update(40);
+    lastValue = rs.update(50);
+    expect(rs.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingStddevEW", () => {
@@ -322,6 +354,15 @@ describe("RollingStddevEW", () => {
       expect(result[i].mean).toBeCloseTo(expected[i].mean, 8);
       expect(result[i].stddev).toBeCloseTo(Math.sqrt(expected[i].variance), 8);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rsew = new RollingStddevEW({ period: 10 });
+    rsew.update(10);
+    rsew.update(20);
+    rsew.update(30);
+    const lastValue = rsew.update(40);
+    expect(rsew.value).toEqual(lastValue);
   });
 });
 
@@ -356,6 +397,17 @@ describe("RollingZScore", () => {
       expect(result[i].zscore).toBe(0);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const rz = new RollingZScore({ period: 4 });
+    let lastValue = rz.update(10);
+    expect(rz.value).toEqual(lastValue);
+    rz.update(20);
+    rz.update(30);
+    rz.update(40);
+    lastValue = rz.update(50);
+    expect(rz.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingZScoreEW", () => {
@@ -375,6 +427,15 @@ describe("RollingZScoreEW", () => {
           : 0;
       expect(result[i].zscore).toBeCloseTo(expectedZ, 8);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rzew = new RollingZScoreEW({ period: 10 });
+    rzew.update(10);
+    rzew.update(20);
+    rzew.update(30);
+    const lastValue = rzew.update(40);
+    expect(rzew.value).toEqual(lastValue);
   });
 });
 
@@ -418,6 +479,17 @@ describe("RollingCov", () => {
       "Period should be larger than DDoF."
     );
   });
+
+  it("should return same value from value property as last update", () => {
+    const rc = new RollingCov({ period: 4 });
+    let lastValue = rc.update(10, 15);
+    expect(rc.value).toEqual(lastValue);
+    rc.update(20, 25);
+    rc.update(30, 35);
+    rc.update(40, 45);
+    lastValue = rc.update(50, 55);
+    expect(rc.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingCorr", () => {
@@ -454,6 +526,17 @@ describe("RollingCorr", () => {
       expect(result[i].meanY).toBeCloseTo(expected[i].meanY, 7);
       expect(result[i].corr).toBeCloseTo(expected[i].corr, 7);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rc = new RollingCorr({ period: 4 });
+    let lastValue = rc.update(10, 15);
+    expect(rc.value).toEqual(lastValue);
+    rc.update(20, 25);
+    rc.update(30, 35);
+    rc.update(40, 45);
+    lastValue = rc.update(50, 55);
+    expect(rc.value).toEqual(lastValue);
   });
 });
 
@@ -497,5 +580,16 @@ describe("RollingBeta", () => {
     expect(() => new RollingBeta({ period: 2, ddof: 2 })).toThrow(
       "Period should be larger than DDoF."
     );
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rb = new RollingBeta({ period: 4 });
+    let lastValue = rb.update(10, 15);
+    expect(rb.value).toEqual(lastValue);
+    rb.update(20, 25);
+    rb.update(30, 35);
+    rb.update(40, 45);
+    lastValue = rb.update(50, 55);
+    expect(rb.value).toEqual(lastValue);
   });
 });

@@ -8,6 +8,10 @@ export class CMA {
   private cma: Kahan = new Kahan();
   private n: number = 0;
 
+  get value(): number {
+    return this.cma.val;
+  }
+
   update(x: number): number {
     this.n++;
     return this.cma.accum((x - this.cma.val) / this.n);

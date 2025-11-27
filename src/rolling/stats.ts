@@ -13,6 +13,19 @@ export class RollingVar {
   private weight: number;
   private varWeight: number;
 
+  get value(): { mean: number; variance: number } {
+    if (this.buffer.full()) {
+      return { mean: this.m.val, variance: this.m2.val * this.varWeight };
+    } else if (this.buffer.size() <= this.ddof) {
+      return { mean: this.m.val, variance: 0 };
+    } else {
+      return {
+        mean: this.m.val,
+        variance: this.m2.val / (this.buffer.size() - this.ddof),
+      };
+    }
+  }
+
   /**
    * @param opts.period Window size
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -63,6 +76,13 @@ export class RollingVarEW {
   private s2: SmoothedAccum = new SmoothedAccum();
   private alpha: number;
 
+  get value(): { mean: number; variance: number } {
+    if (this.m === undefined) {
+      return { mean: 0, variance: 0 };
+    }
+    return { mean: this.m, variance: this.s2.val };
+  }
+
   /**
    * @param opts.period Period to calculate alpha
    * @param opts.alpha Direct smoothing factor
@@ -96,6 +116,11 @@ export class RollingStddev {
   private readonly variance: RollingVar;
   readonly buffer: CircularBuffer<number>;
 
+  get value(): { mean: number; stddev: number } {
+    const { mean, variance } = this.variance.value;
+    return { mean, stddev: Math.sqrt(variance) };
+  }
+
   /**
    * @param opts.period Window size
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -118,6 +143,11 @@ export class RollingStddev {
 export class RollingStddevEW {
   private readonly variance: RollingVarEW;
 
+  get value(): { mean: number; stddev: number } {
+    const { mean, variance } = this.variance.value;
+    return { mean, stddev: Math.sqrt(variance) };
+  }
+
   /**
    * @param opts.period Period to calculate alpha
    * @param opts.alpha Direct smoothing factor
@@ -139,6 +169,12 @@ export class RollingStddevEW {
 export class RollingZScore {
   private stddev: RollingStddev;
   readonly buffer: CircularBuffer<number>;
+  private lastZ: number = 0;
+
+  get value(): { mean: number; stddev: number; zscore: number } {
+    const { mean, stddev } = this.stddev.value;
+    return { mean, stddev, zscore: this.lastZ };
+  }
 
   constructor(opts: { period: number }) {
     this.stddev = new RollingStddev({ period: opts.period, ddof: 0 });
@@ -148,6 +184,7 @@ export class RollingZScore {
   update(x: number): { mean: number; stddev: number; zscore: number } {
     const { mean, stddev } = this.stddev.update(x);
     const zscore = stddev === 0 ? 0 : (x - mean) / stddev;
+    this.lastZ = zscore;
     return { mean, stddev, zscore };
   }
 }
@@ -158,6 +195,12 @@ export class RollingZScore {
  */
 export class RollingZScoreEW {
   private stddev: RollingStddevEW;
+  private lastZ: number = 0;
+
+  get value(): { mean: number; stddev: number; zscore: number } {
+    const { mean, stddev } = this.stddev.value;
+    return { mean, stddev, zscore: this.lastZ };
+  }
 
   /**
    * @param opts.period Period to calculate alpha
@@ -170,6 +213,7 @@ export class RollingZScoreEW {
   update(x: number): { mean: number; stddev: number; zscore: number } {
     const { mean, stddev } = this.stddev.update(x);
     const zscore = stddev === 0 ? 0 : (x - mean) / stddev;
+    this.lastZ = zscore;
     return { mean, stddev, zscore };
   }
 }
@@ -187,6 +231,24 @@ export class RollingCov {
   private ddof: number;
   private weight: number;
   private covWeight: number;
+
+  get value(): { meanX: number; meanY: number; cov: number } {
+    if (this.bufferX.full()) {
+      return {
+        meanX: this.mx.val,
+        meanY: this.my.val,
+        cov: this.kahanMXY.val * this.covWeight,
+      };
+    } else if (this.bufferX.size() <= this.ddof) {
+      return { meanX: this.mx.val, meanY: this.my.val, cov: 0 };
+    } else {
+      return {
+        meanX: this.mx.val,
+        meanY: this.my.val,
+        cov: this.kahanMXY.val / (this.bufferX.size() - this.ddof),
+      };
+    }
+  }
 
   /**
    * @param opts.period Window size
@@ -262,6 +324,40 @@ export class RollingCorr {
   private ddof: number;
   private weight: number;
   private statWeight: number;
+
+  get value(): {
+    meanX: number;
+    meanY: number;
+    cov: number;
+    corr: number;
+  } {
+    const mxy = this.kahanMXY.val;
+    const m2x = this.kahanM2X.val;
+    const m2y = this.kahanM2Y.val;
+    const denom = Math.sqrt(m2x * m2y);
+    if (this.bufferX.full()) {
+      return {
+        meanX: this.mx,
+        meanY: this.my,
+        cov: mxy * this.statWeight,
+        corr: denom === 0 ? 0 : mxy / denom,
+      };
+    } else if (this.bufferX.size() <= this.ddof) {
+      return {
+        meanX: this.mx,
+        meanY: this.my,
+        cov: 0,
+        corr: 0,
+      };
+    } else {
+      return {
+        meanX: this.mx,
+        meanY: this.my,
+        cov: mxy / (this.bufferX.size() - this.ddof),
+        corr: denom === 0 ? 0 : mxy / denom,
+      };
+    }
+  }
 
   /**
    * @param opts.period Window size
@@ -371,6 +467,21 @@ export class RollingBeta {
   private weight: number;
   private statWeight: number;
 
+  get value(): { meanX: number; meanY: number; cov: number; beta: number } {
+    const mxy = this.kahanMXY.val;
+    const m2x = this.kahanM2X.val;
+    const beta = m2x > 0 ? mxy / m2x : 0;
+    if (this.bufferX.full()) {
+      const cov = mxy * this.statWeight;
+      return { meanX: this.mx, meanY: this.my, cov, beta };
+    } else if (this.bufferX.size() <= this.ddof) {
+      return { meanX: this.mx, meanY: this.my, cov: 0, beta: 0 };
+    } else {
+      const cov = mxy / (this.bufferX.size() - this.ddof);
+      return { meanX: this.mx, meanY: this.my, cov, beta };
+    }
+  }
+
   /**
    * @param opts.period Window size
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -451,6 +562,13 @@ export class RollingCovEW {
   private sxy: SmoothedAccum = new SmoothedAccum();
   private alpha: number;
 
+  get value(): { meanX: number; meanY: number; cov: number } {
+    if (this.mx === undefined) {
+      return { meanX: 0, meanY: 0, cov: 0 };
+    }
+    return { meanX: this.mx!, meanY: this.my!, cov: this.sxy.val };
+  }
+
   /**
    * @param opts.period Period to calculate alpha
    * @param opts.alpha Direct smoothing factor
@@ -490,6 +608,19 @@ export class RollingCorrEW {
   private s2x: SmoothedAccum = new SmoothedAccum();
   private s2y: SmoothedAccum = new SmoothedAccum();
   private alpha: number;
+
+  get value(): { meanX: number; meanY: number; cov: number; corr: number } {
+    if (this.mx === undefined) {
+      return { meanX: 0, meanY: 0, cov: 0, corr: 0 };
+    }
+    const denom = Math.sqrt(this.s2x.val * this.s2y.val);
+    return {
+      meanX: this.mx!,
+      meanY: this.my!,
+      cov: this.sxy.val,
+      corr: denom === 0 ? 0 : this.sxy.val / denom,
+    };
+  }
 
   /**
    * @param opts.period Period to calculate alpha
@@ -541,6 +672,18 @@ export class RollingBetaEW {
   private sxy: SmoothedAccum = new SmoothedAccum();
   private s2x: SmoothedAccum = new SmoothedAccum();
   private alpha: number;
+
+  get value(): { meanX: number; meanY: number; cov: number; beta: number } {
+    if (this.mx === undefined) {
+      return { meanX: 0, meanY: 0, cov: 0, beta: 0 };
+    }
+    return {
+      meanX: this.mx!,
+      meanY: this.my!,
+      cov: this.sxy.val,
+      beta: this.s2x.val > 0 ? this.sxy.val / this.s2x.val : 0,
+    };
+  }
 
   /**
    * @param opts.period Period to calculate alpha

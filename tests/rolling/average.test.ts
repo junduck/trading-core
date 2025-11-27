@@ -125,6 +125,15 @@ describe("RollingSum", () => {
       expect(result[i]).toBeCloseTo(expected[i], 10);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const ms = new RollingSum({ period: 3 });
+    ms.update(10);
+    ms.update(20);
+    ms.update(30);
+    const lastValue = ms.update(40);
+    expect(ms.value).toBe(lastValue);
+  });
 });
 
 describe("SMA", () => {
@@ -178,6 +187,15 @@ describe("SMA", () => {
     for (let i = 0; i < result.length; i++) {
       expect(result[i]).toBeCloseTo(expected[i], 10);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const sma = new SMA({ period: 3 });
+    sma.update(10);
+    sma.update(20);
+    sma.update(30);
+    const lastValue = sma.update(40);
+    expect(sma.value).toBe(lastValue);
   });
 });
 
@@ -235,6 +253,14 @@ describe("EMA", () => {
       expect(result[i]).toBeCloseTo(expected[i], 10);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const ema = new EMA({ period: 10 });
+    ema.update(10);
+    ema.update(20);
+    const lastValue = ema.update(30);
+    expect(ema.value).toBe(lastValue);
+  });
 });
 
 describe("EWMA", () => {
@@ -288,5 +314,15 @@ describe("EWMA", () => {
     for (let i = 0; i < result.length; i++) {
       expect(result[i]).toBeCloseTo(expected[i], 8);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const ewma = new EWMA({ period: 4 });
+    ewma.update(10);
+    ewma.update(20);
+    ewma.update(30);
+    ewma.update(40);
+    const lastValue = ewma.update(50);
+    expect(ewma.value).toBe(lastValue);
   });
 });

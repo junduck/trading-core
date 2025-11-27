@@ -105,4 +105,10 @@ describe("CMA", () => {
       expect(result[i]).toBeCloseTo(expected[i], 10);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const cma = new CMA();
+    const lastValue = cma.update(50);
+    expect(cma.value).toBe(lastValue);
+  });
 });

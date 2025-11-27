@@ -10,6 +10,10 @@ export class RollingMin {
   readonly buffer: CircularBuffer<number>;
   private minDeque: Deque<number>;
 
+  get value(): number {
+    return this.minDeque.empty() ? Infinity : this.minDeque.front()!;
+  }
+
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
     // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
@@ -43,6 +47,10 @@ export class RollingMin {
 export class RollingMax {
   readonly buffer: CircularBuffer<number>;
   private maxDeque: Deque<number>;
+
+  get value(): number {
+    return this.maxDeque.empty() ? -Infinity : this.maxDeque.front()!;
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -78,6 +86,13 @@ export class RollingMinMax {
   readonly buffer: CircularBuffer<number>;
   private minDeque: Deque<number>;
   private maxDeque: Deque<number>;
+
+  get value(): { min: number; max: number } {
+    return {
+      min: this.minDeque.empty() ? Infinity : this.minDeque.front()!,
+      max: this.maxDeque.empty() ? -Infinity : this.maxDeque.front()!,
+    };
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -129,6 +144,14 @@ export class RollingArgMin {
   private readonly period: number;
   private position: number = 0;
 
+  get value(): { val: number; pos: number } {
+    if (this.minDeque.empty()) {
+      return { val: Infinity, pos: 0 };
+    }
+    const front = this.minDeque.front()!;
+    return { val: front.val, pos: this.position - front.pos - 1 };
+  }
+
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
     // Monotonic deque primarily push_back, so allocate 1.5x to avoid rebalancing
@@ -171,6 +194,14 @@ export class RollingArgMax {
   private maxDeque: Deque<{ val: number; pos: number }>;
   private readonly period: number;
   private position: number = 0;
+
+  get value(): { val: number; pos: number } {
+    if (this.maxDeque.empty()) {
+      return { val: -Infinity, pos: 0 };
+    }
+    const front = this.maxDeque.front()!;
+    return { val: front.val, pos: this.position - front.pos - 1 };
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -215,6 +246,23 @@ export class RollingArgMinMax {
   private maxDeque: Deque<{ val: number; pos: number }>;
   private readonly period: number;
   private position: number = 0;
+
+  get value(): {
+    min: { val: number; pos: number };
+    max: { val: number; pos: number };
+  } {
+    const minFront = this.minDeque.front();
+    const maxFront = this.maxDeque.front();
+
+    return {
+      min: minFront
+        ? { val: minFront.val, pos: this.position - minFront.pos - 1 }
+        : { val: Infinity, pos: 0 },
+      max: maxFront
+        ? { val: maxFront.val, pos: this.position - maxFront.pos - 1 }
+        : { val: -Infinity, pos: 0 },
+    };
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);

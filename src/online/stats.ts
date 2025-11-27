@@ -10,6 +10,16 @@ export class CuVar {
   private n: number = 0;
   private ddof: number;
 
+  get value(): { mean: number; variance: number } {
+    if (this.n <= this.ddof) {
+      return { mean: this.m.val, variance: 0 };
+    }
+    return {
+      mean: this.m.val,
+      variance: this.m2.val / (this.n - this.ddof),
+    };
+  }
+
   /**
    * @param opts.ddof Delta degrees of freedom (default: 0)
    */
@@ -23,13 +33,7 @@ export class CuVar {
     this.m.accum(delta / this.n);
     this.m2.accum((x - this.m.val) * delta);
 
-    if (this.n <= this.ddof) {
-      return { mean: this.m.val, variance: 0 };
-    }
-    return {
-      mean: this.m.val,
-      variance: this.m2.val / (this.n - this.ddof),
-    };
+    return this.value;
   }
 }
 
@@ -39,6 +43,11 @@ export class CuVar {
  */
 export class CuStddev {
   private readonly variance: CuVar;
+
+  get value(): { mean: number; stddev: number } {
+    const { mean, variance } = this.variance.value;
+    return { mean, stddev: Math.sqrt(variance) };
+  }
 
   /**
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -64,6 +73,17 @@ export class CuCov {
   private n: number = 0;
   private ddof: number;
 
+  get value(): { meanX: number; meanY: number; cov: number } {
+    if (this.n <= this.ddof) {
+      return { meanX: this.mx.val, meanY: this.my.val, cov: 0 };
+    }
+    return {
+      meanX: this.mx.val,
+      meanY: this.my.val,
+      cov: this.mxy.val / (this.n - this.ddof),
+    };
+  }
+
   /**
    * @param opts.ddof Delta degrees of freedom (default: 0)
    */
@@ -80,14 +100,7 @@ export class CuCov {
     this.my.accum(dy * a);
     this.mxy.accum((x - this.mx.val) * dy);
 
-    if (this.n <= this.ddof) {
-      return { meanX: this.mx.val, meanY: this.my.val, cov: 0 };
-    }
-    return {
-      meanX: this.mx.val,
-      meanY: this.my.val,
-      cov: this.mxy.val / (this.n - this.ddof),
-    };
+    return this.value;
   }
 }
 
@@ -103,6 +116,24 @@ export class CuCorr {
   private m2y: Kahan = new Kahan();
   private n: number = 0;
   private ddof: number;
+
+  get value(): { meanX: number; meanY: number; cov: number; corr: number } {
+    if (this.n <= this.ddof) {
+      return { meanX: this.mx.val, meanY: this.my.val, cov: 0, corr: 0 };
+    }
+
+    const mxy = this.mxy.val;
+    const m2x = this.m2x.val;
+    const m2y = this.m2y.val;
+    const denom = Math.sqrt(m2x * m2y);
+
+    return {
+      meanX: this.mx.val,
+      meanY: this.my.val,
+      cov: mxy / (this.n - this.ddof),
+      corr: denom === 0 ? 0 : mxy / denom,
+    };
+  }
 
   /**
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -126,21 +157,7 @@ export class CuCorr {
     this.m2x.accum((x - this.mx.val) * dx);
     this.m2y.accum((y - this.my.val) * dy);
 
-    if (this.n <= this.ddof) {
-      return { meanX: this.mx.val, meanY: this.my.val, cov: 0, corr: 0 };
-    }
-
-    const mxy = this.mxy.val;
-    const m2x = this.m2x.val;
-    const m2y = this.m2y.val;
-    const denom = Math.sqrt(m2x * m2y);
-
-    return {
-      meanX: this.mx.val,
-      meanY: this.my.val,
-      cov: mxy / (this.n - this.ddof),
-      corr: denom === 0 ? 0 : mxy / denom,
-    };
+    return this.value;
   }
 }
 
@@ -155,6 +172,19 @@ export class CuBeta {
   private m2x: Kahan = new Kahan();
   private n: number = 0;
   private ddof: number;
+
+  get value(): { meanX: number; meanY: number; cov: number; beta: number } {
+    if (this.n <= this.ddof) {
+      return { meanX: this.mx.val, meanY: this.my.val, cov: 0, beta: 0 };
+    }
+
+    const mxy = this.mxy.val;
+    const m2x = this.m2x.val;
+    const cov = mxy / (this.n - this.ddof);
+    const beta = m2x > 0 ? mxy / m2x : 0;
+
+    return { meanX: this.mx.val, meanY: this.my.val, cov, beta };
+  }
 
   /**
    * @param opts.ddof Delta degrees of freedom (default: 0)
@@ -177,15 +207,6 @@ export class CuBeta {
     this.mxy.accum((x - this.mx.val) * dy);
     this.m2x.accum((x - this.mx.val) * dx);
 
-    if (this.n <= this.ddof) {
-      return { meanX: this.mx.val, meanY: this.my.val, cov: 0, beta: 0 };
-    }
-
-    const mxy = this.mxy.val;
-    const m2x = this.m2x.val;
-    const cov = mxy / (this.n - this.ddof);
-    const beta = m2x > 0 ? mxy / m2x : 0;
-
-    return { meanX: this.mx.val, meanY: this.my.val, cov, beta };
+    return this.value;
   }
 }

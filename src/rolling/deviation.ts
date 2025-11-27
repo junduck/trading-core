@@ -1,7 +1,7 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
 import { SMA } from "./average.js";
 import { RollingMedian } from "./rank.js";
-import { nth_element } from "../numeric/utils.js";
+import { lerp, nth_element } from "../numeric/utils.js";
 
 /**
  * Rolling Mean Absolute Deviation.
@@ -11,6 +11,14 @@ import { nth_element } from "../numeric/utils.js";
 export class MeanAbsDeviation {
   private sma: SMA;
   readonly buffer: CircularBuffer<number>;
+  private mad?: number;
+
+  get value(): { mean: number; mad: number } {
+    if (this.mad === undefined) {
+      return { mean: 0, mad: 0 };
+    }
+    return { mean: this.sma.value, mad: this.mad! };
+  }
 
   constructor(opts: { period: number }) {
     this.sma = new SMA(opts);
@@ -26,8 +34,9 @@ export class MeanAbsDeviation {
       const val = this.buffer.at(i)!;
       sum += Math.abs(val - mean);
     }
+    this.mad = sum / n;
 
-    return { mean, mad: sum / n };
+    return { mean, mad: this.mad };
   }
 }
 
@@ -42,6 +51,15 @@ export class MedianAbsDeviation {
   private queue: Array<number>;
   private readonly midIdx: number;
   private readonly isEven: boolean;
+  private med?: number | undefined;
+  private mad?: number;
+
+  get value(): { median: number; mad: number } | undefined {
+    if (this.med === undefined) {
+      return undefined;
+    }
+    return { median: this.med!, mad: this.mad! };
+  }
 
   constructor(opts: { period: number }) {
     this.median = new RollingMedian(opts);
@@ -52,9 +70,9 @@ export class MedianAbsDeviation {
   }
 
   update(x: number): { median: number; mad: number } | undefined {
-    const med = this.median.update(x);
+    this.med = this.median.update(x);
 
-    if (med === undefined) {
+    if (this.med === undefined) {
       return undefined;
     }
 
@@ -62,19 +80,18 @@ export class MedianAbsDeviation {
 
     let i = 0;
     for (const val of this.buffer) {
-      this.queue[i++] = Math.abs(val - med);
+      this.queue[i++] = Math.abs(val - this.med);
     }
 
-    let mad: number;
     if (this.isEven) {
       const a = nth_element(this.queue, 0, n, this.midIdx - 1);
       const b = nth_element(this.queue, 0, n, this.midIdx);
-      mad = (a + b) / 2;
+      this.mad = lerp(a, b, 0.5);
     } else {
-      mad = nth_element(this.queue, 0, n, this.midIdx);
+      this.mad = nth_element(this.queue, 0, n, this.midIdx);
     }
 
-    return { median: med, mad };
+    return { median: this.med!, mad: this.mad! };
   }
 }
 
@@ -88,6 +105,15 @@ export class IQR {
   private queue: Array<number>;
   private readonly q1Idx: number;
   private readonly q3Idx: number;
+  private q1?: number;
+  private q3?: number;
+
+  get value(): { q1: number; q3: number; iqr: number } | undefined {
+    if (this.q1 === undefined) {
+      return undefined;
+    }
+    return { q1: this.q1!, q3: this.q3!, iqr: this.q3! - this.q1! };
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -96,12 +122,12 @@ export class IQR {
     this.q3Idx = Math.floor((opts.period - 1) * 0.75);
   }
 
-  update(x: number): { q1: number; q3: number; iqr: number } | null {
+  update(x: number): { q1: number; q3: number; iqr: number } | undefined {
     this.buffer.push(x);
     const n = this.buffer.size();
 
     if (n < this.buffer.capacity()) {
-      return null;
+      return undefined;
     }
 
     let i = 0;
@@ -109,9 +135,9 @@ export class IQR {
       this.queue[i++] = val;
     }
 
-    const q1 = nth_element(this.queue, 0, n, this.q1Idx);
-    const q3 = nth_element(this.queue, this.q1Idx, n, this.q3Idx);
+    this.q1 = nth_element(this.queue, 0, n, this.q1Idx);
+    this.q3 = nth_element(this.queue, this.q1Idx, n, this.q3Idx);
 
-    return { q1, q3, iqr: q3 - q1 };
+    return { q1: this.q1, q3: this.q3, iqr: this.q3 - this.q1 };
   }
 }

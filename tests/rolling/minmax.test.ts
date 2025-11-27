@@ -128,6 +128,16 @@ describe("RollingMin", () => {
 
     expect(result).toEqual(expected);
   });
+
+  it("should return same value from value property as last update", () => {
+    const rm = new RollingMin({ period: 4 });
+    rm.update(50);
+    rm.update(30);
+    rm.update(60);
+    rm.update(20);
+    const lastValue = rm.update(70);
+    expect(rm.value).toBe(lastValue);
+  });
 });
 
 describe("RollingMax", () => {
@@ -184,6 +194,16 @@ describe("RollingMax", () => {
 
     expect(result).toEqual(expected);
   });
+
+  it("should return same value from value property as last update", () => {
+    const rm = new RollingMax({ period: 4 });
+    rm.update(50);
+    rm.update(30);
+    rm.update(60);
+    rm.update(20);
+    const lastValue = rm.update(70);
+    expect(rm.value).toBe(lastValue);
+  });
 });
 
 describe("RollingMinMax", () => {
@@ -224,6 +244,16 @@ describe("RollingMinMax", () => {
       expect(r.min).toBe(50);
       expect(r.max).toBe(50);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rmm = new RollingMinMax({ period: 4 });
+    rmm.update(50);
+    rmm.update(30);
+    rmm.update(60);
+    rmm.update(20);
+    const lastValue = rmm.update(70);
+    expect(rmm.value).toEqual(lastValue);
   });
 });
 
@@ -281,6 +311,16 @@ describe("RollingArgMin", () => {
       expect(results[i].pos).toBe(expected[i].pos);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const ram = new RollingArgMin({ period: 4 });
+    ram.update(50);
+    ram.update(30);
+    ram.update(60);
+    ram.update(20);
+    const lastValue = ram.update(70);
+    expect(ram.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingArgMax", () => {
@@ -337,6 +377,16 @@ describe("RollingArgMax", () => {
       expect(results[i].pos).toBe(expected[i].pos);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const ram = new RollingArgMax({ period: 4 });
+    ram.update(50);
+    ram.update(30);
+    ram.update(60);
+    ram.update(20);
+    const lastValue = ram.update(70);
+    expect(ram.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingArgMinMax", () => {
@@ -385,5 +435,15 @@ describe("RollingArgMinMax", () => {
       expect(r.min.val).toBe(50);
       expect(r.max.val).toBe(50);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const ramm = new RollingArgMinMax({ period: 4 });
+    ramm.update(50);
+    ramm.update(30);
+    ramm.update(60);
+    ramm.update(20);
+    const lastValue = ramm.update(70);
+    expect(ramm.value).toEqual(lastValue);
   });
 });

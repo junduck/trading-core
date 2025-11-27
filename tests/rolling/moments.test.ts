@@ -146,6 +146,16 @@ describe("RollingSkew", () => {
       expect(result[i].skew).toBeCloseTo(expected[i].skew, 8);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const rs = new RollingSkew({ period: 4 });
+    rs.update(10);
+    rs.update(20);
+    rs.update(30);
+    rs.update(40);
+    const lastValue = rs.update(50);
+    expect(rs.value).toEqual(lastValue);
+  });
 });
 
 describe("RollingKurt", () => {
@@ -219,5 +229,15 @@ describe("RollingKurt", () => {
       expect(result[i].variance).toBeCloseTo(expected[i].variance, 8);
       expect(result[i].kurt).toBeCloseTo(expected[i].kurt, 7);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rk = new RollingKurt({ period: 4 });
+    rk.update(10);
+    rk.update(20);
+    rk.update(30);
+    rk.update(40);
+    const lastValue = rk.update(50);
+    expect(rk.value).toEqual(lastValue);
   });
 });

@@ -118,6 +118,16 @@ describe("RollingMedian", () => {
       }
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const rm = new RollingMedian({ period: 4 });
+    rm.update(10);
+    rm.update(20);
+    rm.update(30);
+    rm.update(40);
+    const lastValue = rm.update(50);
+    expect(rm.value).toEqual(lastValue);
+  });
 });
 
 /**
@@ -248,5 +258,14 @@ describe("RollingQuantile", () => {
         }
       }
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const rq = new RollingQuantile({ period: 10, quantiles: [0.25, 0.75] });
+    for (let i = 1; i <= 10; i++) {
+      rq.update(i * 10);
+    }
+    const lastValue = rq.update(110);
+    expect(rq.value).toEqual(lastValue);
   });
 });

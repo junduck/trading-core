@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { MeanAbsDeviation, MedianAbsDeviation, IQR } from "../../src/rolling/deviation";
+import {
+  MeanAbsDeviation,
+  MedianAbsDeviation,
+  IQR,
+} from "../../src/rolling/deviation";
 
 /**
  * Naive mean absolute deviation calculation
@@ -59,7 +63,9 @@ function naiveMedianAbsDeviation(
       median = (sorted[mid - 1] + sorted[mid]) / 2;
     }
 
-    const deviations = window.map((v) => Math.abs(v - median)).sort((a, b) => a - b);
+    const deviations = window
+      .map((v) => Math.abs(v - median))
+      .sort((a, b) => a - b);
     let mad: number;
     if (n % 2 === 1) {
       mad = deviations[Math.floor(n / 2)];
@@ -147,6 +153,16 @@ describe("MeanAbsDeviation", () => {
       expect(result[i].mad).toBeCloseTo(expected[i].mad, 8);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const mad = new MeanAbsDeviation({ period: 4 });
+    mad.update(10);
+    mad.update(20);
+    mad.update(30);
+    mad.update(40);
+    const lastValue = mad.update(50);
+    expect(mad.value).toEqual(lastValue);
+  });
 });
 
 describe("MedianAbsDeviation", () => {
@@ -225,6 +241,16 @@ describe("MedianAbsDeviation", () => {
       }
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const mad = new MedianAbsDeviation({ period: 4 });
+    mad.update(10);
+    mad.update(20);
+    mad.update(30);
+    mad.update(40);
+    const lastValue = mad.update(50);
+    expect(mad.value).toEqual(lastValue);
+  });
 });
 
 describe("IQR", () => {
@@ -239,7 +265,7 @@ describe("IQR", () => {
     for (let i = 0; i < result.length; i++) {
       const exp = expected[i];
       if (exp === undefined) {
-        expect(result[i]).toBeNull();
+        expect(result[i]).toBeUndefined();
       } else {
         expect(result[i]!.q1).toBeCloseTo(exp.q1, 8);
         expect(result[i]!.q3).toBeCloseTo(exp.q3, 8);
@@ -259,7 +285,7 @@ describe("IQR", () => {
     for (let i = 0; i < result.length; i++) {
       const exp = expected[i];
       if (exp === undefined) {
-        expect(result[i]).toBeNull();
+        expect(result[i]).toBeUndefined();
       } else {
         expect(result[i]!.q1).toBeCloseTo(exp.q1, 8);
         expect(result[i]!.q3).toBeCloseTo(exp.q3, 8);
@@ -279,12 +305,21 @@ describe("IQR", () => {
     for (let i = 0; i < result.length; i++) {
       const exp = expected[i];
       if (exp === undefined) {
-        expect(result[i]).toBeNull();
+        expect(result[i]).toBeUndefined();
       } else {
         expect(result[i]!.q1).toBeCloseTo(exp.q1, 8);
         expect(result[i]!.q3).toBeCloseTo(exp.q3, 8);
         expect(result[i]!.iqr).toBeCloseTo(exp.iqr, 8);
       }
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const iqr = new IQR({ period: 10 });
+    for (let i = 1; i <= 10; i++) {
+      iqr.update(i * 10);
+    }
+    const lastValue = iqr.update(110);
+    expect(iqr.value).toEqual(lastValue);
   });
 });

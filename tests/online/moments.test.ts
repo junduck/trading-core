@@ -142,6 +142,12 @@ describe("CuSkew", () => {
       expect(result[i].skew).toBeCloseTo(expected[i].skew, 8);
     }
   });
+
+  it("should return same value from value property as last update", () => {
+    const cs = new CuSkew();
+    const lastValue = cs.update(50);
+    expect(cs.value).toEqual(lastValue);
+  });
 });
 
 describe("CuKurt", () => {
@@ -219,5 +225,11 @@ describe("CuKurt", () => {
       expect(result[i].variance).toBeCloseTo(expected[i].variance, 8);
       expect(result[i].kurt).toBeCloseTo(expected[i].kurt, 7);
     }
+  });
+
+  it("should return same value from value property as last update", () => {
+    const ck = new CuKurt();
+    const lastValue = ck.update(50);
+    expect(ck.value).toEqual(lastValue);
   });
 });

@@ -9,6 +9,10 @@ export class RollingSum {
   readonly buffer: CircularBuffer<number>;
   private readonly sum: Kahan = new Kahan();
 
+  get value(): number {
+    return this.sum.val;
+  }
+
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
   }
@@ -33,6 +37,10 @@ export class SMA {
   readonly buffer: CircularBuffer<number>;
   private sma: SmoothedAccum = new SmoothedAccum();
   private weight: number;
+
+  get value(): number {
+    return this.sma.val;
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -60,6 +68,10 @@ export class SMA {
 export class EMA {
   private alpha: number;
   private ema?: SmoothedAccum;
+
+  get value(): number {
+    return this.ema?.val ?? 0;
+  }
 
   /**
    * @param opts.period Period to calculate alpha
@@ -95,6 +107,10 @@ export class EWMA {
   private a1_n: number = 1;
   private s: number = 0;
   private readonly totalWeight: Kahan;
+
+  get value(): number {
+    return this.s / this.totalWeight.val;
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);

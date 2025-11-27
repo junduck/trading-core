@@ -1,5 +1,5 @@
 import { CircularBuffer } from "../containers/circular-buffer.js";
-import { nth_element } from "../numeric/utils.js";
+import { lerp, nth_element } from "../numeric/utils.js";
 
 /**
  * Rolling median calculator. O(n) per update using QuickSelect.
@@ -12,6 +12,11 @@ export class RollingMedian {
   readonly queue: Array<number>;
   private readonly midx: number;
   private readonly isEven: boolean;
+  private median: number | undefined;
+
+  get value(): number | undefined {
+    return this.median;
+  }
 
   constructor(opts: { period: number }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -25,6 +30,7 @@ export class RollingMedian {
     const n = this.buffer.size();
 
     if (n < this.buffer.capacity()) {
+      this.median = undefined;
       return undefined;
     }
 
@@ -40,9 +46,11 @@ export class RollingMedian {
       for (let i = this.midx + 1; i < n; i++) {
         if (this.queue[i]! < b) b = this.queue[i]!;
       }
-      return (a + b) / 2;
+      this.median = lerp(a, b, 0.5);
+      return this.median;
     }
-    return nth_element(this.queue, 0, n, this.midx);
+    this.median = nth_element(this.queue, 0, n, this.midx);
+    return this.median;
   }
 }
 
@@ -55,6 +63,14 @@ export class RollingQuantile {
   readonly buffer: CircularBuffer<number>;
   readonly queue: Array<number>;
   readonly sortedIndices: Array<{ qidx: number; outIdx: number }>;
+  private quantiles: number[];
+
+  get value(): number[] | undefined {
+    if (!this.buffer.full()) {
+      return undefined;
+    }
+    return [...this.quantiles];
+  }
 
   constructor(opts: { period: number; quantiles: number[] }) {
     this.buffer = new CircularBuffer<number>(opts.period);
@@ -65,6 +81,7 @@ export class RollingQuantile {
       outIdx: i,
     }));
     this.sortedIndices.sort((a, b) => a.qidx - b.qidx);
+    this.quantiles = new Array<number>(this.sortedIndices.length);
   }
 
   update(x: number): number[] | undefined {
@@ -80,18 +97,17 @@ export class RollingQuantile {
       this.queue[i++] = val;
     }
 
-    const result = new Array<number>(this.sortedIndices.length);
     let left = 0;
     let right = n;
 
     for (const { qidx, outIdx } of this.sortedIndices) {
       const idx = Math.min(qidx, n - 1);
       const val = nth_element(this.queue, left, right, idx);
-      result[outIdx] = val;
+      this.quantiles[outIdx] = val;
       // Exploit partial sort: after finding idx, search [idx, right) for next quantile
       left = idx;
     }
 
-    return result;
+    return [...this.quantiles];
   }
 }

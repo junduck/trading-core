@@ -42,6 +42,12 @@ describe("CuVar", () => {
     expect(result.mean).toBe(10);
     expect(result.variance).toBe(0);
   });
+
+  it("should return same value from value property as last update", () => {
+    const cv = new CuVar();
+    const lastValue = cv.update(50);
+    expect(cv.value).toEqual(lastValue);
+  });
 });
 
 describe("CuStddev", () => {
@@ -56,6 +62,12 @@ describe("CuStddev", () => {
 
     expect(result.mean).toBeCloseTo(3);
     expect(result.stddev).toBeCloseTo(Math.sqrt(2));
+  });
+
+  it("should return same value from value property as last update", () => {
+    const cs = new CuStddev();
+    const lastValue = cs.update(50);
+    expect(cs.value).toEqual(lastValue);
   });
 });
 
@@ -79,6 +91,12 @@ describe("CuCov", () => {
 
     expect(result.cov).toBe(0);
   });
+
+  it("should return same value from value property as last update", () => {
+    const cc = new CuCov();
+    const lastValue = cc.update(10, 20);
+    expect(cc.value).toEqual(lastValue);
+  });
 });
 
 describe("CuCorr", () => {
@@ -99,6 +117,12 @@ describe("CuCorr", () => {
 
     expect(result.corr).toBe(0);
   });
+
+  it("should return same value from value property as last update", () => {
+    const cc = new CuCorr();
+    const lastValue = cc.update(10, 20);
+    expect(cc.value).toEqual(lastValue);
+  });
 });
 
 describe("CuBeta", () => {
@@ -118,5 +142,11 @@ describe("CuBeta", () => {
     const result = cb.update(1, 2);
 
     expect(result.beta).toBe(0);
+  });
+
+  it("should return same value from value property as last update", () => {
+    const cb = new CuBeta();
+    const lastValue = cb.update(10, 20);
+    expect(cb.value).toEqual(lastValue);
   });
 });

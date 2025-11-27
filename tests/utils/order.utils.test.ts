@@ -43,7 +43,7 @@ describe("Order Factory Functions", () => {
         symbol: "BTC",
         quant: 10,
         id: "order-1",
-        create: date,
+        created: date,
       });
 
       expect(order.id).toBe("order-1");
