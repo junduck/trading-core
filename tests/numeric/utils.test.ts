@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { median, quantile } from "../../src/numeric/stats.js";
+import { invNormalCDF } from "../../src/numeric/utils.js";
 
 describe("median", () => {
   it("returns NaN for empty array", () => {
@@ -39,5 +40,45 @@ describe("quantile", () => {
     expect(quantile(x, 0.5)).toBe(2.5);
     expect(quantile(x, 0.25)).toBeCloseTo(1.75, 10);
     expect(quantile(x, 0.75)).toBeCloseTo(3.25, 10);
+  });
+});
+
+describe("invNormalCDF", () => {
+  it("validates against AS241 reference values (Wichura's algorithm)", () => {
+    // Reference test values from Applied Statistics Algorithm AS241
+    // Wichura, M. J. (1988). Algorithm AS 241: The Percentage Points of the Normal Distribution.
+    expect(invNormalCDF(0.25)).toBeCloseTo(-0.6744897501960817, 8);
+    expect(invNormalCDF(0.001)).toBeCloseTo(-3.090232306167814, 8);
+    expect(invNormalCDF(1e-20)).toBeCloseTo(-9.262340089798408, 8);
+  });
+
+  it("validates standard normal quantiles", () => {
+    expect(invNormalCDF(0.5)).toBeCloseTo(0, 10);
+    expect(invNormalCDF(0.8413447)).toBeCloseTo(1, 5);
+    expect(invNormalCDF(0.9772499)).toBeCloseTo(2, 5);
+    expect(invNormalCDF(0.1586553)).toBeCloseTo(-1, 5);
+    expect(invNormalCDF(0.025)).toBeCloseTo(-1.959964, 6);
+    expect(invNormalCDF(0.975)).toBeCloseTo(1.959964, 6);
+  });
+
+  it("validates common confidence levels", () => {
+    expect(invNormalCDF(0.05)).toBeCloseTo(-1.6448536, 6);
+    expect(invNormalCDF(0.95)).toBeCloseTo(1.6448536, 6);
+    expect(invNormalCDF(0.01)).toBeCloseTo(-2.3263479, 6);
+    expect(invNormalCDF(0.99)).toBeCloseTo(2.3263479, 6);
+  });
+
+  it("handles boundary conditions", () => {
+    expect(invNormalCDF(0)).toBeNaN();
+    expect(invNormalCDF(1)).toBeNaN();
+    expect(invNormalCDF(-0.1)).toBeNaN();
+    expect(invNormalCDF(1.1)).toBeNaN();
+  });
+
+  it("validates symmetry", () => {
+    expect(invNormalCDF(0.1)).toBeCloseTo(-invNormalCDF(0.9), 10);
+    expect(invNormalCDF(0.3)).toBeCloseTo(-invNormalCDF(0.7), 10);
+    expect(invNormalCDF(0.4)).toBeCloseTo(-invNormalCDF(0.6), 10);
+    expect(invNormalCDF(0.618)).toBeCloseTo(-invNormalCDF(0.382), 10);
   });
 });

@@ -6,14 +6,14 @@ import { lerp, nth_element } from "./utils.js";
  * @internal
  */
 export function _m2(x: number[]): { m: number; m2: number } {
-  let m = 0;
-  let m2 = 0;
+  let m = new Kahan();
+  let m2 = new Kahan();
   for (let i = 0; i < x.length; i++) {
-    const delta = x[i]! - m;
-    m += delta / (i + 1);
-    m2 += delta * (x[i]! - m);
+    const delta = x[i]! - m.val;
+    m.accum(delta / (i + 1));
+    m2.accum(delta * (x[i]! - m.val));
   }
-  return { m, m2 };
+  return { m: m.val, m2: m2.val };
 }
 
 /**

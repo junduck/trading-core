@@ -101,6 +101,8 @@ export {
   invLerp,
   remap,
   clamp,
+  normalPDF,
+  invNormalCDF,
 } from "./numeric/utils.js";
 
 // Numeric Utilities - Array Reducers
@@ -136,3 +138,10 @@ export {
 } from "./numeric/stats.js";
 
 export { argsort, rank, spearman } from "./numeric/rank.js";
+
+// Numeric Utilities - Risk Metrics
+export {
+  historicalCVaR,
+  parametricCVaR,
+  expWeightedCVaR,
+} from "./numeric/CVaR.js";
