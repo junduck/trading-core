@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2025-11-27
+
+### Added
+
+- Added `value` readonly property to all stateful operators
+  - Provides direct access to the current computed value without calling methods
+  - Available on both online (cumulative) and rolling window statistics
+  - Enables more ergonomic API usage for accessing current state
+- Added running performance metrics for trading strategy evaluation
+  - `RunningSharpe` - Tracks Sharpe ratio (mean_return - riskfree) / stddev_return
+  - `RunningSortino` - Tracks Sortino ratio using downside volatility only
+  - `DownStats` - Tracks downside mean and standard deviation (semi-deviation)
+  - `RunningWinRate` - Tracks percentage of positive returns (hit ratio)
+  - `RunningGainLoss` - Tracks average gain/loss ratio
+  - `RunningExpectancy` - Tracks expectancy: (win_rate × avg_gain) - (loss_rate × avg_loss)
+  - `RunningProfitFactor` - Tracks sum_of_gains / sum_of_losses
+- Added running drawdown and drawup tracking utilities
+  - `RunningDrawdown` - Tracks absolute drawdown as peak - value
+  - `RunningDrawup` - Tracks absolute drawup as value - trough
+  - `RunningRelDrawdown` - Tracks relative drawdown as (peak - value) / peak
+  - `RunningRelDrawup` - Tracks relative drawup as (value - trough) / trough
+  - `RunningLongestDrawdown` - Tracks longest drawdown duration
+  - `RunningLongestDrawup` - Tracks longest drawup duration
+  - All drawdown utilities support generic time types with Date as default
+
+### Fixed
+
+- Fixed potential issue from returning reference to internal state array from stateful operators in `CuHistogram` and `RollingHistogram`
+  - Both histogram classes now return copies of internal arrays instead of direct references
+  - Prevents accidental mutation of internal state by external code
+  - Affects `update()` method which now returns `[...this.counts]` instead of direct reference
+
 ## [2.4.1] - 2025-11-25
 
 ### Added
