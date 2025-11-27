@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.1] - 2025-11-27
+
+### Added
+
+- **New deep import structure** for clearer conceptual organization
+  - `@junduck/trading-core/containers` - Data structures (CircularBuffer, Deque, PriorityQueue, RBTree)
+  - `@junduck/trading-core/online` - Online/streaming algorithms (RunningSharpe, CuVar, etc.)
+  - `@junduck/trading-core/rolling` - Rolling window algorithms (RollingVar, SMA, etc.)
+  - `@junduck/trading-core/batch` - Stateless batch functions for arrays (sharpe, mean, variance, etc.)
+  - Provides clear distinction between streaming vs batch processing
+  - `@junduck/trading-core/algorithm` continues to work for backwards compatibility
+- **Batch performance metrics** for array-based computation
+  - `sharpe()` - Sharpe ratio from array of returns
+  - `sortino()` - Sortino ratio from array of returns
+  - `calmar()` - Calmar ratio from array of returns
+  - `winRate()` - Win rate (hit ratio) from array of returns
+  - `gainLoss()` - Gain/loss ratio from array of returns
+  - `expectancy()` - Expectancy from array of returns
+  - `profitFactor()` - Profit factor from array of returns
+  - Available in main export and `@junduck/trading-core/batch` deep import
+
+## [2.6.0] - 2025-11-27
+
+### Added
+
+- **CVaR (Conditional Value at Risk)** risk metrics for portfolio risk management
+  - `historicalCVaR()` - Historical CVaR based on actual return distribution
+  - `parametricCVaR()` - Parametric CVaR assuming normal distribution
+  - `expWeightedCVaR()` - Exponentially weighted CVaR with configurable decay factor
+  - Normal distribution utilities: `invNormalCDF()`, `normalPDF()`
+  - All CVaR functions support configurable confidence levels (default α=0.05)
+  - Also available in `@junduck/trading-core/algorithm` deep import
+- Performance metrics now exported from `@junduck/trading-core/algorithm`
+  - Provides convenient access to running performance metrics via algorithm submodule
+  - Includes Sharpe, Sortino, win rate, expectancy, and other trading metrics
+
+### Fixed
+
+- Missing tests for rolling covariance/correlation/beta with exponential weights
+
 ## [2.5.0] - 2025-11-27
 
 ### Added
@@ -16,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added running performance metrics for trading strategy evaluation
   - `RunningSharpe` - Tracks Sharpe ratio (mean_return - riskfree) / stddev_return
   - `RunningSortino` - Tracks Sortino ratio using downside volatility only
-  - `DownStats` - Tracks downside mean and standard deviation (semi-deviation)
+  - `RunningDownStats` - Tracks downside mean and standard deviation (semi-deviation)
   - `RunningWinRate` - Tracks percentage of positive returns (hit ratio)
   - `RunningGainLoss` - Tracks average gain/loss ratio
   - `RunningExpectancy` - Tracks expectancy: (win_rate × avg_gain) - (loss_rate × avg_loss)

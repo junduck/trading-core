@@ -18,6 +18,22 @@
     "./algorithm": {
       "types": "./dist/algorithm.d.ts",
       "import": "./dist/algorithm.js"
+    },
+    "./containers": {
+      "types": "./dist/containers.d.ts",
+      "import": "./dist/containers.js"
+    },
+    "./online": {
+      "types": "./dist/online.d.ts",
+      "import": "./dist/online.js"
+    },
+    "./rolling": {
+      "types": "./dist/rolling.d.ts",
+      "import": "./dist/rolling.js"
+    },
+    "./batch": {
+      "types": "./dist/batch.d.ts",
+      "import": "./dist/batch.js"
     }
   },
   "files": [
