@@ -19,6 +19,11 @@ export class Kahan {
     this.val = t;
     return this.val;
   }
+
+  reset() {
+    this.val = 0;
+    this.carry = 0;
+  }
 }
 
 /**

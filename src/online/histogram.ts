@@ -111,4 +111,9 @@ export class CuHistogram {
 
     return left;
   }
+
+  reset(): void {
+    this.counts.fill(0);
+    this.n = 0;
+  }
 }

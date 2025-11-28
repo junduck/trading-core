@@ -88,6 +88,17 @@ class CuMoments {
       };
     }
   }
+
+  reset(): void {
+    this.cma1.reset();
+    this.cma2.reset();
+    this.cma3.reset();
+    this.cma4?.reset();
+    this.u = 0;
+    this.u2 = 0;
+    this.u3 = 0;
+    delete this.u4;
+  }
 }
 
 /**
@@ -111,6 +122,11 @@ export class CuSkew {
     const { u, u2, u3 } = this.moments.update(x);
     this.skew = u2 === 0 ? 0 : u3 / Math.pow(u2, 1.5);
     return { mean: u, variance: u2, skew: this.skew };
+  }
+
+  reset(): void {
+    this.moments.reset();
+    this.skew = 0;
   }
 }
 
@@ -142,5 +158,11 @@ export class CuKurt {
     this.skew = u2 === 0 ? 0 : u3 / Math.pow(u2, 1.5);
     this.kurt = u2 === 0 ? 0 : u4! / (u2 * u2) - 3;
     return { mean: u, variance: u2, skew: this.skew, kurt: this.kurt };
+  }
+
+  reset(): void {
+    this.moments.reset();
+    this.skew = 0;
+    this.kurt = 0;
   }
 }

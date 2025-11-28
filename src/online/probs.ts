@@ -75,6 +75,12 @@ export class CountMinSketch<T = string> {
     // h ^= h >>> 16;
     return h & (this.width - 1);
   }
+
+  reset(): void {
+    for (let i = 0; i < this.depth; i++) {
+      this.counters[i]!.fill(0);
+    }
+  }
 }
 
 function nextPowerOfTwo(n: number): number {
@@ -164,5 +170,9 @@ export class BloomFilter<T = string> {
     h = (h * 0x85ebca6b) >>> 0;
     h ^= h >>> 13;
     return h & (this.size - 1);
+  }
+
+  reset(): void {
+    this.bits.fill(0);
   }
 }

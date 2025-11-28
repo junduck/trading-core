@@ -15,14 +15,19 @@ export interface RunningDrawResult<T> {
  * @group Performance Analysis - Online
  */
 export class RunningDrawdown<T = Date> {
-  private peak: number;
-  private peakTime: T;
-  private max: number = 0;
-  private maxFrom: T;
-  private maxTo: T;
-  private dd: number = 0;
+  private isInitialized: boolean = false;
+  private peak!: number;
+  private peakTime!: T;
+  private max!: number;
+  private maxFrom!: T;
+  private maxTo!: T;
+  private dd!: number;
 
-  get value(): RunningDrawResult<T> {
+  get value(): RunningDrawResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return {
       value: this.dd,
       max: this.max,
@@ -31,11 +36,18 @@ export class RunningDrawdown<T = Date> {
     };
   }
 
-  constructor(initValue: number, initTime: T) {
-    this.peak = initValue;
-    this.peakTime = initTime;
-    this.maxFrom = initTime;
-    this.maxTo = initTime;
+  constructor(initValue: number, initTime: T);
+  constructor();
+  constructor(initValue?: number, initTime?: T) {
+    if (initValue !== undefined && initTime !== undefined) {
+      this.peak = initValue;
+      this.peakTime = initTime;
+      this.maxFrom = initTime;
+      this.maxTo = initTime;
+      this.dd = 0;
+      this.max = 0;
+      this.isInitialized = true;
+    }
   }
 
   /**
@@ -44,6 +56,19 @@ export class RunningDrawdown<T = Date> {
    * @returns Current drawdown, max drawdown, and max period [from, to]
    */
   update(value: number, time: T): RunningDrawResult<T> {
+    if (!this.isInitialized) {
+      // First update after reset/construction - establish initial state
+      this.peak = value;
+      this.peakTime = time;
+      this.maxFrom = time;
+      this.maxTo = time;
+      this.dd = 0;
+      this.max = 0;
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     // New peak
     if (value > this.peak) {
       this.peak = value;
@@ -59,7 +84,11 @@ export class RunningDrawdown<T = Date> {
       this.maxTo = time;
     }
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }
 
@@ -69,14 +98,19 @@ export class RunningDrawdown<T = Date> {
  * @group Performance Analysis - Online
  */
 export class RunningDrawup<T = Date> {
-  private trough: number;
-  private troughTime: T;
-  private max: number = 0;
-  private maxFrom: T;
-  private maxTo: T;
-  private du: number = 0;
+  private isInitialized: boolean = false;
+  private trough!: number;
+  private troughTime!: T;
+  private max!: number;
+  private maxFrom!: T;
+  private maxTo!: T;
+  private du!: number;
 
-  get value(): RunningDrawResult<T> {
+  get value(): RunningDrawResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return {
       value: this.du,
       max: this.max,
@@ -85,11 +119,18 @@ export class RunningDrawup<T = Date> {
     };
   }
 
-  constructor(initValue: number, initTime: T) {
-    this.trough = initValue;
-    this.troughTime = initTime;
-    this.maxFrom = initTime;
-    this.maxTo = initTime;
+  constructor(initValue: number, initTime: T);
+  constructor();
+  constructor(initValue?: number, initTime?: T) {
+    if (initValue !== undefined && initTime !== undefined) {
+      this.trough = initValue;
+      this.troughTime = initTime;
+      this.maxFrom = initTime;
+      this.maxTo = initTime;
+      this.du = 0;
+      this.max = 0;
+      this.isInitialized = true;
+    }
   }
 
   /**
@@ -98,6 +139,18 @@ export class RunningDrawup<T = Date> {
    * @returns Current drawup, max drawup, and max period [from, to]
    */
   update(value: number, time: T): RunningDrawResult<T> {
+    if (!this.isInitialized) {
+      this.trough = value;
+      this.troughTime = time;
+      this.maxFrom = time;
+      this.maxTo = time;
+      this.du = 0;
+      this.max = 0;
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     // New trough
     if (value < this.trough) {
       this.trough = value;
@@ -113,26 +166,34 @@ export class RunningDrawup<T = Date> {
       this.maxTo = time;
     }
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }
 
 /**
  * Tracks relative drawdown as (peak - value) / peak.
  * @template T Time type (default: Date)
- * @throws {Error} If initValue <= 0
  * @note Mathematically invalid if values cross zero
  * @group Performance Analysis - Online
  */
 export class RunningRelDrawdown<T = Date> {
-  private peak: number;
-  private peakTime: T;
-  private max: number = 0;
-  private maxFrom: T;
-  private maxTo: T;
-  private dd: number = 0;
+  private isInitialized: boolean = false;
+  private peak!: number;
+  private peakTime!: T;
+  private max!: number;
+  private maxFrom!: T;
+  private maxTo!: T;
+  private dd!: number;
 
-  get value(): RunningDrawResult<T> {
+  get value(): RunningDrawResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return {
       value: this.dd,
       max: this.max,
@@ -141,11 +202,18 @@ export class RunningRelDrawdown<T = Date> {
     };
   }
 
-  constructor(initValue: number, initTime: T) {
-    this.peak = initValue;
-    this.peakTime = initTime;
-    this.maxFrom = initTime;
-    this.maxTo = initTime;
+  constructor(initValue: number, initTime: T);
+  constructor();
+  constructor(initValue?: number, initTime?: T) {
+    if (initValue !== undefined && initTime !== undefined) {
+      this.peak = initValue;
+      this.peakTime = initTime;
+      this.maxFrom = initTime;
+      this.maxTo = initTime;
+      this.dd = 0;
+      this.max = 0;
+      this.isInitialized = true;
+    }
   }
 
   /**
@@ -154,6 +222,18 @@ export class RunningRelDrawdown<T = Date> {
    * @returns Current relative drawdown, max drawdown, and max period [from, to]
    */
   update(value: number, time: T): RunningDrawResult<T> {
+    if (!this.isInitialized) {
+      this.peak = value;
+      this.peakTime = time;
+      this.maxFrom = time;
+      this.maxTo = time;
+      this.dd = 0;
+      this.max = 0;
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     // New peak
     if (value > this.peak) {
       this.peak = value;
@@ -169,26 +249,34 @@ export class RunningRelDrawdown<T = Date> {
       this.maxTo = time;
     }
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }
 
 /**
  * Tracks relative drawup as (value - trough) / trough.
  * @template T Time type (default: Date)
- * @throws {Error} If initValue <= 0
  * @note Mathematically invalid if values cross zero
  * @group Performance Analysis - Online
  */
 export class RunningRelDrawup<T = Date> {
-  private trough: number;
-  private troughTime: T;
-  private max: number = 0;
-  private maxFrom: T;
-  private maxTo: T;
-  private du: number = 0;
+  private isInitialized: boolean = false;
+  private trough!: number;
+  private troughTime!: T;
+  private max!: number;
+  private maxFrom!: T;
+  private maxTo!: T;
+  private du!: number;
 
-  get value(): RunningDrawResult<T> {
+  get value(): RunningDrawResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return {
       value: this.du,
       max: this.max,
@@ -196,11 +284,19 @@ export class RunningRelDrawup<T = Date> {
       maxTo: this.maxTo,
     };
   }
-  constructor(initValue: number, initTime: T) {
-    this.trough = initValue;
-    this.troughTime = initTime;
-    this.maxFrom = initTime;
-    this.maxTo = initTime;
+
+  constructor(initValue: number, initTime: T);
+  constructor();
+  constructor(initValue?: number, initTime?: T) {
+    if (initValue !== undefined && initTime !== undefined) {
+      this.trough = initValue;
+      this.troughTime = initTime;
+      this.maxFrom = initTime;
+      this.maxTo = initTime;
+      this.du = 0;
+      this.max = 0;
+      this.isInitialized = true;
+    }
   }
 
   /**
@@ -209,6 +305,18 @@ export class RunningRelDrawup<T = Date> {
    * @returns Current relative drawup, max drawup, and max period [from, to]
    */
   update(value: number, time: T): RunningDrawResult<T> {
+    if (!this.isInitialized) {
+      this.trough = value;
+      this.troughTime = time;
+      this.maxFrom = time;
+      this.maxTo = time;
+      this.du = 0;
+      this.max = 0;
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     // New trough
     if (value < this.trough) {
       this.trough = value;
@@ -224,7 +332,11 @@ export class RunningRelDrawup<T = Date> {
       this.maxTo = time;
     }
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }
 
@@ -245,37 +357,55 @@ export interface RunningDrawDurationResult<T> {
  * @group Performance Analysis - Online
  */
 export class RunningLongestDrawdown<T = Date> {
-  private peak: number;
-  private peakTime: T;
+  private isInitialized: boolean = false;
+  private peak!: number;
+  private peakTime!: T;
   private readonly computeDuration: (from: T, to: T) => number;
 
-  private v: RunningDrawDurationResult<T>;
+  private v!: RunningDrawDurationResult<T>;
 
-  get value(): RunningDrawDurationResult<T> {
+  get value(): RunningDrawDurationResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return { ...this.v };
   }
 
-  /**
-   * @param initValue Initial value
-   * @param initTime Initial time
-   * @param computeDuration Function to compute duration between two time points (defaults to Date millisecond difference)
-   */
   constructor(
     initValue: number,
     initTime: T,
     computeDuration?: (from: T, to: T) => number
+  );
+  constructor(computeDuration?: (from: T, to: T) => number);
+  constructor(
+    initValueOrComputeDuration?: number | ((from: T, to: T) => number),
+    initTime?: T,
+    computeDuration?: (from: T, to: T) => number
   ) {
-    this.peak = initValue;
-    this.peakTime = initTime;
-    this.computeDuration =
-      computeDuration ??
-      ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
-    this.v = {
-      duration: 0,
-      longest: 0,
-      longestFrom: initTime,
-      longestTo: initTime,
-    };
+    if (
+      typeof initValueOrComputeDuration === "number" &&
+      initTime !== undefined
+    ) {
+      this.peak = initValueOrComputeDuration;
+      this.peakTime = initTime;
+      this.computeDuration =
+        computeDuration ??
+        ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
+      this.v = {
+        duration: 0,
+        longest: 0,
+        longestFrom: initTime,
+        longestTo: initTime,
+      };
+      this.isInitialized = true;
+    } else {
+      this.computeDuration =
+        (initValueOrComputeDuration as
+          | ((from: T, to: T) => number)
+          | undefined) ??
+        ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
+    }
   }
 
   /**
@@ -284,6 +414,20 @@ export class RunningLongestDrawdown<T = Date> {
    * @returns Current drawdown duration, longest duration, and longest period [from, to]
    */
   update(value: number, time: T): RunningDrawDurationResult<T> {
+    if (!this.isInitialized) {
+      this.peak = value;
+      this.peakTime = time;
+      this.v = {
+        duration: 0,
+        longest: 0,
+        longestFrom: time,
+        longestTo: time,
+      };
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     const currentDuration = this.computeDuration(this.peakTime, time);
 
     // New peak - finalize previous drawdown period
@@ -298,7 +442,7 @@ export class RunningLongestDrawdown<T = Date> {
       this.peak = value;
       this.peakTime = time;
 
-      return this.value;
+      return this.value!;
     }
 
     // Still in drawdown - current might be the longest
@@ -308,12 +452,16 @@ export class RunningLongestDrawdown<T = Date> {
       this.v.longestFrom = this.peakTime;
       this.v.longestTo = time;
 
-      return this.value;
+      return this.value!;
     }
 
     this.v.duration = currentDuration;
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }
 
@@ -323,37 +471,55 @@ export class RunningLongestDrawdown<T = Date> {
  * @group Performance Analysis - Online
  */
 export class RunningLongestDrawup<T = Date> {
-  private trough: number;
-  private troughTime: T;
+  private isInitialized: boolean = false;
+  private trough!: number;
+  private troughTime!: T;
   private readonly computeDuration: (from: T, to: T) => number;
 
-  private v: RunningDrawDurationResult<T>;
+  private v!: RunningDrawDurationResult<T>;
 
-  get value(): RunningDrawDurationResult<T> {
+  get value(): RunningDrawDurationResult<T> | undefined {
+    if (!this.isInitialized) {
+      return undefined;
+    }
+
     return { ...this.v };
   }
 
-  /**
-   * @param initValue Initial value
-   * @param initTime Initial time
-   * @param computeDuration Function to compute duration between two time points (defaults to Date millisecond difference)
-   */
   constructor(
     initValue: number,
     initTime: T,
     computeDuration?: (from: T, to: T) => number
+  );
+  constructor(computeDuration?: (from: T, to: T) => number);
+  constructor(
+    initValueOrComputeDuration?: number | ((from: T, to: T) => number),
+    initTime?: T,
+    computeDuration?: (from: T, to: T) => number
   ) {
-    this.trough = initValue;
-    this.troughTime = initTime;
-    this.computeDuration =
-      computeDuration ??
-      ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
-    this.v = {
-      duration: 0,
-      longest: 0,
-      longestFrom: initTime,
-      longestTo: initTime,
-    };
+    if (
+      typeof initValueOrComputeDuration === "number" &&
+      initTime !== undefined
+    ) {
+      this.trough = initValueOrComputeDuration;
+      this.troughTime = initTime;
+      this.computeDuration =
+        computeDuration ??
+        ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
+      this.v = {
+        duration: 0,
+        longest: 0,
+        longestFrom: initTime,
+        longestTo: initTime,
+      };
+      this.isInitialized = true;
+    } else {
+      this.computeDuration =
+        (initValueOrComputeDuration as
+          | ((from: T, to: T) => number)
+          | undefined) ??
+        ((from: T, to: T) => (to as any).getTime() - (from as any).getTime());
+    }
   }
 
   /**
@@ -362,6 +528,20 @@ export class RunningLongestDrawup<T = Date> {
    * @returns Current drawup duration, longest duration, and longest period [from, to]
    */
   update(value: number, time: T): RunningDrawDurationResult<T> {
+    if (!this.isInitialized) {
+      this.trough = value;
+      this.troughTime = time;
+      this.v = {
+        duration: 0,
+        longest: 0,
+        longestFrom: time,
+        longestTo: time,
+      };
+      this.isInitialized = true;
+
+      return this.value!;
+    }
+
     const currentDuration = this.computeDuration(this.troughTime, time);
 
     // New trough - finalize previous drawup period
@@ -376,7 +556,7 @@ export class RunningLongestDrawup<T = Date> {
       this.trough = value;
       this.troughTime = time;
 
-      return this.value;
+      return this.value!;
     }
 
     // Still in drawup - current might be the longest
@@ -386,11 +566,15 @@ export class RunningLongestDrawup<T = Date> {
       this.v.longestFrom = this.troughTime;
       this.v.longestTo = time;
 
-      return this.value;
+      return this.value!;
     }
 
     this.v.duration = currentDuration;
 
-    return this.value;
+    return this.value!;
+  }
+
+  reset(): void {
+    this.isInitialized = false;
   }
 }

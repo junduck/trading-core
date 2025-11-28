@@ -37,6 +37,10 @@ export class RunningDownStats {
   setThreshold(threshold: number): void {
     this.threshold = threshold;
   }
+
+  reset(): void {
+    this.std.reset();
+  }
 }
 
 /**
@@ -72,6 +76,10 @@ export class RunningSharpe {
 
     if (stddev === 0) return 0;
     return (mean - this.riskfree) / stddev;
+  }
+
+  reset(): void {
+    this.stats.reset();
   }
 }
 
@@ -113,6 +121,11 @@ export class RunningSortino {
     if (stddev === 0) return 0;
     return (avgReturn - this.riskfree) / stddev;
   }
+
+  reset(): void {
+    this.downside.reset();
+    this.mean.reset();
+  }
 }
 
 /**
@@ -146,6 +159,11 @@ export class RunningWinRate {
     }
 
     return this.value;
+  }
+
+  reset(): void {
+    this.wins = 0;
+    this.total = 0;
   }
 }
 
@@ -184,6 +202,11 @@ export class RunningGainLoss {
     }
 
     return this.value;
+  }
+
+  reset(): void {
+    this.gainMean.reset();
+    this.lossMean.reset();
   }
 }
 
@@ -230,6 +253,14 @@ export class RunningExpectancy {
 
     return this.value;
   }
+
+  reset(): void {
+    this.gainMean.reset();
+    this.lossMean.reset();
+    this.nGains = 0;
+    this.nLosses = 0;
+    this.total = 0;
+  }
 }
 
 /**
@@ -265,5 +296,10 @@ export class RunningProfitFactor {
     }
 
     return this.value;
+  }
+
+  reset(): void {
+    this.gainSum.reset();
+    this.lossSum.reset();
   }
 }

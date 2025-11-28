@@ -16,4 +16,9 @@ export class CMA {
     this.n++;
     return this.cma.accum((x - this.cma.val) / this.n);
   }
+
+  reset(): void {
+    this.cma.reset();
+    this.n = 0;
+  }
 }
