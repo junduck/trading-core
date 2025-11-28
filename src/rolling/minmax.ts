@@ -37,6 +37,11 @@ export class RollingMin {
 
     return this.minDeque.front()!;
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.minDeque.clear();
+  }
 }
 
 /**
@@ -74,6 +79,11 @@ export class RollingMax {
     this.maxDeque.push_back(x);
 
     return this.maxDeque.front()!;
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.maxDeque.clear();
   }
 }
 
@@ -130,6 +140,12 @@ export class RollingMinMax {
       max: this.maxDeque.front()!,
     };
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.minDeque.clear();
+    this.maxDeque.clear();
+  }
 }
 
 /**
@@ -181,6 +197,12 @@ export class RollingArgMin {
     const front = this.minDeque.front()!;
     return { val: front.val, pos: this.position - front.pos - 1 };
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.minDeque.clear();
+    this.position = 0;
+  }
 }
 
 /**
@@ -231,6 +253,12 @@ export class RollingArgMax {
 
     const front = this.maxDeque.front()!;
     return { val: front.val, pos: this.position - front.pos - 1 };
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.maxDeque.clear();
+    this.position = 0;
   }
 }
 
@@ -314,5 +342,12 @@ export class RollingArgMinMax {
       min: { val: minFront.val, pos: this.position - minFront.pos - 1 },
       max: { val: maxFront.val, pos: this.position - maxFront.pos - 1 },
     };
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.minDeque.clear();
+    this.maxDeque.clear();
+    this.position = 0;
   }
 }

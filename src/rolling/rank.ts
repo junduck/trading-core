@@ -52,6 +52,12 @@ export class RollingMedian {
     this.median = nth_element(this.queue, 0, n, this.midx);
     return this.median;
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.queue.fill(0);
+    this.median = undefined;
+  }
 }
 
 /**
@@ -109,5 +115,11 @@ export class RollingQuantile {
     }
 
     return [...this.quantiles];
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.queue.fill(0);
+    this.quantiles.fill(0);
   }
 }

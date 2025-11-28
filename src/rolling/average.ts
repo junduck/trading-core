@@ -27,6 +27,11 @@ export class RollingSum {
       return this.sum.accum(x - old);
     }
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.sum.reset();
+  }
 }
 
 /**
@@ -36,7 +41,7 @@ export class RollingSum {
 export class SMA {
   readonly buffer: CircularBuffer<number>;
   private sma: SmoothedAccum = new SmoothedAccum();
-  private weight: number;
+  private readonly weight: number;
 
   get value(): number {
     return this.sma.val;
@@ -57,6 +62,11 @@ export class SMA {
       this.buffer.push(x);
     }
     return this.sma.val;
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.sma = new SmoothedAccum();
   }
 }
 
@@ -92,6 +102,10 @@ export class EMA {
       this.ema.accum(x, this.alpha);
     }
     return this.ema.val;
+  }
+
+  reset(): void {
+    delete this.ema;
   }
 }
 
@@ -131,5 +145,12 @@ export class EWMA {
       this.s = this.a1 * this.s + x - this.a1_n * x0;
     }
     return this.s / this.totalWeight.val;
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.totalWeight.reset();
+    this.a1_n = 1;
+    this.s = 0;
   }
 }

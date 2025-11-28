@@ -88,6 +88,17 @@ class RollingMoments {
       };
     }
   }
+
+  reset(): void {
+    this.sma1.reset();
+    this.sma2.reset();
+    this.sma3.reset();
+    if (this.sma4) this.sma4.reset();
+    this.u = 0;
+    this.u2 = 0;
+    this.u3 = 0;
+    if (this.u4 !== undefined) this.u4 = 0;
+  }
 }
 
 /**
@@ -111,6 +122,11 @@ export class RollingSkew {
     const { u, u2, u3 } = this.moments.update(x);
     this.skew = u2 === 0 ? 0 : u3 / Math.pow(u2, 1.5);
     return { mean: u, variance: u2, skew: this.skew };
+  }
+
+  reset(): void {
+    this.moments.reset();
+    this.skew = 0;
   }
 }
 
@@ -142,5 +158,11 @@ export class RollingKurt {
     this.skew = u2 === 0 ? 0 : u3 / Math.pow(u2, 1.5);
     this.kurt = u2 === 0 ? 0 : u4! / (u2 * u2) - 3;
     return { mean: u, variance: u2, skew: this.skew, kurt: this.kurt };
+  }
+
+  reset(): void {
+    this.moments.reset();
+    this.skew = 0;
+    this.kurt = 0;
   }
 }

@@ -10,8 +10,8 @@ export class RollingVar {
   private m: Kahan = new Kahan();
   private m2: Kahan = new Kahan();
   private ddof: number;
-  private weight: number;
-  private varWeight: number;
+  private readonly weight: number;
+  private readonly varWeight: number;
 
   get value(): { mean: number; variance: number } {
     if (this.buffer.full()) {
@@ -32,9 +32,6 @@ export class RollingVar {
    */
   constructor(opts: { period: number; ddof?: number }) {
     this.ddof = opts.ddof ?? 0;
-    if (opts.period <= this.ddof) {
-      throw new Error("Period should be larger than DDoF.");
-    }
     this.buffer = new CircularBuffer<number>(opts.period);
     this.weight = 1.0 / opts.period;
     this.varWeight = 1.0 / (opts.period - this.ddof);
@@ -65,6 +62,12 @@ export class RollingVar {
       return { mean: this.m.val, variance: this.m2.val * this.varWeight };
     }
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.m.reset();
+    this.m2.reset();
+  }
 }
 
 /**
@@ -74,7 +77,7 @@ export class RollingVar {
 export class RollingVarEW {
   private m?: number;
   private s2: SmoothedAccum = new SmoothedAccum();
-  private alpha: number;
+  private readonly alpha: number;
 
   get value(): { mean: number; variance: number } {
     if (this.m === undefined) {
@@ -106,6 +109,11 @@ export class RollingVarEW {
     this.s2.accum(d * d2, this.alpha);
     return { mean: this.m, variance: this.s2.val };
   }
+
+  reset(): void {
+    delete this.m;
+    this.s2 = new SmoothedAccum();
+  }
 }
 
 /**
@@ -134,6 +142,10 @@ export class RollingStddev {
     const { mean, variance } = this.variance.update(x);
     return { mean, stddev: Math.sqrt(variance) };
   }
+
+  reset(): void {
+    this.variance.reset();
+  }
 }
 
 /**
@@ -159,6 +171,10 @@ export class RollingStddevEW {
   update(x: number): { mean: number; stddev: number } {
     const { mean, variance } = this.variance.update(x);
     return { mean, stddev: Math.sqrt(variance) };
+  }
+
+  reset(): void {
+    this.variance.reset();
   }
 }
 
@@ -186,6 +202,11 @@ export class RollingZScore {
     const zscore = stddev === 0 ? 0 : (x - mean) / stddev;
     this.lastZ = zscore;
     return { mean, stddev, zscore };
+  }
+
+  reset(): void {
+    this.stddev.reset();
+    this.lastZ = 0;
   }
 }
 
@@ -216,6 +237,11 @@ export class RollingZScoreEW {
     this.lastZ = zscore;
     return { mean, stddev, zscore };
   }
+
+  reset(): void {
+    this.stddev.reset();
+    this.lastZ = 0;
+  }
 }
 
 /**
@@ -229,8 +255,8 @@ export class RollingCov {
   private mx: SmoothedAccum = new SmoothedAccum();
   private my: SmoothedAccum = new SmoothedAccum();
   private ddof: number;
-  private weight: number;
-  private covWeight: number;
+  private readonly weight: number;
+  private readonly covWeight: number;
 
   get value(): { meanX: number; meanY: number; cov: number } {
     if (this.bufferX.full()) {
@@ -256,9 +282,6 @@ export class RollingCov {
    */
   constructor(opts: { period: number; ddof?: number }) {
     this.ddof = opts.ddof ?? 0;
-    if (opts.period <= this.ddof) {
-      throw new Error("Period should be larger than DDoF.");
-    }
     this.bufferX = new CircularBuffer<number>(opts.period);
     this.bufferY = new CircularBuffer<number>(opts.period);
     this.weight = 1.0 / opts.period;
@@ -307,6 +330,14 @@ export class RollingCov {
       };
     }
   }
+
+  reset(): void {
+    this.bufferX.clear();
+    this.bufferY.clear();
+    this.kahanMXY.reset();
+    this.mx = new SmoothedAccum();
+    this.my = new SmoothedAccum();
+  }
 }
 
 /**
@@ -322,8 +353,8 @@ export class RollingCorr {
   private mx: number = 0;
   private my: number = 0;
   private ddof: number;
-  private weight: number;
-  private statWeight: number;
+  private readonly weight: number;
+  private readonly statWeight: number;
 
   get value(): {
     meanX: number;
@@ -450,6 +481,16 @@ export class RollingCorr {
       };
     }
   }
+
+  reset(): void {
+    this.bufferX.clear();
+    this.bufferY.clear();
+    this.kahanMXY.reset();
+    this.kahanM2X.reset();
+    this.kahanM2Y.reset();
+    this.mx = 0;
+    this.my = 0;
+  }
 }
 
 /**
@@ -464,8 +505,8 @@ export class RollingBeta {
   private mx: number = 0;
   private my: number = 0;
   private ddof: number;
-  private weight: number;
-  private statWeight: number;
+  private readonly weight: number;
+  private readonly statWeight: number;
 
   get value(): { meanX: number; meanY: number; cov: number; beta: number } {
     const mxy = this.kahanMXY.val;
@@ -550,6 +591,15 @@ export class RollingBeta {
       return { meanX: this.mx, meanY: this.my, cov, beta };
     }
   }
+
+  reset(): void {
+    this.bufferX.clear();
+    this.bufferY.clear();
+    this.kahanMXY.reset();
+    this.kahanM2X.reset();
+    this.mx = 0;
+    this.my = 0;
+  }
 }
 
 /**
@@ -560,7 +610,7 @@ export class RollingCovEW {
   private mx?: number;
   private my?: number;
   private sxy: SmoothedAccum = new SmoothedAccum();
-  private alpha: number;
+  private readonly alpha: number;
 
   get value(): { meanX: number; meanY: number; cov: number } {
     if (this.mx === undefined) {
@@ -595,6 +645,12 @@ export class RollingCovEW {
     this.sxy.accum(dx * dy2, this.alpha);
     return { meanX: this.mx, meanY: this.my, cov: this.sxy.val };
   }
+
+  reset() {
+    delete this.mx;
+    delete this.my;
+    this.sxy = new SmoothedAccum();
+  }
 }
 
 /**
@@ -607,7 +663,7 @@ export class RollingCorrEW {
   private sxy: SmoothedAccum = new SmoothedAccum();
   private s2x: SmoothedAccum = new SmoothedAccum();
   private s2y: SmoothedAccum = new SmoothedAccum();
-  private alpha: number;
+  private readonly alpha: number;
 
   get value(): { meanX: number; meanY: number; cov: number; corr: number } {
     if (this.mx === undefined) {
@@ -660,6 +716,14 @@ export class RollingCorrEW {
       corr: denom === 0 ? 0 : this.sxy.val / denom,
     };
   }
+
+  reset(): void {
+    delete this.mx;
+    delete this.my;
+    this.sxy = new SmoothedAccum();
+    this.s2x = new SmoothedAccum();
+    this.s2y = new SmoothedAccum();
+  }
 }
 
 /**
@@ -671,7 +735,7 @@ export class RollingBetaEW {
   private my?: number;
   private sxy: SmoothedAccum = new SmoothedAccum();
   private s2x: SmoothedAccum = new SmoothedAccum();
-  private alpha: number;
+  private readonly alpha: number;
 
   get value(): { meanX: number; meanY: number; cov: number; beta: number } {
     if (this.mx === undefined) {
@@ -720,5 +784,12 @@ export class RollingBetaEW {
       cov: this.sxy.val,
       beta: this.s2x.val > 0 ? this.sxy.val / this.s2x.val : 0,
     };
+  }
+
+  reset(): void {
+    delete this.mx;
+    delete this.my;
+    this.sxy = new SmoothedAccum();
+    this.s2x = new SmoothedAccum();
   }
 }

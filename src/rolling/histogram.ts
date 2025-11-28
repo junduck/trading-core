@@ -118,4 +118,9 @@ export class RollingHistogram {
 
     return left;
   }
+
+  reset(): void {
+    this.buffer.clear();
+    this.counts.fill(0);
+  }
 }

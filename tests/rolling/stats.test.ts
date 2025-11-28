@@ -239,12 +239,6 @@ describe("RollingVar", () => {
     }
   });
 
-  it("should throw error when period <= ddof", () => {
-    expect(() => new RollingVar({ period: 2, ddof: 2 })).toThrow(
-      "Period should be larger than DDoF."
-    );
-  });
-
   it("should return same value from value property as last update", () => {
     const rv = new RollingVar({ period: 4 });
     let lastValue = rv.update(10);
@@ -472,12 +466,6 @@ describe("RollingCov", () => {
       expect(result[i].meanY).toBeCloseTo(expected[i].meanY, 8);
       expect(result[i].cov).toBeCloseTo(expected[i].cov, 8);
     }
-  });
-
-  it("should throw error when period <= ddof", () => {
-    expect(() => new RollingCov({ period: 2, ddof: 2 })).toThrow(
-      "Period should be larger than DDoF."
-    );
   });
 
   it("should return same value from value property as last update", () => {

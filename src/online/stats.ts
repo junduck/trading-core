@@ -35,6 +35,12 @@ export class CuVar {
 
     return this.value;
   }
+
+  reset(): void {
+    this.m.reset();
+    this.m2.reset();
+    this.n = 0;
+  }
 }
 
 /**
@@ -59,6 +65,10 @@ export class CuStddev {
   update(x: number): { mean: number; stddev: number } {
     const { mean, variance } = this.variance.update(x);
     return { mean, stddev: Math.sqrt(variance) };
+  }
+
+  reset(): void {
+    this.variance.reset();
   }
 }
 
@@ -101,6 +111,13 @@ export class CuCov {
     this.mxy.accum((x - this.mx.val) * dy);
 
     return this.value;
+  }
+
+  reset(): void {
+    this.mx.reset();
+    this.my.reset();
+    this.mxy.reset();
+    this.n = 0;
   }
 }
 
@@ -159,6 +176,15 @@ export class CuCorr {
 
     return this.value;
   }
+
+  reset(): void {
+    this.mx.reset();
+    this.my.reset();
+    this.mxy.reset();
+    this.m2x.reset();
+    this.m2y.reset();
+    this.n = 0;
+  }
 }
 
 /**
@@ -208,5 +234,13 @@ export class CuBeta {
     this.m2x.accum((x - this.mx.val) * dx);
 
     return this.value;
+  }
+
+  reset(): void {
+    this.mx.reset();
+    this.my.reset();
+    this.mxy.reset();
+    this.m2x.reset();
+    this.n = 0;
   }
 }

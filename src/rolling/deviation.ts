@@ -38,6 +38,11 @@ export class MeanAbsDeviation {
 
     return { mean, mad: this.mad };
   }
+
+  reset(): void {
+    this.sma.reset();
+    delete this.mad;
+  }
 }
 
 /**
@@ -93,6 +98,13 @@ export class MedianAbsDeviation {
 
     return { median: this.med!, mad: this.mad! };
   }
+
+  reset(): void {
+    this.median.reset();
+    this.queue.fill(0);
+    delete this.med;
+    delete this.mad;
+  }
 }
 
 /**
@@ -139,5 +151,12 @@ export class IQR {
     this.q3 = nth_element(this.queue, this.q1Idx, n, this.q3Idx);
 
     return { q1: this.q1, q3: this.q3, iqr: this.q3 - this.q1 };
+  }
+
+  reset(): void {
+    this.buffer.clear();
+    this.queue.fill(0);
+    delete this.q1;
+    delete this.q3;
   }
 }
