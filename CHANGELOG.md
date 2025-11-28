@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2025-11-28
+
+### Added
+
+- **`clear()` method** for all stateful operators to enable easy tumbling window aggregation
+  - **Online/cumulative operators**: `CMA`, `CuVar`, `CuStddev`, `CuCov`, `CuCorr`, `CuBeta`, `CuSkew`, `CuKurt`, `CuHistogram`, `RunningSharpe`, `RunningSortino`, `RunningDownStats`, `RunningWinRate`, `RunningGainLoss`, `RunningExpectancy`, `RunningProfitFactor`, `RunningDrawdown`, `RunningDrawup`, `RunningRelDrawdown`, `RunningRelDrawup`, `RunningLongestDrawdown`, `RunningLongestDrawup`
+  - **Rolling window operators**: `RollingSum`, `SMA`, `EMA`, `EWMA`, `RollingVar`, `RollingStddev`, `RollingVarEW`, `RollingStddevEW`, `RollingZScore`, `RollingZScoreEW`, `RollingCov`, `RollingCorr`, `RollingBeta`, `RollingCovEW`, `RollingCorrEW`, `RollingBetaEW`, `RollingMin`, `RollingMax`, `RollingMinMax`, `RollingArgMin`, `RollingArgMax`, `RollingArgMinMax`, `RollingMedian`, `RollingQuantile`, `RollingSkew`, `RollingKurt`, `RollingHistogram`, `RankStats`, `FrequencyCounter`, `Accumulator`
+  - Enables resetting operator state to initial condition without creating new instances
+  - Supports efficient tumbling window patterns for time-series aggregation
+
 ## [2.6.1] - 2025-11-27
 
 ### Added
