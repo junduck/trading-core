@@ -186,7 +186,9 @@ export function acceptOrder(order: Order, time?: Date): OrderState {
     ...order,
     filledQuantity: 0,
     remainingQuantity: order.quantity,
-    status: "OPEN",
+    status:
+      // Default OPEN on live order and PENDING on stop order
+      order.type === "LIMIT" || order.type === "MARKET" ? "OPEN" : "PENDING",
     modified,
   };
 }
@@ -218,4 +220,29 @@ export function rejectOrder(order: Order, time?: Date): OrderState {
 export function cancelOrder(state: OrderState, time?: Date): void {
   state.status = "CANCELLED";
   state.modified = time ?? new Date();
+}
+
+/**
+ * Convert a pending STOP/STOP_LIMIT order by updating its state.
+ * @param state - The triggerred order state to convert
+ * @param time - Optional conversion timestamp (defaults to current time)
+ * @group Order Management
+ */
+export function convertOrder(state: OrderState, time?: Date): void {
+  switch (state.type) {
+    case "STOP":
+      // convert to MARKET order
+      state.type = "MARKET";
+      state.status = "OPEN";
+      state.modified = time ?? new Date();
+      return;
+    case "STOP_LIMIT":
+      // convert to LIMIT order
+      state.type = "LIMIT";
+      state.status = "OPEN";
+      state.modified = time ?? new Date();
+      return;
+    default:
+    // no-op
+  }
 }

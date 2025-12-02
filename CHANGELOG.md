@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2025-12-02
+
+### Added
+
+- **`PENDING` status** to `OrderStatus` type for stop orders
+  - Stop orders now initialize with "PENDING" status when accepted
+  - MARKET and LIMIT orders continue to initialize with "OPEN" status
+  - Enables proper lifecycle management for stop orders before trigger
+- **`convertOrder()`** function to handle stop order activation
+  - Converts STOP orders to MARKET orders when trigger price is hit
+  - Converts STOP_LIMIT orders to LIMIT orders when trigger price is hit
+  - Updates order status from "PENDING" to "OPEN" upon conversion
+  - Maintains proper timestamp tracking for conversion events
+  - No-op for non-stop order types
+
 ## [2.7.0] - 2025-11-28
 
 ### Added

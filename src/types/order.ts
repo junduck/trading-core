@@ -9,6 +9,7 @@ export type OrderType = "MARKET" | "LIMIT" | "STOP" | "STOP_LIMIT";
  * @group Order Management
  */
 export type OrderStatus =
+  | "PENDING" // Stop order pending
   | "OPEN" // Order placed but not filled yet
   | "PARTIAL" // Partially filled
   | "FILLED" // Completely filled
