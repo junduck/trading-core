@@ -90,6 +90,24 @@ export type OrderState = Order & {
 };
 
 /**
+ * PartialOrder represents order data with optional fields.
+ * Used for order updates, queries, or when only partial order information is available.
+ * All fields are optional except for the required id field.
+ * @group Order Management
+ */
+export type PartialOrder = {
+  id: string;
+  side?: "BUY" | "SELL";
+  effect?: "OPEN_LONG" | "CLOSE_SHORT" | "CLOSE_LONG" | "OPEN_SHORT";
+  symbol?: string;
+  type?: OrderType;
+  quantity?: number;
+  price?: number;
+  stopPrice?: number;
+  created?: Date;
+};
+
+/**
  * Fill represents an actual execution of an order.
  * Multiple fills can occur for a single order (partial fills).
  * Uses OrderAction to ensure type-safe side/effect combinations.
