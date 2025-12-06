@@ -106,6 +106,7 @@ export type {
   PositionEffect,
   Order,
   OrderState,
+  PartialOrder,
   Fill,
   FillEffect,
 } from "./types/order.js";

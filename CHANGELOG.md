@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2025-12-03
+
+### Added
+
+- **`PartialOrder` type** for flexible order data representation
+  - Represents order data with optional fields for updates and queries
+  - All fields optional except required `id` field
+  - Complements existing `Order` and `OrderState` types
+
 ## [2.8.0] - 2025-12-02
 
 ### Added

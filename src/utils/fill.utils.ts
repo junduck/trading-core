@@ -29,7 +29,7 @@ export function fillOrder(opts: {
 }): Fill {
   const {
     state,
-    id,
+    id = "",
     quant,
     price,
     commission = 0,
@@ -43,7 +43,7 @@ export function fillOrder(opts: {
 
   return {
     ...({ side: state.side, effect: state.effect } as OrderAction),
-    id: id || "",
+    id,
     orderId: state.id,
     symbol: state.symbol,
     quantity: quant,
