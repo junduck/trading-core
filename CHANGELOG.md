@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2025-12-09
+
+### Added
+
+- **`BlockQueue<T>` class** - Unbounded queue implemented as linked list of array blocks
+  - Provides efficient FIFO operations with automatic memory management
+  - Reuses emptied blocks to avoid excessive allocations and reduce GC pressure
+  - Configurable block size and maximum free blocks for performance tuning
+  - Includes `push()`/`pop()` aliases for `push_back()`/`pop_front()` (consistent with CircularBuffer)
+  - Similar interface to CircularBuffer but with unbounded capacity
+  - Available in `@junduck/trading-core/containers` deep import
+
 ## [2.9.0] - 2025-12-03
 
 ### Added
