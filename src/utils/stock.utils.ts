@@ -59,6 +59,128 @@ export function handleSplit(
 }
 
 /**
+ * Handles a bonus issue by adjusting position quantities and deducting applicable taxes.
+ * @param pos - The position to modify
+ * @param symbol - The asset symbol undergoing the bonus issue
+ * @param bonusRatio - Taxable bonus issue ratio (e.g., 0.1 for 10%)
+ * @param capitalRatio - Non-taxable capitalisation issue ratio (e.g., 0.2 for 20%)
+ * @param fmvPerShare - Fair market value per share for taxable portion. For Chinese market stocks, use 1 per share as mandated by tax regulations.
+ * @param taxRate - The tax rate applied to the bonus shares (default: 0)
+ * @param time - The transaction time (default: current date)
+ * @group Position
+ */
+export function handleBonusIssue(
+  pos: Position,
+  symbol: string,
+  bonusRatio: number,
+  capitalRatio: number,
+  fmvPerShare: number,
+  taxRate: number = 0,
+  time?: Date
+) {
+  const actTime = time ?? new Date();
+
+  let totalBonusShares = 0;
+  const splitRatio = 1 + bonusRatio + capitalRatio;
+
+  const long = pos.long?.get(symbol);
+  if (long) {
+    totalBonusShares = long.quantity * bonusRatio;
+
+    // Update each lot
+    for (const lot of long.lots) {
+      lot.quantity *= splitRatio;
+      // totalCost unchanged, we deduct tax directly from cash
+      // This is a simplification, position lot does not have the facility to track tax basis
+      // For perfect accuracy, each lot should track tax basis separately and holding period
+    }
+
+    long.quantity *= splitRatio;
+    long.modified = actTime;
+  }
+
+  const short = pos.short?.get(symbol);
+  if (short) {
+    // Update each lot
+    for (const lot of short.lots) {
+      lot.quantity *= splitRatio;
+      // totalProceeds unchanged
+    }
+
+    short.quantity *= splitRatio;
+    short.modified = actTime;
+  }
+
+  // Handle tax payment for taxable bonus issue
+  if (totalBonusShares > 0 && taxRate > 0 && fmvPerShare > 0) {
+    const taxAmount = totalBonusShares * fmvPerShare * taxRate;
+    pos.cash -= taxAmount;
+  }
+
+  if (long || short) {
+    pos.modified = actTime;
+  }
+}
+
+/**
+ * Handles a rights issue by purchasing new shares at offer price.
+ * For long positions, creates a new lot and deducts cash.
+ * For short positions, increases liability with no proceeds.
+ * @param pos - The position to modify
+ * @param symbol - The asset symbol undergoing the rights issue
+ * @param rightsRatio - Rights issue ratio (e.g., 0.2 for 20%)
+ * @param rightsOfferPrice - Offer price per share for rights issue
+ * @param time - The transaction time (default: current date)
+ * @group Position
+ */
+export function handleRightsIssue(
+  pos: Position,
+  symbol: string,
+  rightsRatio: number,
+  rightsOfferPrice: number,
+  time?: Date
+) {
+  const actTime = time ?? new Date();
+
+  const long = pos.long?.get(symbol);
+  if (long) {
+    const additionalShares = long.quantity * rightsRatio;
+    const totalCost = additionalShares * rightsOfferPrice;
+
+    // Create new lot for rights issue purchase
+    const newLot: LongPositionLot = {
+      quantity: additionalShares,
+      price: rightsOfferPrice,
+      totalCost: totalCost,
+    };
+
+    // Add new lot to position
+    pushLongPositionLot(pos, symbol, newLot, actTime);
+
+    // Deduct cash for rights issue purchase
+    pos.cash -= totalCost;
+  }
+
+  const short = pos.short?.get(symbol);
+  if (short) {
+    const additionalShorts = short.quantity * rightsRatio; // this is liability
+
+    const newLot: ShortPositionLot = {
+      quantity: additionalShorts,
+      price: rightsOfferPrice,
+      totalProceeds: 0, // no proceeds from rights issue short, borrowed amount just inflated due to exercising rights
+    };
+
+    // Add new lot to short position
+    pushShortPositionLot(pos, symbol, newLot, actTime);
+  }
+
+  if (long || short) {
+    pos.modified = actTime;
+  }
+}
+
+/**
  * Handles a cash dividend payment by adjusting cost basis and cash balance.
  * @param pos - The position to modify
  * @param symbol - The asset symbol paying the dividend
