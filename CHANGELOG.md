@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2025-12-10
+
+### Added
+
+- **`handleBonusIssue()`** function for processing bonus issues and capitalisation issues
+  - Adjusts position quantities for bonus and capitalisation ratios
+  - Handles tax deduction for taxable bonus shares
+  - Supports Chinese market tax regulations with configurable fair market value
+  - Available in `@junduck/trading-core/trading` deep import
+
+- **`handleRightsIssue()`** function for processing rights issues
+  - Creates new lots for long positions with cash deduction at offer price
+  - Increases short position liability without proceeds
+  - Maintains proper equity accounting for both position types
+  - Available in `@junduck/trading-core/trading` deep import
+
+### Changed
+
+- Removed unnecessary validation checks and error throws in stock utilities
+  - Streamlined error handling for better performance
+  - Reduced code complexity while maintaining correctness
+
 ## [2.10.0] - 2025-12-09
 
 ### Added

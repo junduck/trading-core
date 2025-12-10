@@ -53,6 +53,8 @@ export {
 
 export {
   handleSplit,
+  handleBonusIssue,
+  handleRightsIssue,
   handleCashDividend,
   handleSpinoff,
   handleMerger,
