@@ -25,10 +25,6 @@ export function handleSplit(
   ratio: number,
   time?: Date
 ) {
-  if (ratio <= 0) {
-    throw new Error(`Invalid split ratio: ${ratio}. Must be positive.`);
-  }
-
   const actTime = time ?? new Date();
 
   const long = pos.long?.get(symbol);
@@ -80,15 +76,6 @@ export function handleCashDividend(
   taxRate: number = 0,
   time?: Date
 ): number {
-  if (amountPerShare < 0) {
-    throw new Error(
-      `Invalid dividend amount: ${amountPerShare}. Must be non-negative.`
-    );
-  }
-  if (taxRate < 0 || taxRate > 1) {
-    throw new Error(`Invalid tax rate: ${taxRate}. Must be between 0 and 1.`);
-  }
-
   const actTime = time ?? new Date();
 
   let cashFlow = 0;
@@ -155,10 +142,6 @@ export function handleSpinoff(
   time?: Date,
   disableLot?: boolean
 ) {
-  if (ratio <= 0) {
-    throw new Error(`Invalid spinoff ratio: ${ratio}. Must be positive.`);
-  }
-
   const actTime = time ?? new Date();
 
   const long = pos.long?.get(symbol);
@@ -225,15 +208,6 @@ export function handleMerger(
   time?: Date,
   disableLot?: boolean
 ): number {
-  if (ratio <= 0) {
-    throw new Error(`Invalid merger ratio: ${ratio}. Must be positive.`);
-  }
-  if (cashComponent < 0) {
-    throw new Error(
-      `Invalid cash component: ${cashComponent}. Must be non-negative.`
-    );
-  }
-
   const actTime = time ?? new Date();
 
   let cashFlow = 0;

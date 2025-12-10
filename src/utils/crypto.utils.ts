@@ -29,10 +29,6 @@ export function handleHardFork(
   time?: Date,
   disableLot?: boolean
 ) {
-  if (ratio <= 0) {
-    throw new Error(`Invalid hard fork ratio: ${ratio}. Must be positive.`);
-  }
-
   const actTime = time ?? new Date();
 
   const long = pos.long?.get(symbol);
@@ -98,17 +94,6 @@ export function handleAirdrop(
   time?: Date,
   disableLot?: boolean
 ) {
-  if (!holderSymbol && fixedAmount <= 0) {
-    throw new Error(
-      "Either holderSymbol with amountPerToken or fixedAmount must be specified"
-    );
-  }
-  if (amountPerToken < 0) {
-    throw new Error(
-      `Invalid airdrop amount: ${amountPerToken}. Must be non-negative.`
-    );
-  }
-
   const actTime = time ?? new Date();
 
   let airdropQuantity = 0;
@@ -164,10 +149,6 @@ export function handleTokenSwap(
   time?: Date,
   disableLot?: boolean
 ) {
-  if (ratio <= 0) {
-    throw new Error(`Invalid swap ratio: ${ratio}. Must be positive.`);
-  }
-
   const actTime = time ?? new Date();
 
   const long = pos.long?.get(oldSymbol);
@@ -236,12 +217,6 @@ export function handleStakingReward(
   time?: Date,
   disableLot?: boolean
 ): number {
-  if (rewardPerToken < 0) {
-    throw new Error(
-      `Invalid reward amount: ${rewardPerToken}. Must be non-negative.`
-    );
-  }
-
   const actTime = time ?? new Date();
 
   let totalRewards = 0;
