@@ -396,9 +396,6 @@ export class RollingCorr {
    */
   constructor(opts: { period: number; ddof?: number }) {
     this.ddof = opts.ddof ?? 0;
-    if (opts.period <= this.ddof) {
-      throw new Error("Period should be larger than DDoF.");
-    }
     this.bufferX = new CircularBuffer<number>(opts.period);
     this.bufferY = new CircularBuffer<number>(opts.period);
     this.kahanMXY = new Kahan();
@@ -529,9 +526,6 @@ export class RollingBeta {
    */
   constructor(opts: { period: number; ddof?: number }) {
     this.ddof = opts.ddof ?? 0;
-    if (opts.period <= this.ddof) {
-      throw new Error("Period should be larger than DDoF.");
-    }
     this.bufferX = new CircularBuffer<number>(opts.period);
     this.bufferY = new CircularBuffer<number>(opts.period);
     this.kahanMXY = new Kahan();
