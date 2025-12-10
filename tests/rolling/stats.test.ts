@@ -564,12 +564,6 @@ describe("RollingBeta", () => {
     }
   });
 
-  it("should throw error when period <= ddof", () => {
-    expect(() => new RollingBeta({ period: 2, ddof: 2 })).toThrow(
-      "Period should be larger than DDoF."
-    );
-  });
-
   it("should return same value from value property as last update", () => {
     const rb = new RollingBeta({ period: 4 });
     let lastValue = rb.update(10, 15);

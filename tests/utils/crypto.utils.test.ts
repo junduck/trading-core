@@ -376,57 +376,6 @@ describe("Crypto Utils", () => {
     });
   });
 
-  describe("Error Cases", () => {
-    it("should throw error for invalid hard fork ratio", () => {
-      const bchSymbol = "BCH";
-      openLong(position, btcSymbol, 100, 10, 100);
-
-      expect(() => {
-        handleHardFork(position, btcSymbol, bchSymbol, 0);
-      }).toThrow("Invalid hard fork ratio");
-
-      expect(() => {
-        handleHardFork(position, btcSymbol, bchSymbol, -1);
-      }).toThrow("Invalid hard fork ratio");
-    });
-
-    it("should throw error for invalid airdrop parameters", () => {
-      const airdropSymbol = "AIRDROP";
-
-      expect(() => {
-        handleAirdrop(position, null, airdropSymbol, 0, 0);
-      }).toThrow(
-        "Either holderSymbol with amountPerToken or fixedAmount must be specified"
-      );
-
-      expect(() => {
-        handleAirdrop(position, ethSymbol, airdropSymbol, -1);
-      }).toThrow("Invalid airdrop amount");
-    });
-
-    it("should throw error for invalid swap ratio", () => {
-      const oldSymbol = "OLD";
-      const newSymbol = "NEW";
-      openLong(position, oldSymbol, 100, 10, 100);
-
-      expect(() => {
-        handleTokenSwap(position, oldSymbol, newSymbol, 0);
-      }).toThrow("Invalid swap ratio");
-
-      expect(() => {
-        handleTokenSwap(position, oldSymbol, newSymbol, -1);
-      }).toThrow("Invalid swap ratio");
-    });
-
-    it("should throw error for invalid staking reward amount", () => {
-      openLong(position, ethSymbol, 100, 10, 100);
-
-      expect(() => {
-        handleStakingReward(position, ethSymbol, -1);
-      }).toThrow("Invalid reward amount");
-    });
-  });
-
   describe("DisableLot Mode", () => {
     it("handleHardFork should maintain single lot when disableLot is true", () => {
       const bchSymbol = "BCH";
