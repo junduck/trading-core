@@ -121,6 +121,12 @@ export type {
 } from "./utils/order.validation.js";
 
 export {
+  adjustOrderSplit,
+  adjustOrderBonusIssue,
+  adjustOrderRightsIssueTERP,
+} from "./utils/order.adjust.js";
+
+export {
   type OrderOpts,
   buyOrder,
   sellOrder,
