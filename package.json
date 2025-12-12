@@ -1,6 +1,6 @@
 {
   "name": "@junduck/trading-core",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "description": "Foundation data structures and utilities for spot market trading bookkeeping, backtesting, and algorithmic trading",
   "type": "module",
   "main": "./dist/index.js",
