@@ -93,13 +93,15 @@ export function pushLongPositionLot(
  * @param symbol - The asset symbol
  * @param newLot - The new LongPositionLot to merge
  * @param time - The transaction time
+ * @param replacePrice - If true, replaces the lot price to the new lot's price (default: true)
  * @group Position
  */
 export function amendLongPositionLot(
   to: Position,
   symbol: string,
   newLot: LongPositionLot,
-  time: Date
+  time: Date,
+  replacePrice: boolean = true
 ) {
   // Initialize long positions map if needed
   to.long ??= new Map();
@@ -115,10 +117,9 @@ export function amendLongPositionLot(
     };
     to.long!.set(symbol, pos);
   } else {
-    pos.lots[0]!.quantity += newLot.quantity;
-    pos.lots[0]!.totalCost += newLot.totalCost;
-    // updated to latest price
-    pos.lots[0]!.price = newLot.price;
+    pos.lots.at(-1)!.quantity += newLot.quantity;
+    pos.lots.at(-1)!.totalCost += newLot.totalCost;
+    if (replacePrice) pos.lots.at(-1)!.price = newLot.price;
     pos.quantity += newLot.quantity;
     pos.totalCost += newLot.totalCost;
     pos.modified = time;
@@ -167,13 +168,15 @@ export function pushShortPositionLot(
  * @param symbol - The asset symbol
  * @param newLot - The new ShortPositionLot to merge
  * @param time - The transaction time
+ * @param replacePrice - If true, replaces the lot price to the new lot's price (default: true)
  * @group Position
  */
 export function amendShortPositionLot(
   to: Position,
   symbol: string,
   newLot: ShortPositionLot,
-  time: Date
+  time: Date,
+  replacePrice: boolean = true
 ) {
   // Initialize short positions map if needed
   to.short ??= new Map();
@@ -189,10 +192,9 @@ export function amendShortPositionLot(
     };
     to.short!.set(symbol, pos);
   } else {
-    pos.lots[0]!.quantity += newLot.quantity;
-    pos.lots[0]!.totalProceeds += newLot.totalProceeds;
-    // updated to latest price
-    pos.lots[0]!.price = newLot.price;
+    pos.lots.at(-1)!.quantity += newLot.quantity;
+    pos.lots.at(-1)!.totalProceeds += newLot.totalProceeds;
+    if (replacePrice) pos.lots.at(-1)!.price = newLot.price;
     pos.quantity += newLot.quantity;
     pos.totalProceeds += newLot.totalProceeds;
     pos.modified = time;
