@@ -14,43 +14,51 @@ import {
  * Handles a stock split by adjusting position quantities and costs.
  * @param pos - The position to modify
  * @param symbol - The asset symbol undergoing the split
- * @param ratio - The split ratio (e.g., 2 for a 2-for-1 split)
+ * @param ratio - The split ratio (e.g., 2 for a 2-for-1 split, 1.3 for a 13-for-10 split)
  * @param time - The transaction time (default: current date)
- * @throws Error if the split ratio is not positive
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @group Position
  */
 export function handleSplit(
   pos: Position,
   symbol: string,
   ratio: number,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   const actTime = time ?? new Date();
+  const inc = ratio - 1;
 
   const long = pos.long?.get(symbol);
   if (long) {
-    // Update each lot
-    for (const lot of long.lots) {
-      lot.quantity *= ratio;
-      // lot.totalCost remains unchanged (total investment value doesn't change)
-    }
+    let split = long.quantity * inc;
+    const newLot: LongPositionLot = {
+      quantity: split,
+      price: 0,
+      totalCost: 0,
+    };
 
-    long.quantity *= ratio;
-    // totalCost remains unchanged (total investment value doesn't change)
-    long.modified = actTime;
+    if (disableLot) {
+      amendLongPositionLot(pos, symbol, newLot, actTime, false);
+    } else {
+      pushLongPositionLot(pos, symbol, newLot, actTime);
+    }
   }
 
   const short = pos.short?.get(symbol);
   if (short) {
-    // Update each lot
-    for (const lot of short.lots) {
-      lot.quantity *= ratio;
-      // lot.totalProceeds remains unchanged (total investment value doesn't change)
-    }
+    let split = short.quantity * inc;
+    const newLot: ShortPositionLot = {
+      quantity: split,
+      price: 0,
+      totalProceeds: 0,
+    };
 
-    short.quantity *= ratio;
-    // totalProceeds remains unchanged (total investment value doesn't change)
-    short.modified = actTime;
+    if (disableLot) {
+      amendShortPositionLot(pos, symbol, newLot, actTime);
+    } else {
+      pushShortPositionLot(pos, symbol, newLot, actTime);
+    }
   }
 
   if (long || short) {
@@ -67,6 +75,7 @@ export function handleSplit(
  * @param fmvPerShare - Fair market value per share for taxable portion. For Chinese market stocks, use 1 per share as mandated by tax regulations.
  * @param taxRate - The tax rate applied to the bonus shares (default: 0)
  * @param time - The transaction time (default: current date)
+ * @param disableLot - If true, merges into single lot instead of tracking separate lots (default: false)
  * @group Position
  */
 export function handleBonusIssue(
@@ -76,39 +85,43 @@ export function handleBonusIssue(
   capitalRatio: number,
   fmvPerShare: number,
   taxRate: number = 0,
-  time?: Date
+  time?: Date,
+  disableLot?: boolean
 ) {
   const actTime = time ?? new Date();
 
   let totalBonusShares = 0;
-  const splitRatio = 1 + bonusRatio + capitalRatio;
 
   const long = pos.long?.get(symbol);
   if (long) {
-    totalBonusShares = long.quantity * bonusRatio;
-
-    // Update each lot
-    for (const lot of long.lots) {
-      lot.quantity *= splitRatio;
-      // totalCost unchanged, we deduct tax directly from cash
-      // This is a simplification, position lot does not have the facility to track tax basis
-      // For perfect accuracy, each lot should track tax basis separately and holding period
+    const split = long.quantity * (bonusRatio + capitalRatio);
+    const newLot: LongPositionLot = {
+      quantity: split,
+      price: 0,
+      totalCost: 0,
+    };
+    if (disableLot) {
+      amendLongPositionLot(pos, symbol, newLot, actTime, false);
+    } else {
+      pushLongPositionLot(pos, symbol, newLot, actTime);
     }
 
-    long.quantity *= splitRatio;
-    long.modified = actTime;
+    totalBonusShares = long.quantity * bonusRatio;
   }
 
   const short = pos.short?.get(symbol);
   if (short) {
-    // Update each lot
-    for (const lot of short.lots) {
-      lot.quantity *= splitRatio;
-      // totalProceeds unchanged
+    const split = short.quantity * (bonusRatio + capitalRatio);
+    const newLot: ShortPositionLot = {
+      quantity: split,
+      price: 0,
+      totalProceeds: 0,
+    };
+    if (disableLot) {
+      amendShortPositionLot(pos, symbol, newLot, actTime, false);
+    } else {
+      pushShortPositionLot(pos, symbol, newLot, actTime);
     }
-
-    short.quantity *= splitRatio;
-    short.modified = actTime;
   }
 
   // Handle tax payment for taxable bonus issue

@@ -27,7 +27,7 @@ describe("Stock Utils - Corporate Actions", () => {
         expect(position.cash).toBe(98_900);
 
         // Step 2: Stock Split - ratio=2
-        handleSplit(position, symbol, 2);
+        handleSplit(position, symbol, 2, undefined, true);
 
         // Verify position
         const longPos = position.long?.get("AAPL");
