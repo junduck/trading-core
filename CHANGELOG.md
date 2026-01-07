@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.13.0] - 2026-01-08
+
+### Added
+
+- **Stock adjustment primitives** for complex corporate actions
+  - `adjustLotForSplit()` - Calculates incremental shares for stock splits
+  - `roundAdjustLot()` - Handles fractional shares with "fractional", "floor", and "cashInLieu" methods
+  - `applyAdjustLot()` - Applies adjustment lots to position state with optional lot merging
+  - `taxForAdjustLot()` and `valueForAdjustLot()` - Utilities for tax and valuation of adjustments
+  - Available in `@junduck/trading-core/trading` deep import
+
 ## [2.12.0] - 2025-12-12
 
 ### Added
