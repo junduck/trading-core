@@ -60,6 +60,21 @@ export {
   handleMerger,
 } from "./utils/stock.utils.js";
 
+export type {
+  AdjustRoundingMethod,
+  AdjustRoundingCashflow,
+  AdjustLot,
+} from "./utils/stock.split.js";
+
+export {
+  adjustLotForSplit,
+  roundAdjustLot,
+  applyAdjustLot,
+  setPriceForAdjustLot,
+  valueForAdjustLot,
+  taxForAdjustLot,
+} from "./utils/stock.split.js";
+
 export {
   handleHardFork,
   handleAirdrop,
